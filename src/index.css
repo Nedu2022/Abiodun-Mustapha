@@ -1,24 +1,20 @@
 @import 'tailwindcss';
 
 @theme {
-  /* Typography — matching the reference template */
   --font-sans: 'Jost', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-display: 'Playfair Display', Georgia, 'Times New Roman', serif;
 
-  /* Brand palette — refined, editorial, warm.
-     Green & gold, but grounded in cream & warm charcoal so it reads
-     as tailored luxury rather than saturated UI. */
   --color-green: #0b6e4f;
   --color-green-deep: #0d3a2c;
-  --color-charcoal: #1b201c; /* warm near-black for dark sections */
+  --color-charcoal: #1b201c;
   --color-charcoal-800: #232a24;
-  --color-gold: #b08d3a; /* muted, antique gold */
+  --color-gold: #b08d3a;
   --color-gold-bright: #c9a227;
-  --color-ink: #23241f; /* warm off-black text */
-  --color-ink-soft: #6f6b5f; /* warm muted gray text */
-  --color-cream: #f6f1e7; /* primary warm background */
-  --color-cream-200: #ede6d6; /* slightly deeper cream / borders */
-  --color-line: #e2dccc; /* hairline rule on cream */
+  --color-ink: #23241f;
+  --color-ink-soft: #6f6b5f;
+  --color-cream: #f6f1e7;
+  --color-cream-200: #ede6d6;
+  --color-line: #e2dccc;
 }
 
 @layer base {
@@ -52,13 +48,11 @@
 }
 
 @layer utilities {
-  /* Italic serif accent word inside display headings */
   .accent {
     font-style: italic;
     font-weight: 400;
   }
 
-  /* Small tracked uppercase eyebrow label */
   .eyebrow {
     font-family: var(--font-sans);
     font-weight: 500;

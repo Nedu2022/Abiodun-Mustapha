@@ -1,14 +1,8 @@
-// -----------------------------------------------------------------------------
-// Single source of truth for all site content.
-// Every link below is Abiodun Mustapha's real link (from his Linktree & socials).
-// -----------------------------------------------------------------------------
-
 const WHATSAPP = 'https://api.whatsapp.com/send?phone=2348148560609'
 const WHATSAPP_BOOK =
   'https://api.whatsapp.com/send?phone=2348148560609&text=Hello%20Abiodun,%20I%20would%20like%20to%20book%20you%20for%20a%20speaking%20or%20training%20engagement.'
 
 export const site = {
-  // Logo wordmark is split so it can be styled on two lines (no "Dr." in the logo)
   first: 'Abiodun',
   last: 'Mustapha',
   name: 'Dr. Abiodun Mustapha',
@@ -39,7 +33,6 @@ export const hero = {
   secondary: { label: 'Get a Free Ebook', href: 'http://bit.ly/freepurposebook' },
 }
 
-// Real, verifiable credentials (no invented numbers)
 export const credentials = [
   'Author of “30 Lessons Life Taught Me Before 30”',
   'Host of the Growth Secrets Podcast',
@@ -76,7 +69,6 @@ export const book = {
   secondary: { label: 'Visit my bookstore', href: 'https://selar.co/m/AbiodunMustapha' },
 }
 
-// Free ebooks and lead magnets, all real links
 export const resources = {
   eyebrow: 'Free Resources',
   title: 'Start growing',
@@ -148,8 +140,6 @@ export const gallery = {
   eyebrow: 'In Motion',
   title: 'Moments &',
   accent: 'work',
-  // All real photos of Abiodun on stage and at events. Rows scroll as you move
-  // through the section.
   images: [
     '/images/speaking-tedx.jpg',
     '/images/speaking-white.jpg',

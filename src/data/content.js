@@ -1,8 +1,7 @@
 const WHATSAPP = 'https://api.whatsapp.com/send?phone=2348148560609'
 
-// Booking & speaking invitations go through a single Google Form.
-// TODO: paste the real Google Form link below (e.g. https://forms.gle/XXXXXXXX).
-const BOOKING_FORM = 'https://forms.gle/your-booking-form-link'
+// Booking & speaking invitations route to the official website.
+const BOOKING_FORM = 'https://abiodunmustapha11.wixsite.com/abiodunmustapha'
 
 export const site = {
   first: 'Abiodun',

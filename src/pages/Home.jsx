@@ -6,6 +6,7 @@ import Book from '../components/Book'
 import Resources from '../components/Resources'
 import Podcast from '../components/Podcast'
 import Speaking from '../components/Speaking'
+import Events from '../components/Events'
 import Community from '../components/Community'
 import Gallery from '../components/Gallery'
 import Footer from '../components/Footer'
@@ -22,6 +23,7 @@ export default function Home() {
         <Resources />
         <Podcast />
         <Speaking />
+        <Events />
         <Community />
         <Gallery />
       </main>

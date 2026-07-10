@@ -1,6 +1,8 @@
 const WHATSAPP = 'https://api.whatsapp.com/send?phone=2348148560609'
-const WHATSAPP_BOOK =
-  'https://api.whatsapp.com/send?phone=2348148560609&text=Hello%20Abiodun,%20I%20would%20like%20to%20book%20you%20for%20a%20speaking%20or%20training%20engagement.'
+
+// Booking & speaking invitations go through a single Google Form.
+// TODO: paste the real Google Form link below (e.g. https://forms.gle/XXXXXXXX).
+const BOOKING_FORM = 'https://forms.gle/your-booking-form-link'
 
 export const site = {
   first: 'Abiodun',
@@ -8,16 +10,17 @@ export const site = {
   name: 'Dr. Abiodun Mustapha',
   email: 'abiodunmustapha11@gmail.com',
   whatsapp: WHATSAPP,
+  bookingForm: BOOKING_FORM,
   ctaLabel: 'Book a Session',
-  ctaHref: WHATSAPP_BOOK,
+  ctaHref: BOOKING_FORM,
 }
 
 export const nav = [
   { label: 'Story', href: '#story' },
   { label: 'Book', href: '#book' },
-  { label: 'Resources', href: '#resources' },
   { label: 'Podcast', href: '#podcast' },
   { label: 'Speaking', href: '#speaking' },
+  { label: 'Events', href: '#events' },
 ]
 
 export const hero = {
@@ -29,7 +32,7 @@ export const hero = {
   blurb:
     'From the streets of Oshodi to a life of learning and impact, my journey is proof that where you begin does not decide where you finish. I teach the very same principles that turned my own life around.',
   image: '/images/portrait-suit.jpg',
-  primary: { label: 'Book a Session', href: WHATSAPP_BOOK },
+  primary: { label: 'Book a Session', href: BOOKING_FORM },
   secondary: { label: 'Get a Free Ebook', href: 'http://bit.ly/freepurposebook' },
 }
 
@@ -125,7 +128,55 @@ export const speaking = {
     'Leadership',
     'Productizing Knowledge',
   ],
-  cta: { label: 'Book Me for Your Event', href: WHATSAPP_BOOK },
+  cta: { label: 'Book Me for Your Event', href: BOOKING_FORM },
+}
+
+export const events = {
+  eyebrow: 'Stages & Events',
+  title: 'The rooms I now get',
+  accent: 'invited into',
+  intro:
+    'From TEDx to national congresses, campuses, and boardrooms, I have been honoured to stand before people ready to grow. Where you are today does not define where you will end. These stages are proof of that.',
+  featured: {
+    tag: 'TEDx Speaker',
+    name: 'TEDx',
+    x: 'x',
+    line: 'Ideas worth spreading',
+    desc: 'I stood on the TEDx stage and told the truth: an ordinary boy from Oshodi can build a life of purpose. The same principles that turned my story around are the ones I came to share.',
+    image: '/images/speaking-tedx.jpg',
+  },
+  list: [
+    {
+      title: 'The Light Congress',
+      role: 'Keynote Speaker',
+      note: 'Purpose & personal transformation',
+      image: '/images/event-lightcongress.jpg',
+    },
+    {
+      title: 'Future Forward Conference',
+      role: 'Guest Speaker',
+      note: 'Thinking bigger than your environment',
+      image: '/images/speaking-futureforward.jpg',
+    },
+    {
+      title: 'The Advance',
+      role: 'Facilitator',
+      note: 'Discipline, habits & becoming',
+      image: '/images/speaking-advance.jpg',
+    },
+    {
+      title: 'Leadership Confab',
+      role: 'Panelist & Speaker',
+      note: 'Faith, work & leadership',
+      image: '/images/speaking-confab.jpg',
+    },
+  ],
+  stats: [
+    { value: '2,000+', label: 'People trained' },
+    { value: '45+', label: 'Leaders coached' },
+    { value: 'GIZ', label: 'Certified trainer & coach' },
+  ],
+  cta: { label: 'Invite me to speak', href: BOOKING_FORM },
 }
 
 export const community = {

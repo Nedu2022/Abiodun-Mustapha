@@ -4,6 +4,7 @@ import Hero from '../components/Hero'
 import Story from '../components/Story'
 import Book from '../components/Book'
 import Resources from '../components/Resources'
+import Services from '../components/Services'
 import Podcast from '../components/Podcast'
 import Speaking from '../components/Speaking'
 import Events from '../components/Events'
@@ -21,6 +22,7 @@ export default function Home() {
         <Story />
         <Book />
         <Resources />
+        <Services />
         <Podcast />
         <Speaking />
         <Events />

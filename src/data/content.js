@@ -17,6 +17,7 @@ export const site = {
 export const nav = [
   { label: 'Story', href: '#story' },
   { label: 'Book', href: '#book' },
+  { label: 'Work', href: '#services' },
   { label: 'Podcast', href: '#podcast' },
   { label: 'Speaking', href: '#speaking' },
   { label: 'Events', href: '#events' },
@@ -29,7 +30,7 @@ export const hero = {
   mission:
     'I help everyday people discover their purpose, build real discipline, and grow into the fullness of who they were created to be.',
   blurb:
-    'From the streets of Oshodi to a life of learning and impact, my journey is proof that where you begin does not decide where you finish. I teach the very same principles that turned my own life around.',
+    'Today I teach, write, and speak to people who are ready to stop existing and start truly living. Everything I hand you, I lived through first.',
   image: '/images/portrait-suit.jpg',
   primary: { label: 'Book a Session', href: BOOKING_FORM },
   secondary: { label: 'Get a Free Ebook', href: 'http://bit.ly/freepurposebook' },
@@ -50,7 +51,7 @@ export const story = {
   body: [
     'I did not grow up with much. The streets of Oshodi were loud, crowded, and unforgiving, and for a long time they were the whole of my world.',
     'But somewhere along the way I made a decision. I chose to keep learning, to keep believing, and to keep showing up even when nothing around me looked like the future I was praying for.',
-    'That decision carried me from those streets into classrooms, onto stages, and into the lives of thousands of people I now get to teach. My story is not really about me. It is proof of what becomes possible when an ordinary person refuses to give up on their purpose.',
+    'That one decision carried me off those streets and into classrooms, lecture halls, and eventually the lives of people I never imagined I would reach. My story was never really about me. It is what happens when an ordinary person refuses to quit on themselves.',
   ],
   link: {
     label: 'Read the full story',
@@ -66,7 +67,7 @@ export const book = {
   subtitle: 'The Myths, Mistakes and Miracles',
   foreword: 'Foreword by Dr. Femi Awoyomi, Chairman, African Young Brains',
   description:
-    'Thirty honest lessons on purpose, discipline, money, faith, and becoming, drawn straight from a life that was rebuilt from the ground up. It is the book I wish someone had handed me at twenty.',
+    'Thirty lessons on the myths I believed, the mistakes I made, and the miracles that found me anyway, drawn straight from a life rebuilt from nothing. It is the book I wish someone had handed me at twenty.',
   primary: { label: 'Get it on Amazon', href: 'https://www.amazon.com/dp/B088QT8B9W' },
   secondary: { label: 'Visit my bookstore', href: 'https://selar.co/m/AbiodunMustapha' },
 }
@@ -105,11 +106,43 @@ export const resources = {
   ],
 }
 
+export const services = {
+  eyebrow: 'Work With Me',
+  title: 'Ways we can',
+  accent: 'work together',
+  intro:
+    'When you are ready to go further than the free downloads, these are the doors. Pick the one that meets you where you stand, and let us get to work.',
+  items: [
+    {
+      tag: 'Masterclass',
+      title: 'Purpose Mastery Masterclass',
+      price: '₦10,000',
+      meta: 'Self-paced',
+      desc: 'The exact framework for naming the assignment your life was built for, then mastering it.',
+    },
+    {
+      tag: 'Coaching',
+      title: 'One-on-One Coaching',
+      price: '₦50,000',
+      meta: '90-minute session',
+      desc: 'A private, strategic session on where you are stuck and where you are headed. We name the next move and how you make it.',
+    },
+    {
+      tag: 'Speaking',
+      title: 'Speaking Engagement',
+      price: '₦80,000',
+      meta: '60-minute session',
+      desc: 'Bring me to your event to send your audience home with fire in their belly and a plan in their hand.',
+    },
+  ],
+  cta: { label: 'Reserve Your Spot', href: BOOKING_FORM },
+}
+
 export const podcast = {
   eyebrow: 'Watch & Listen',
   title: 'Growth Secrets,',
   accent: 'in your ears',
-  body: 'Every episode is a candid conversation about purpose, personal growth, faith, and the real work of becoming better. Tune in on your favourite platform.',
+  body: 'Every episode is an unfiltered, unscripted sit-down. The questions people are too polite to ask, answered without the gloss. Pull up a seat and listen in.',
   primary: { label: 'Listen to the Podcast', href: 'https://podcasts.google.com/feed/aHR0cHM6Ly9hbmNob3IuZm0vcy8yOGM1MDMwMC9wb2RjYXN0L3Jzcw' },
   secondary: { label: 'Watch on YouTube', href: 'https://www.youtube.com/channel/UC4KuhzkY8SNEbEUD78LBo6w' },
 }
@@ -118,7 +151,7 @@ export const speaking = {
   eyebrow: 'Speaking & Training',
   title: 'Invite me to your',
   accent: 'next event',
-  body: 'I speak and train on purpose, personal development, and growth for churches, schools, companies, and conferences. Let us create something your audience will remember.',
+  body: 'I stand in front of churches, schools, companies, and conferences and leave the room different than I found it. Give me your audience and I will give them a moment they carry home.',
   topics: [
     'Purpose & Clarity',
     'Personal Development',
@@ -135,7 +168,7 @@ export const events = {
   title: 'The rooms I now get',
   accent: 'invited into',
   intro:
-    'From TEDx to national congresses, campuses, and boardrooms, I have been honoured to stand before people ready to grow. Where you are today does not define where you will end. These stages are proof of that.',
+    'From TEDx to national congresses, campuses, and boardrooms, I have been handed microphones I once only dreamed of holding. Where you are today does not define where you will end. These stages are my proof.',
   featured: {
     tag: 'TEDx Speaker',
     name: 'TEDx',
@@ -182,7 +215,7 @@ export const community = {
   eyebrow: 'Community',
   title: 'Grow with',
   accent: 'Growth Hub Africa',
-  body: 'A growing family of people who are serious about becoming better. Daily encouragement, practical lessons, and honest conversation, all in one place.',
+  body: 'A family of people who refuse to do life alone. Daily encouragement, practical wisdom, and the kind of accountability that actually moves you forward.',
   cta: { label: 'Join on Telegram', href: 'https://t.me/growthhubafrica' },
 }
 

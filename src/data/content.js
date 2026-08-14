@@ -15,6 +15,7 @@ export const site = {
 }
 
 export const nav = [
+  { label: 'About', href: '#about' },
   { label: 'Story', href: '#story' },
   { label: 'Book', href: '#book' },
   { label: 'Work', href: '#services' },
@@ -30,7 +31,7 @@ export const hero = {
   mission:
     'I help everyday people discover their purpose, build real discipline, and grow into the fullness of who they were created to be.',
   blurb:
-    'Today I teach, write, and speak to people who are ready to stop existing and start truly living. Everything I hand you, I lived through first.',
+    'Today I teach, write, and speak to people who are ready to stop existing and start living. Everything I hand you, I lived through first.',
   image: '/images/portrait-suit.jpg',
   primary: { label: 'Book a Session', href: BOOKING_FORM },
   secondary: { label: 'Get a Free Ebook', href: 'http://bit.ly/freepurposebook' },
@@ -43,10 +44,33 @@ export const credentials = [
   'From Oshodi to the pursuit of a PhD',
 ]
 
+export const about = {
+  eyebrow: 'About',
+  title: 'Background &',
+  accent: 'Credentials',
+  image: '/images/portrait-gesture.jpg',
+  body: [
+    'Dr. Abiodun Mustapha is a Thought Leader, Tech Consultant, and Educator, and the Founder of Growth Hub Africa, a community of strategic career leaders and business experts. He was trained and certified as a Business Trainer and Coach by the German Development Corporation (GIZ) in 2018, and currently coordinates the advocacy and operations at the Institute of Digital Humanities and Technologies at Anchor University, Lagos.',
+    'He is the Host of Growth School, a weekly webinar on the systems of personal, career, and business development, and Host of the podcast Growth Secrets w/ Abiodun Mustapha, on which he convenes professionals from various spheres of life. He is also the Founder of Growth Hub Africa and GrowthSpec Technologies Ltd.',
+    'He has trained over 2,000 professionals and coached over 45 professionals and business owners to date. In 2025, he served as Consulting Facilitator for the Eko Digital Skills Initiative and the Job Creation Initiative, both under the Lagos State Ministry of Tertiary Education, programmes aimed at building digital and career readiness capacity among young people and undergraduates across Lagos State.',
+    'His work centres on a consistent framework guiding professionals and businesses through a process of purpose, productivity, and profitability, delivered through speaking engagements, structured training, personal coaching, and writing.',
+    'His published works, including Mind Shift and 30 Lessons Life Taught Me Before 30, among others, explore these themes and have been credited with driving remarkable shifts in mindset among readers. He also has research work in peer reviewed journals, book chapters, and conference proceedings.',
+    'His voice and work have featured across numerous platforms, including the Young Professional Forum in Ketu, Oshodi, Agege, and Isheri Idimu, The Prophetic Woman, Dear Potential, Sweet FM, Splash FM, KMC TV, Edufrica, the Prevarsity Conference, and the NACOS Conference, among others.',
+  ],
+  credentials: [
+    'Certified Business Trainer and Coach, GIZ (2018)',
+    'Member, Nigeria Computer Society',
+    'Member, Association for Computing Machinery',
+    'Chartered Member, Computer Professionals of Nigeria',
+    'Charter Member, Association of Cybersecurity Practitioners',
+    'Charter Member, Association of Ranking Professionals',
+  ],
+}
+
 export const story = {
   eyebrow: 'My Story',
   title: 'From Oshodi',
-  accent: 'to purpose',
+  accent: 'to Global Impact',
   image: '/images/portrait-bw.jpg',
   body: [
     'I did not grow up with much. The streets of Oshodi were loud, crowded, and unforgiving, and for a long time they were the whole of my world.',
@@ -116,21 +140,18 @@ export const services = {
     {
       tag: 'Masterclass',
       title: 'Purpose Mastery Masterclass',
-      price: '₦10,000',
       meta: 'Self-paced',
       desc: 'The exact framework for naming the assignment your life was built for, then mastering it.',
     },
     {
       tag: 'Coaching',
       title: 'One-on-One Coaching',
-      price: '₦50,000',
       meta: '90-minute session',
       desc: 'A private, strategic session on where you are stuck and where you are headed. We name the next move and how you make it.',
     },
     {
       tag: 'Speaking',
       title: 'Speaking Engagement',
-      price: '₦80,000',
       meta: '60-minute session',
       desc: 'Bring me to your event to send your audience home with fire in their belly and a plan in their hand.',
     },

@@ -32,8 +32,7 @@ export default function Services() {
                 </div>
                 <h3 className="mt-4 font-display text-2xl leading-snug text-ink">{s.title}</h3>
                 <p className="mt-3 flex-1 text-[14px] leading-relaxed text-ink-soft">{s.desc}</p>
-                <div className="mt-6 flex items-baseline justify-between border-t border-line pt-5">
-                  <span className="font-display text-xl text-green">{s.price}</span>
+                <div className="mt-6 border-t border-line pt-5">
                   <span className="text-[12px] font-medium uppercase tracking-[0.12em] text-ink-soft">
                     {s.meta}
                   </span>

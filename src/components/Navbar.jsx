@@ -1,13 +1,40 @@
 import { useEffect, useState } from 'react'
+import { Link, useLocation } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Menu, X, ArrowRight } from 'lucide-react'
 import Logo from './ui/Logo'
 import { site, nav, socials } from '../data/content'
 import SocialIcons from './SocialIcons'
 
-export default function Navbar() {
+// Full routes (/about) use React Router's <Link> for client-side navigation.
+// Section anchors (#story) stay plain <a> tags for in-page scrolling on the
+// homepage, but route back to the homepage first when clicked from elsewhere.
+function NavLink({ href, onHome, className, children, onClick }) {
+  const isRoute = href.startsWith('/') && !href.includes('#')
+  if (isRoute) {
+    return (
+      <Link to={href} className={className} onClick={onClick}>
+        {children}
+      </Link>
+    )
+  }
+  return (
+    <a href={onHome ? href : `/${href}`} className={className} onClick={onClick}>
+      {children}
+    </a>
+  )
+}
+
+export default function Navbar({ dark = false }) {
+  const { pathname } = useLocation()
+  const onHome = pathname === '/'
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
+  // Only relevant before scrolling, when the header is transparent and the
+  // page's own background shows through — `dark` says that background is a
+  // dark section (like the About page's header), so the logo/links need to
+  // render light instead of assuming a light hero sits behind them.
+  const floatingOnDark = dark && !scrolled
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24)
@@ -34,19 +61,26 @@ export default function Navbar() {
         }`}
       >
         <nav className="mx-auto flex max-w-6xl items-center justify-between px-5 py-4 sm:px-8">
-          <a href="#top" aria-label={site.name}>
-            <Logo />
-          </a>
+          <Link
+            to="/"
+            aria-label={site.name}
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          >
+            <Logo light={floatingOnDark} />
+          </Link>
 
           <div className="hidden items-center gap-9 md:flex">
             {nav.map((item) => (
-              <a
+              <NavLink
                 key={item.href}
                 href={item.href}
-                className="text-[13px] font-medium uppercase tracking-[0.12em] text-ink-soft transition-colors hover:text-green"
+                onHome={onHome}
+                className={`text-[13px] font-medium uppercase tracking-[0.12em] transition-colors ${
+                  floatingOnDark ? 'text-cream/80 hover:text-gold' : 'text-ink-soft hover:text-green'
+                }`}
               >
                 {item.label}
-              </a>
+              </NavLink>
             ))}
             <a
               href={site.ctaHref}
@@ -63,7 +97,9 @@ export default function Navbar() {
             type="button"
             onClick={() => setOpen(true)}
             aria-label="Open menu"
-            className="flex h-10 w-10 items-center justify-center text-ink md:hidden"
+            className={`flex h-10 w-10 items-center justify-center md:hidden ${
+              floatingOnDark ? 'text-cream' : 'text-ink'
+            }`}
           >
             <Menu className="h-6 w-6" />
           </button>
@@ -115,20 +151,24 @@ export default function Navbar() {
 
               <nav className="relative mt-6 flex flex-1 flex-col justify-center gap-1 px-6">
                 {nav.map((item, i) => (
-                  <motion.a
+                  <motion.div
                     key={item.href}
-                    href={item.href}
-                    onClick={() => setOpen(false)}
                     initial={{ opacity: 0, x: 30 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.12 + i * 0.07 }}
-                    className="group flex items-baseline gap-3 border-b border-cream/10 py-4"
                   >
-                    <span className="font-display text-xs italic text-gold">0{i + 1}</span>
-                    <span className="font-display text-3xl text-cream transition-colors group-hover:text-gold">
-                      {item.label}
-                    </span>
-                  </motion.a>
+                    <NavLink
+                      href={item.href}
+                      onHome={onHome}
+                      onClick={() => setOpen(false)}
+                      className="group flex items-baseline gap-3 border-b border-cream/10 py-4"
+                    >
+                      <span className="font-display text-xs italic text-gold">0{i + 1}</span>
+                      <span className="font-display text-3xl text-cream transition-colors group-hover:text-gold">
+                        {item.label}
+                      </span>
+                    </NavLink>
+                  </motion.div>
                 ))}
               </nav>
 

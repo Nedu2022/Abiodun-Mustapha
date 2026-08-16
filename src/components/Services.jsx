@@ -6,7 +6,7 @@ import { services } from '../data/content'
 
 export default function Services() {
   return (
-    <section id="services" className="scroll-mt-24 bg-cream py-20 sm:py-28">
+    <section id="services" className="scroll-mt-24 bg-white py-20 sm:py-28">
       <div className="mx-auto max-w-6xl px-5 sm:px-8">
         <SectionHeading
           eyebrow={services.eyebrow}

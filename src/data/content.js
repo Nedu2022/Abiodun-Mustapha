@@ -15,7 +15,7 @@ export const site = {
 }
 
 export const nav = [
-  { label: 'About', href: '#about' },
+  { label: 'About', href: '/about' },
   { label: 'Story', href: '#story' },
   { label: 'Book', href: '#book' },
   { label: 'Work', href: '#services' },
@@ -25,7 +25,7 @@ export const nav = [
 ]
 
 export const hero = {
-  eyebrow: 'Personal Development · Faith · Purpose',
+  eyebrow: 'Talk Leader and Global Speaker',
   name: 'Dr. Abiodun Mustapha',
   roles: 'Personal Development Expert. Educator. Author. Speaker.',
   mission:
@@ -94,40 +94,6 @@ export const book = {
     'Thirty lessons on the myths I believed, the mistakes I made, and the miracles that found me anyway, drawn straight from a life rebuilt from nothing. It is the book I wish someone had handed me at twenty.',
   primary: { label: 'Get it on Amazon', href: 'https://www.amazon.com/dp/B088QT8B9W' },
   secondary: { label: 'Visit my bookstore', href: 'https://selar.co/m/AbiodunMustapha' },
-}
-
-export const resources = {
-  eyebrow: 'Free Resources',
-  title: 'Start growing',
-  accent: 'today',
-  intro:
-    'Free tools I put together to help you find clarity and move forward. Take what you need, no strings attached.',
-  items: [
-    {
-      tag: 'Free Ebook',
-      title: 'Finding Purpose With Clarity, Faster',
-      desc: 'A short, practical guide to discovering what you are truly here to do.',
-      href: 'http://bit.ly/freepurposebook',
-    },
-    {
-      tag: 'Free Challenge',
-      title: '3-Day Purpose Challenge',
-      desc: 'Three days, three simple steps to get unstuck. Join the challenge on Telegram.',
-      href: 'http://t.me/purposechallenge',
-    },
-    {
-      tag: 'Free Ebook',
-      title: 'Breaking The Boundary Called Localization',
-      desc: 'On thinking bigger than your environment and building a life without limits.',
-      href: 'https://sendfox.com/lp/1we5r0',
-    },
-    {
-      tag: 'Ebook',
-      title: 'How to Productize Your Knowledge and Make Consistent Cash',
-      desc: 'Turn what you already know into a product people are happy to pay for.',
-      href: 'http://bit.ly/ProductizingYourKnowledge',
-    },
-  ],
 }
 
 export const services = {
@@ -200,14 +166,14 @@ export const events = {
   },
   list: [
     {
-      title: 'The Light Congress',
-      role: 'Keynote Speaker',
+      title: 'SHI Conference',
+      role: 'Speaker',
       note: 'Purpose & personal transformation',
       image: '/images/event-lightcongress.jpg',
     },
     {
-      title: 'Future Forward Conference',
-      role: 'Guest Speaker',
+      title: 'China IECC Workshop',
+      role: 'Speaker',
       note: 'Thinking bigger than your environment',
       image: '/images/speaking-futureforward.jpg',
     },
@@ -244,19 +210,15 @@ export const gallery = {
   eyebrow: 'In Motion',
   title: 'Moments &',
   accent: 'work',
-  images: [
-    '/images/speaking-tedx.jpg',
-    '/images/speaking-white.jpg',
-    '/images/speaking-regalia.jpg',
-    '/images/speaking-convocation.jpg',
-    '/images/speaking-agbada.jpg',
-    '/images/speaking-confab.jpg',
-    '/images/speaking-podium.jpg',
-    '/images/speaking-futureforward.jpg',
-    '/images/event-panel.jpg',
-    '/images/speaking-mic.jpg',
-    '/images/event-lightcongress.jpg',
-    '/images/speaking-advance.jpg',
+  intro: 'A closer look at the talks, sessions, and conversations, in motion.',
+  // Each tile autoplays muted on loop with no controls; clicking it opens the
+  // real video on YouTube, forced to start at 0:00 (overrides YouTube's own
+  // "resume where you left off" on mobile app + signed-in web). Leave `id`
+  // empty and a placeholder shows instead.
+  videos: [
+    { id: '9eHFbWvEtLY', title: 'Introduction to Microsoft Excel' },
+    { id: 'HpqIiLnEUwk', title: 'Opportunities with AI in the New Decade — AI Summit' },
+    { id: 'JrMzdVGTpJg', title: 'AI Summit 2026: Beyond Human Thinking' },
   ],
 }
 

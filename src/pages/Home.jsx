@@ -1,10 +1,8 @@
 import Preloader from '../components/Preloader'
 import Navbar from '../components/Navbar'
 import Hero from '../components/Hero'
-import About from '../components/About'
 import Story from '../components/Story'
 import Book from '../components/Book'
-import Resources from '../components/Resources'
 import Services from '../components/Services'
 import Podcast from '../components/Podcast'
 import Speaking from '../components/Speaking'
@@ -20,10 +18,8 @@ export default function Home() {
       <Navbar />
       <main>
         <Hero />
-        <About />
         <Story />
         <Book />
-        <Resources />
         <Services />
         <Podcast />
         <Speaking />

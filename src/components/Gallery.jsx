@@ -1,14 +1,88 @@
+import { useEffect, useRef } from 'react'
 import { ExternalLink } from 'lucide-react'
 import Reveal from './ui/Reveal'
 import SectionHeading from './ui/SectionHeading'
 import { gallery } from '../data/content'
 
-// Ambient, always-on preview: the embed autoplays muted on a silent loop with
-// every control stripped out (no seek bar, no pause, no keyboard shortcuts).
-// It's a moving photograph, not a player — the iframe itself is inert
-// (pointer-events-none) and a transparent link sits on top, so the one thing
-// a click can do is open the real video on YouTube.
+// Loads YouTube's IFrame Player API once and resolves with `window.YT` when
+// it's ready, no matter how many tiles ask for it at once.
+let ytApiPromise
+function loadYouTubeApi() {
+  if (!ytApiPromise) {
+    ytApiPromise = new Promise((resolve) => {
+      if (window.YT?.Player) {
+        resolve(window.YT)
+        return
+      }
+      const prev = window.onYouTubeIframeAPIReady
+      window.onYouTubeIframeAPIReady = () => {
+        prev?.()
+        resolve(window.YT)
+      }
+      if (!document.querySelector('script[src="https://www.youtube.com/iframe_api"]')) {
+        const tag = document.createElement('script')
+        tag.src = 'https://www.youtube.com/iframe_api'
+        document.head.appendChild(tag)
+      }
+    })
+  }
+  return ytApiPromise
+}
+
+// Ambient, always-on preview: the player is driven through YouTube's real
+// Player API (not just the autoplay=1 URL flag, which YouTube often ignores
+// when several iframes load at once) so it reliably starts muted and looping
+// with no paused title card sitting on top. controls=0 hides the scrub bar,
+// and the mount is pointer-events-none, so a click can only reach the
+// transparent link over it, which opens the real video on YouTube.
 function VideoTile({ id, title }) {
+  const mountRef = useRef(null)
+  const playerRef = useRef(null)
+
+  useEffect(() => {
+    if (!id || !mountRef.current) return
+    let cancelled = false
+
+    loadYouTubeApi().then((YT) => {
+      if (cancelled || !mountRef.current) return
+      playerRef.current = new YT.Player(mountRef.current, {
+        videoId: id,
+        width: '100%',
+        height: '100%',
+        playerVars: {
+          autoplay: 1,
+          mute: 1,
+          controls: 0,
+          disablekb: 1,
+          fs: 0,
+          iv_load_policy: 3,
+          loop: 1,
+          playlist: id,
+          rel: 0,
+          playsinline: 1,
+          modestbranding: 1,
+        },
+        events: {
+          onReady: (e) => {
+            e.target.mute()
+            e.target.playVideo()
+          },
+          onStateChange: (e) => {
+            if (e.data === YT.PlayerState.ENDED) {
+              e.target.seekTo(0)
+              e.target.playVideo()
+            }
+          },
+        },
+      })
+    })
+
+    return () => {
+      cancelled = true
+      playerRef.current?.destroy?.()
+    }
+  }, [id])
+
   if (!id) {
     return (
       <div className="flex aspect-video w-full flex-col items-center justify-center gap-2 rounded-2xl border border-dashed border-line bg-cream-200 p-6 text-center">
@@ -18,10 +92,6 @@ function VideoTile({ id, title }) {
     )
   }
 
-  // Plain youtube.com (not the nocookie domain) — nocookie strips all session
-  // context, and an always-anonymous request is what tends to trip YouTube's
-  // "sign in to confirm you're not a bot" wall on the embed itself.
-  const src = `https://www.youtube.com/embed/${id}?autoplay=1&mute=1&loop=1&playlist=${id}&controls=0&disablekb=1&fs=0&iv_load_policy=3&modestbranding=1&rel=0&playsinline=1`
   // `t=0s` forces YouTube to start at the beginning instead of resuming
   // wherever the viewer last left off (their app/web history does this by
   // default, on both mobile and desktop).
@@ -30,15 +100,10 @@ function VideoTile({ id, title }) {
   return (
     <div className="group relative aspect-video w-full overflow-hidden rounded-2xl bg-charcoal shadow-lg shadow-charcoal/10 ring-1 ring-charcoal/5">
       {/* Zoomed past 100% so the wrapper's overflow-hidden crops out
-          YouTube's own play/pause and "watch on YouTube" corner chrome —
-          controls=0 hides the control bar but not that logo mark. */}
-      <iframe
-        className="pointer-events-none h-full w-full scale-[1.16]"
-        src={src}
-        title={title}
-        allow="autoplay; encrypted-media"
-        tabIndex={-1}
-      />
+          YouTube's own corner logo mark once playback is running. */}
+      <div className="pointer-events-none h-full w-full scale-[1.16]">
+        <div ref={mountRef} className="h-full w-full" />
+      </div>
       <a
         href={url}
         target="_blank"

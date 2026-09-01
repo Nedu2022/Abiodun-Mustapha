@@ -5,8 +5,8 @@ import Logo from './ui/Logo'
 import { site, nav, socials } from '../data/content'
 
 // `hideCta` skips the "Let us build something that lasts" banner for pages
-// (like /about) that already close with their own tailored call to action —
-// keeps two near-identical CTAs from stacking back to back.
+// (like /about) that already close with their own tailored call to action.
+// Keeps two near-identical CTAs from stacking back to back.
 export default function Footer({ hideCta = false }) {
   const year = new Date().getFullYear()
   const onHome = useLocation().pathname === '/'

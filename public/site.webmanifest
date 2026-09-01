@@ -1,0 +1,15 @@
+{
+  "name": "Dr. Abiodun Mustapha",
+  "short_name": "A. Mustapha",
+  "description": "Personal development expert, educator, author and speaker.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#f6f1e7",
+  "theme_color": "#0d3a2c",
+  "icons": [
+    { "src": "/favicon-32.png", "sizes": "32x32", "type": "image/png" },
+    { "src": "/apple-touch-icon.png", "sizes": "180x180", "type": "image/png" },
+    { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}

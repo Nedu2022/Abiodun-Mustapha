@@ -22,7 +22,15 @@ function Vinyl() {
         <div className="absolute inset-[18%] rounded-full border border-gold/30" />
         {/* label */}
         <div className="absolute inset-[34%] flex items-center justify-center overflow-hidden rounded-full bg-gold">
-          <img src="/images/portrait-formal.jpg" alt="" className="h-full w-full object-cover" />
+          <img
+            src="/images/portrait-formal.jpg"
+            alt="Dr. Abiodun Mustapha, host of the Growth Secrets podcast"
+            width={1728}
+            height={2160}
+            loading="lazy"
+            decoding="async"
+            className="h-full w-full object-cover"
+          />
         </div>
         <div className="absolute left-1/2 top-1/2 h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full bg-charcoal" />
       </motion.div>

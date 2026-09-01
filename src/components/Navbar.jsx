@@ -31,7 +31,7 @@ export default function Navbar({ dark = false }) {
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
   // Only relevant before scrolling, when the header is transparent and the
-  // page's own background shows through — `dark` says that background is a
+  // page's own background shows through, so `dark` says that background is a
   // dark section (like the About page's header), so the logo/links need to
   // render light instead of assuming a light hero sits behind them.
   const floatingOnDark = dark && !scrolled

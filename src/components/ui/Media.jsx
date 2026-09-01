@@ -1,7 +1,14 @@
 import { useState } from 'react'
 
 // Renders a real image; if it's missing, shows a quiet editorial placeholder
-// (warm tone + small serif label) — never a loud gradient block.
+// (warm tone + small serif label), never a loud gradient block.
+//
+// `priority` is for the one image that is the page's largest contentful paint
+// (the hero portrait): it opts out of lazy loading and asks the browser to
+// fetch it ahead of everything else, which is what Core Web Vitals grades.
+// `width`/`height` are intrinsic dimensions only (the CSS still controls the
+// rendered size). They exist so the browser can reserve space and avoid layout
+// shift, the other half of the vitals score.
 export default function Media({
   src,
   alt = '',
@@ -9,6 +16,9 @@ export default function Media({
   imgClassName = '',
   label,
   rounded = 'rounded-none',
+  width,
+  height,
+  priority = false,
 }) {
   const [failed, setFailed] = useState(false)
   const showImage = src && !failed
@@ -19,7 +29,11 @@ export default function Media({
         <img
           src={src}
           alt={alt}
-          loading="lazy"
+          width={width}
+          height={height}
+          loading={priority ? 'eager' : 'lazy'}
+          decoding={priority ? 'sync' : 'async'}
+          fetchPriority={priority ? 'high' : 'auto'}
           onError={() => setFailed(true)}
           className={`h-full w-full object-cover ${imgClassName}`}
         />

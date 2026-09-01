@@ -1,22 +1,45 @@
-import { useEffect } from 'react'
 import Navbar from '../components/Navbar'
 import AboutSection from '../components/About'
 import Button from '../components/ui/Button'
 import Particles from '../components/ui/Particles'
 import Footer from '../components/Footer'
 import { site, hero } from '../data/content'
+import Seo from '../seo/Seo'
+import { pages } from '../seo/config'
+import {
+  breadcrumbSchema,
+  graph,
+  organizationSchema,
+  personSchema,
+  webPageSchema,
+  websiteSchema,
+} from '../seo/schema'
+
+const aboutJsonLd = graph([
+  websiteSchema(),
+  webPageSchema({ ...pages.about, type: 'ProfilePage' }),
+  personSchema(),
+  organizationSchema(),
+  breadcrumbSchema([
+    { name: 'Home', path: '/' },
+    { name: 'About', path: '/about' },
+  ]),
+])
 
 // A standalone, shareable page: this is the link the team hands out whenever
-// someone asks "send me your bio" — no scrolling through the full site required.
+// someone asks "send me your bio", with no scrolling through the full site.
 export default function About() {
-  useEffect(() => {
-    document.title = `About — ${site.name}`
-  }, [])
-
   return (
     <>
+      <Seo {...pages.about} jsonLd={aboutJsonLd} type="profile" />
+      <a
+        href="#main"
+        className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[200] focus:rounded-full focus:bg-cream focus:px-5 focus:py-3 focus:text-[13px] focus:text-ink"
+      >
+        Skip to content
+      </a>
       <Navbar dark />
-      <main>
+      <main id="main">
         <header className="bg-charcoal pb-14 pt-36 text-cream sm:pt-40">
           <div className="mx-auto max-w-6xl px-5 sm:px-8">
             <span className="eyebrow text-gold">About</span>

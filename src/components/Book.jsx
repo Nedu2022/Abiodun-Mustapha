@@ -14,8 +14,10 @@ export default function Book() {
           <div className="absolute -bottom-3 -right-3 -z-10 h-full w-full border border-gold/50" />
           <Media
             src={book.cover}
-            alt={`${book.title} ${book.accent}`}
+            alt={`Cover of ${book.title} ${book.accent}, a book by Dr. Abiodun Mustapha`}
             label="Book cover"
+            width={354}
+            height={500}
             className="aspect-[354/500] shadow-2xl"
           />
         </Reveal>

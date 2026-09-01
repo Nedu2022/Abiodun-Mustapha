@@ -45,8 +45,10 @@ export default function Events() {
             <div className="group relative h-full min-h-[22rem] overflow-hidden rounded-2xl">
               <Media
                 src={events.featured.image}
-                alt="Abiodun Mustapha speaking at TEDx"
+                alt="Dr. Abiodun Mustapha speaking on the TEDx stage about purpose"
                 label="TEDx"
+                width={1000}
+                height={609}
                 className="absolute inset-0 h-full w-full"
                 imgClassName="object-top transition-transform duration-700 group-hover:scale-105"
               />
@@ -99,7 +101,7 @@ export default function Events() {
                 <div className="relative aspect-[4/3] overflow-hidden">
                   <Media
                     src={e.image}
-                    alt={e.title}
+                    alt={`Dr. Abiodun Mustapha as ${e.role} at ${e.title.trim()}`}
                     label={e.title}
                     className="absolute inset-0 h-full w-full"
                     imgClassName="object-top transition-transform duration-700 group-hover:scale-105"

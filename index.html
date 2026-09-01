@@ -2,25 +2,189 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Baseline head. The <Seo> component rewrites title/description/canonical
+         and the JSON-LD block per route once React mounts; everything here is
+         what a crawler or social scraper sees before any JavaScript runs, so it
+         has to be correct on its own. -->
+    <title>Dr. Abiodun Mustapha | Personal Development Expert & Speaker</title>
+    <meta
+      name="description"
+      content="Dr. Abiodun Mustapha is a personal development expert, educator, author and speaker in Lagos, Nigeria. Book him to speak, train your team, or coach you one on one."
+    />
+    <link rel="canonical" href="https://abiodunmustapha.com/" />
+    <link rel="alternate" hreflang="en" href="https://abiodunmustapha.com/" />
+    <link rel="alternate" hreflang="x-default" href="https://abiodunmustapha.com/" />
+    <meta
+      name="robots"
+      content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"
+    />
+    <meta name="author" content="Dr. Abiodun Mustapha" />
+    <meta name="theme-color" content="#0d3a2c" />
+
+    <!-- Open Graph / Facebook / LinkedIn / WhatsApp -->
+    <meta property="og:type" content="profile" />
+    <meta property="og:site_name" content="Dr. Abiodun Mustapha" />
+    <meta property="og:locale" content="en_US" />
+    <meta
+      property="og:title"
+      content="Dr. Abiodun Mustapha | Personal Development Expert & Speaker"
+    />
+    <meta
+      property="og:description"
+      content="Personal development expert, educator, author of 30 Lessons Life Taught Me Before 30, and founder of Growth Hub Africa. From Oshodi to stages across the world."
+    />
+    <meta property="og:url" content="https://abiodunmustapha.com/" />
+    <meta property="og:image" content="https://abiodunmustapha.com/images/portrait-suit.jpg" />
+    <meta property="og:image:width" content="1728" />
+    <meta property="og:image:height" content="2160" />
+    <meta
+      property="og:image:alt"
+      content="Dr. Abiodun Mustapha, personal development expert, author and speaker"
+    />
+    <meta property="profile:first_name" content="Abiodun" />
+    <meta property="profile:last_name" content="Mustapha" />
+
+    <!-- X / Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:title"
+      content="Dr. Abiodun Mustapha | Personal Development Expert & Speaker"
+    />
+    <meta
+      name="twitter:description"
+      content="Personal development expert, educator, author of 30 Lessons Life Taught Me Before 30, and founder of Growth Hub Africa."
+    />
+    <meta name="twitter:image" content="https://abiodunmustapha.com/images/portrait-suit.jpg" />
+    <meta
+      name="twitter:image:alt"
+      content="Dr. Abiodun Mustapha, personal development expert, author and speaker"
+    />
+
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta
-      name="description"
-      content="Abiodun Mustapha is a Personal Development Expert, Educator, Author and Transformational Speaker. Author of 30 Lessons Life Taught Me Before 30, host of the Growth Secrets Podcast, and founder of Growth Hub Africa."
-    />
-    <meta name="theme-color" content="#0d3a2c" />
+    <link rel="manifest" href="/site.webmanifest" />
+
+    <!-- The hero portrait is the largest-contentful paint on the home page;
+         preloading it pulls LCP forward instead of waiting on the JS bundle. -->
+    <link rel="preload" as="image" href="/images/portrait-suit.jpg" fetchpriority="high" />
+
+    <!-- Fonts load without blocking first paint: the stylesheet is fetched as a
+         non-render-blocking "print" sheet, then switched to all once it lands. -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="dns-prefetch" href="https://www.youtube.com" />
+    <link rel="dns-prefetch" href="https://i.ytimg.com" />
     <link
-      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Jost:wght@300;400;500;600&display=swap"
       rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Jost:wght@300;400;500;600&display=swap"
+      media="print"
+      onload="this.media='all'"
     />
-    <title>Abiodun Mustapha | Personal Development Expert, Author & Speaker</title>
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Jost:wght@300;400;500;600&display=swap"
+      />
+    </noscript>
+
+    <script type="application/ld+json" data-seo-jsonld="1">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "WebSite",
+            "@id": "https://abiodunmustapha.com/#website",
+            "url": "https://abiodunmustapha.com",
+            "name": "Dr. Abiodun Mustapha",
+            "inLanguage": "en",
+            "publisher": { "@id": "https://abiodunmustapha.com/#person" }
+          },
+          {
+            "@type": "Person",
+            "@id": "https://abiodunmustapha.com/#person",
+            "name": "Dr. Abiodun Mustapha",
+            "alternateName": ["Abiodun Mustapha", "Dr Abiodun Mustapha"],
+            "jobTitle": "Personal Development Expert, Educator, Author and Speaker",
+            "description": "Dr. Abiodun Mustapha is a personal development expert, educator, author and speaker in Lagos, Nigeria, founder of Growth Hub Africa and author of 30 Lessons Life Taught Me Before 30.",
+            "url": "https://abiodunmustapha.com",
+            "image": "https://abiodunmustapha.com/images/portrait-suit.jpg",
+            "email": "mailto:abiodunmustapha11@gmail.com",
+            "telephone": "+2348148560609",
+            "address": {
+              "@type": "PostalAddress",
+              "addressLocality": "Lagos",
+              "addressCountry": "NG"
+            },
+            "worksFor": { "@id": "https://abiodunmustapha.com/#organization" },
+            "sameAs": [
+              "https://www.linkedin.com/in/abiodunmustapha/",
+              "https://instagram.com/iamabiodunmustapha",
+              "https://www.youtube.com/channel/UC4KuhzkY8SNEbEUD78LBo6w",
+              "https://medium.com/@abiodunmustapha11",
+              "https://t.me/growthhubafrica",
+              "https://linktr.ee/abiodunmustapha",
+              "https://selar.co/m/AbiodunMustapha",
+              "https://www.amazon.com/dp/B088QT8B9W"
+            ]
+          },
+          {
+            "@type": "Organization",
+            "@id": "https://abiodunmustapha.com/#organization",
+            "name": "Growth Hub Africa",
+            "legalName": "GrowthSpec Technologies Ltd.",
+            "url": "https://t.me/growthhubafrica",
+            "founder": { "@id": "https://abiodunmustapha.com/#person" }
+          }
+        ]
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>
+
+    <!-- Real, indexable copy for anything that reads HTML without executing it.
+         It mirrors what the rendered page says; nothing here is hidden from
+         visitors, it is simply what they get when scripts cannot run. -->
+    <noscript>
+      <h1>Dr. Abiodun Mustapha</h1>
+      <p><strong>Personal Development Expert. Educator. Author. Speaker.</strong></p>
+      <p>
+        I help everyday people discover their purpose, build real discipline, and grow into the
+        fullness of who they were created to be. I am the founder of Growth Hub Africa, a
+        GIZ-certified business trainer and coach, host of the Growth Secrets podcast, and author of
+        <em>30 Lessons Life Taught Me Before 30</em>. I have trained over 2,000 professionals and
+        coached over 45 professionals and business owners, from the streets of Oshodi to the TEDx
+        stage.
+      </p>
+      <h2>Speaking topics</h2>
+      <ul>
+        <li>Purpose &amp; Clarity</li>
+        <li>Personal Development</li>
+        <li>Discipline &amp; Habits</li>
+        <li>Faith &amp; Work</li>
+        <li>Leadership</li>
+        <li>Productizing Knowledge</li>
+      </ul>
+      <h2>Work with me</h2>
+      <ul>
+        <li>Purpose Mastery Masterclass (self-paced)</li>
+        <li>One-on-one coaching (90-minute session)</li>
+        <li>Speaking engagements and corporate training</li>
+      </ul>
+      <h2>Elsewhere</h2>
+      <ul>
+        <li><a href="/about">Full biography and credentials</a></li>
+        <li><a href="https://www.amazon.com/dp/B088QT8B9W">30 Lessons Life Taught Me Before 30</a></li>
+        <li><a href="https://www.youtube.com/channel/UC4KuhzkY8SNEbEUD78LBo6w">Growth Secrets on YouTube</a></li>
+        <li><a href="https://t.me/growthhubafrica">Growth Hub Africa on Telegram</a></li>
+        <li><a href="https://www.linkedin.com/in/abiodunmustapha/">LinkedIn</a></li>
+        <li><a href="mailto:abiodunmustapha11@gmail.com">abiodunmustapha11@gmail.com</a></li>
+      </ul>
+    </noscript>
+
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

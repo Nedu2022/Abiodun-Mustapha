@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { ExternalLink } from 'lucide-react'
 import Reveal from './ui/Reveal'
 import SectionHeading from './ui/SectionHeading'
@@ -38,9 +38,35 @@ function loadYouTubeApi() {
 function VideoTile({ id, title }) {
   const mountRef = useRef(null)
   const playerRef = useRef(null)
+  const frameRef = useRef(null)
+  // Browsers without IntersectionObserver simply start in view, so they keep
+  // the original behaviour instead of losing the video entirely.
+  const [inView, setInView] = useState(
+    () => typeof IntersectionObserver === 'undefined'
+  )
+
+  // Nothing about YouTube is touched until the tile is close to the viewport.
+  // Booting three players on page load pulls in roughly a megabyte of iframe
+  // and player script before the visitor has scrolled anywhere near them, which
+  // is the single largest drag on this page's Core Web Vitals score.
+  useEffect(() => {
+    const node = frameRef.current
+    if (!node || inView) return undefined
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((e) => e.isIntersecting)) {
+          setInView(true)
+          io.disconnect()
+        }
+      },
+      { rootMargin: '300px' }
+    )
+    io.observe(node)
+    return () => io.disconnect()
+  }, [inView])
 
   useEffect(() => {
-    if (!id || !mountRef.current) return
+    if (!id || !inView || !mountRef.current) return
     let cancelled = false
 
     loadYouTubeApi().then((YT) => {
@@ -81,7 +107,7 @@ function VideoTile({ id, title }) {
       cancelled = true
       playerRef.current?.destroy?.()
     }
-  }, [id])
+  }, [id, inView])
 
   if (!id) {
     return (
@@ -98,11 +124,28 @@ function VideoTile({ id, title }) {
   const url = `https://www.youtube.com/watch?v=${id}&t=0s`
 
   return (
-    <div className="group relative aspect-video w-full overflow-hidden rounded-2xl bg-charcoal shadow-lg shadow-charcoal/10 ring-1 ring-charcoal/5">
+    <div
+      ref={frameRef}
+      className="group relative aspect-video w-full overflow-hidden rounded-2xl bg-charcoal shadow-lg shadow-charcoal/10 ring-1 ring-charcoal/5"
+    >
       {/* Zoomed past 100% so the wrapper's overflow-hidden crops out
           YouTube's own corner logo mark once playback is running. */}
       <div className="pointer-events-none h-full w-full scale-[1.16]">
-        <div ref={mountRef} className="h-full w-full" />
+        {inView ? (
+          <div ref={mountRef} className="h-full w-full" />
+        ) : (
+          // Standing in for the player until it is worth loading: YouTube's own
+          // still, which costs one small image instead of a whole iframe.
+          <img
+            src={`https://i.ytimg.com/vi/${id}/hqdefault.jpg`}
+            alt={`Still from "${title}", a video by Dr. Abiodun Mustapha`}
+            width={480}
+            height={360}
+            loading="lazy"
+            decoding="async"
+            className="h-full w-full object-cover"
+          />
+        )}
       </div>
       <a
         href={url}

@@ -45,3 +45,34 @@ npm run build
 - Kept the original **elegant UI completely intact**.
 - **Favicon**: Background updated to a sleek charcoal gradient instead of green for a more premium look.
 - **Content**: 100% matched to his official links.
+
+## 🔍 SEO
+
+Everything search engines read comes from one place: [`src/seo/config.js`](src/seo/config.js).
+Change `SITE_URL` there and canonical tags, Open Graph URLs, `sitemap.xml` and every
+JSON-LD `@id` follow automatically.
+
+| Concern | Where it lives |
+| --- | --- |
+| Per-route title, description, canonical, OG/Twitter cards | `src/seo/Seo.jsx` (runtime) + `index.html` (pre-JS baseline) |
+| Structured data (Person, Organization, WebSite, Book, PodcastSeries, OfferCatalog, FAQPage, BreadcrumbList) | `src/seo/schema.js` |
+| Static `/about` head, image `sitemap.xml`, hreflang | `scripts/seo-build.mjs`, run automatically by `npm run build` |
+| Crawler rules | `public/robots.txt` |
+| FAQ copy (visible text *and* the rich-result source) | `faq` in `src/data/content.js` |
+
+Two rules to keep it healthy:
+
+1. **Never claim in structured data what the page doesn't say.** The JSON-LD is
+   built from the same copy in `src/data/content.js` that visitors read.
+2. **New route? Add it to `pages` in `src/seo/config.js`,** render `<Seo>` in the
+   page component, and add it to the `urls` array in `scripts/seo-build.mjs` so it
+   reaches the sitemap.
+3. **Keep the videos lazy.** `Gallery.jsx` shows a YouTube still and only boots a
+   real player once the tile scrolls near the viewport. Loading all three eagerly
+   costs about a megabyte before anyone has scrolled that far.
+
+### After the next deploy
+
+- Verify the domain in [Google Search Console](https://search.google.com/search-console) and submit `https://abiodunmustapha.com/sitemap.xml`.
+- Do the same in [Bing Webmaster Tools](https://www.bing.com/webmasters) (it also feeds ChatGPT search).
+- Run the live URLs through the [Rich Results Test](https://search.google.com/test/rich-results) and [PageSpeed Insights](https://pagespeed.web.dev/).

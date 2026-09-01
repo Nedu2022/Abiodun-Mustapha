@@ -11,8 +11,10 @@ export default function About() {
           <div className="absolute -left-3 -top-3 hidden h-2/3 w-2/3 border border-gold/50 sm:block" />
           <Media
             src={about.image}
-            alt="Dr. Abiodun Mustapha"
+            alt="Dr. Abiodun Mustapha, founder of Growth Hub Africa and GIZ-certified business trainer, mid-gesture while speaking"
             label="Add photo"
+            width={761}
+            height={1280}
             className="relative aspect-[4/5]"
           />
         </Reveal>

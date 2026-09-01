@@ -1,3 +1,17 @@
+import Seo from '../seo/Seo'
+import { pages } from '../seo/config'
+import {
+  bookSchema,
+  faqSchema,
+  graph,
+  organizationSchema,
+  personSchema,
+  podcastSchema,
+  servicesSchema,
+  webPageSchema,
+  websiteSchema,
+} from '../seo/schema'
+import { faq, services } from '../data/content'
 import Preloader from '../components/Preloader'
 import Navbar from '../components/Navbar'
 import Hero from '../components/Hero'
@@ -9,14 +23,35 @@ import Speaking from '../components/Speaking'
 import Events from '../components/Events'
 import Community from '../components/Community'
 import Gallery from '../components/Gallery'
+import Faq from '../components/Faq'
 import Footer from '../components/Footer'
+
+// Built once at module scope, because the object identity has to stay stable
+// or the Seo effect would re-serialise the whole graph on every render.
+const homeJsonLd = graph([
+  websiteSchema(),
+  webPageSchema({ ...pages.home, type: 'WebPage' }),
+  personSchema(),
+  organizationSchema(),
+  bookSchema(),
+  podcastSchema(),
+  servicesSchema(services.items),
+  faqSchema(faq.items),
+])
 
 export default function Home() {
   return (
     <>
+      <Seo {...pages.home} image={pages.home.image} jsonLd={homeJsonLd} type="profile" />
       <Preloader />
+      <a
+        href="#main"
+        className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[200] focus:rounded-full focus:bg-charcoal focus:px-5 focus:py-3 focus:text-[13px] focus:text-cream"
+      >
+        Skip to content
+      </a>
       <Navbar />
-      <main>
+      <main id="main">
         <Hero />
         <Story />
         <Book />
@@ -26,6 +61,7 @@ export default function Home() {
         <Events />
         <Community />
         <Gallery />
+        <Faq />
       </main>
       <Footer />
     </>

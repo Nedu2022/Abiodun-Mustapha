@@ -4,7 +4,7 @@ import Media from './ui/Media'
 import Particles from './ui/Particles'
 import { hero, credentials } from '../data/content'
 
-const D = 1.5 // start after the preloader lifts
+const D = 0.95 // start as the preloader curtain lifts (see Preloader HOLD_MS)
 const fade = {
   hidden: { opacity: 0, y: 22 },
   show: (i) => ({
@@ -111,8 +111,11 @@ export default function Hero() {
           <div className="absolute -bottom-3 -left-3 hidden h-2/3 w-2/3 bg-green/10 sm:block" />
           <Media
             src={hero.image}
-            alt="Abiodun Mustapha"
+            alt="Dr. Abiodun Mustapha, personal development expert, educator and speaker, in a portrait suit"
             label="Add photo"
+            width={1728}
+            height={2160}
+            priority
             className="relative aspect-[4/5]"
           />
         </motion.div>

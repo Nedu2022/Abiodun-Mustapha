@@ -22,6 +22,7 @@ export const nav = [
   { label: 'Podcast', href: '#podcast' },
   { label: 'Speaking', href: '#speaking' },
   { label: 'Events', href: '#events' },
+  { label: 'FAQ', href: '#faq' },
 ]
 
 export const hero = {
@@ -217,7 +218,7 @@ export const gallery = {
   // empty and a placeholder shows instead.
   videos: [
     { id: '9eHFbWvEtLY', title: 'Introduction to Microsoft Excel' },
-    { id: 'HpqIiLnEUwk', title: 'Opportunities with AI in the New Decade — AI Summit' },
+    { id: 'HpqIiLnEUwk', title: 'Opportunities with AI in the New Decade (AI Summit)' },
     { id: 'JrMzdVGTpJg', title: 'AI Summit 2026: Beyond Human Thinking' },
   ],
 }
@@ -231,3 +232,48 @@ export const socials = [
   { id: 'medium', label: 'Medium', icon: 'medium', url: 'https://medium.com/@abiodunmustapha11' },
   { id: 'email', label: 'Email', icon: 'email', url: 'mailto:abiodunmustapha11@gmail.com' },
 ]
+
+// Answers to what people actually type into Google before they reach out.
+// Rendered as a real, readable section and mirrored into FAQPage structured
+// data, so the same words can win the rich result and the click.
+export const faq = {
+  eyebrow: 'Questions',
+  title: 'The things people',
+  accent: 'always ask',
+  intro:
+    'Before we ever get on a call, these are the questions that show up in my inbox most. Here are the honest answers.',
+  items: [
+    {
+      q: 'Who is Dr. Abiodun Mustapha?',
+      a: 'I am a personal development expert, educator, author and speaker based in Lagos, Nigeria. I am the founder of Growth Hub Africa and GrowthSpec Technologies Ltd, a GIZ-certified business trainer and coach, and the author of 30 Lessons Life Taught Me Before 30. I grew up on the streets of Oshodi and now teach professionals how to move through purpose, productivity and profitability.',
+    },
+    {
+      q: 'How do I book Abiodun Mustapha to speak at my event?',
+      a: 'Send the invitation through the booking page on this site, or reach me on WhatsApp or by email. Tell me the date, the audience and what you want them to walk away with, and I will come back to you personally with availability and a plan for the session.',
+    },
+    {
+      q: 'What topics does he speak on?',
+      a: 'Purpose and clarity, personal development, discipline and habits, faith and work, leadership, and productizing your knowledge. I speak to churches, schools, companies and conferences, and I shape every talk around the room I am walking into.',
+    },
+    {
+      q: 'Does he offer one-on-one coaching?',
+      a: 'Yes. I run private 90-minute coaching sessions on where you are stuck and where you are headed, alongside the self-paced Purpose Mastery Masterclass. I have coached over 45 professionals and business owners and trained more than 2,000 people to date.',
+    },
+    {
+      q: 'What books has Abiodun Mustapha written?',
+      a: 'My published works include 30 Lessons Life Taught Me Before 30: The Myths, Mistakes and Miracles, and Mind Shift. 30 Lessons is available on Amazon and through my Selar bookstore, and I also give away a free purpose ebook to anyone starting out.',
+    },
+    {
+      q: 'Where can I listen to the Growth Secrets podcast?',
+      a: 'Growth Secrets w/ Abiodun Mustapha is on Google Podcasts and every major podcast app through the Anchor feed, and the video episodes are on my YouTube channel. Each one is an unscripted sit-down with a professional worth learning from.',
+    },
+    {
+      q: 'What is Growth Hub Africa?',
+      a: 'Growth Hub Africa is the community I founded for strategic career leaders and business experts. It runs on Telegram, and it is where the daily encouragement, practical wisdom and accountability live. Joining is free.',
+    },
+    {
+      q: 'Where is Dr. Abiodun Mustapha based?',
+      a: 'I am based in Lagos, Nigeria, where I coordinate advocacy and operations at the Institute of Digital Humanities and Technologies at Anchor University. I speak and train both across Nigeria and internationally, including virtual sessions.',
+    },
+  ],
+}

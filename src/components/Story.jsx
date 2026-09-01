@@ -12,8 +12,10 @@ export default function Story() {
           <div className="absolute -bottom-3 -right-3 hidden h-2/3 w-2/3 border border-gold/50 sm:block" />
           <Media
             src={story.image}
-            alt="Abiodun Mustapha"
+            alt="Black and white portrait of Dr. Abiodun Mustapha, who grew up in Oshodi, Lagos"
             label="Add photo"
+            width={864}
+            height={1080}
             className="relative aspect-[4/5]"
           />
         </Reveal>

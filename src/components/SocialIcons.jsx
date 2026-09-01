@@ -1,5 +1,3 @@
-// Lucide 1.x removed brand logos, so social icons are inline SVGs here.
-// All share a 24×24 viewBox and use `currentColor` so styling just works.
 const svg = (path) =>
   function Icon(props) {
     return (

@@ -3,9 +3,6 @@ import Reveal from './ui/Reveal'
 import SectionHeading from './ui/SectionHeading'
 import { faq } from '../data/content'
 
-// Built on native <details>/<summary> on purpose: the answers sit in the HTML
-// whether or not JavaScript runs, so crawlers (and screen readers) get the full
-// text while visitors get a quiet accordion.
 export default function Faq() {
   return (
     <section id="faq" className="scroll-mt-24 bg-cream py-20 sm:py-28">

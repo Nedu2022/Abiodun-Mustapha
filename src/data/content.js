@@ -1,6 +1,5 @@
 const WHATSAPP = 'https://api.whatsapp.com/send?phone=2348148560609'
 
-// Booking & speaking invitations route to the official website.
 const BOOKING_FORM = 'https://abiodunmustapha11.wixsite.com/abiodunmustapha'
 
 export const site = {
@@ -212,10 +211,7 @@ export const gallery = {
   title: 'Moments &',
   accent: 'work',
   intro: 'A closer look at the talks, sessions, and conversations, in motion.',
-  // Each tile autoplays muted on loop with no controls; clicking it opens the
-  // real video on YouTube, forced to start at 0:00 (overrides YouTube's own
-  // "resume where you left off" on mobile app + signed-in web). Leave `id`
-  // empty and a placeholder shows instead.
+
   videos: [
     { id: '9eHFbWvEtLY', title: 'Introduction to Microsoft Excel' },
     { id: 'HpqIiLnEUwk', title: 'Opportunities with AI in the New Decade (AI Summit)' },
@@ -233,9 +229,6 @@ export const socials = [
   { id: 'email', label: 'Email', icon: 'email', url: 'mailto:abiodunmustapha11@gmail.com' },
 ]
 
-// Answers to what people actually type into Google before they reach out.
-// Rendered as a real, readable section and mirrored into FAQPage structured
-// data, so the same words can win the rich result and the click.
 export const faq = {
   eyebrow: 'Questions',
   title: 'The things people',

@@ -1,14 +1,5 @@
 import { useState } from 'react'
 
-// Renders a real image; if it's missing, shows a quiet editorial placeholder
-// (warm tone + small serif label), never a loud gradient block.
-//
-// `priority` is for the one image that is the page's largest contentful paint
-// (the hero portrait): it opts out of lazy loading and asks the browser to
-// fetch it ahead of everything else, which is what Core Web Vitals grades.
-// `width`/`height` are intrinsic dimensions only (the CSS still controls the
-// rendered size). They exist so the browser can reserve space and avoid layout
-// shift, the other half of the vitals score.
 export default function Media({
   src,
   alt = '',

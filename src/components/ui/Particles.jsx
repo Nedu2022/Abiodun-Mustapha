@@ -1,9 +1,6 @@
 import { useMemo } from 'react'
 import { motion } from 'framer-motion'
 
-// Lightweight ambient particle field: a faint dot-grid for texture plus a few
-// slow-drifting dots. Pure CSS + Framer Motion, no heavy canvas library.
-// Deterministic pseudo-random so renders are stable (and lint stays happy).
 const rand = (seed) => {
   const x = Math.sin(seed * 999.7) * 43758.5453
   return x - Math.floor(x)
@@ -29,7 +26,6 @@ export default function Particles({ count = 14, tone = 'gold', className = '' })
 
   return (
     <div className={`pointer-events-none absolute inset-0 overflow-hidden ${className}`} aria-hidden="true">
-      {/* faint dot grid */}
       <div
         className="absolute inset-0 opacity-[0.06]"
         style={{
@@ -37,7 +33,6 @@ export default function Particles({ count = 14, tone = 'gold', className = '' })
           backgroundSize: '26px 26px',
         }}
       />
-      {/* drifting particles */}
       {dots.map((d) => (
         <motion.span
           key={d.id}

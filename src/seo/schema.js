@@ -1,8 +1,3 @@
-// ---------------------------------------------------------------------------
-// JSON-LD builders. Every claim here is also stated in the visible page copy.
-// Google penalises structured data that describes things the page doesn't show,
-// so nothing is asserted that isn't in src/data/content.js.
-// ---------------------------------------------------------------------------
 import {
   SITE_URL,
   absolute,
@@ -94,7 +89,6 @@ export const podcastSchema = () => ({
   sameAs: [podcast.url, podcast.youtube],
 })
 
-// The three ways to work with him, as a catalogue Google can surface.
 export const servicesSchema = (services) => ({
   '@type': 'OfferCatalog',
   '@id': `${SITE_URL}/#services`,
@@ -145,8 +139,6 @@ export const webPageSchema = ({ path, title, description, type = 'WebPage' }) =>
   inLanguage: 'en',
 })
 
-// One @graph per page keeps every node cross-referenced by @id, which is how
-// Google resolves the site to a single real-world entity instead of loose bits.
 export const graph = (nodes) => ({
   '@context': 'https://schema.org',
   '@graph': nodes.filter(Boolean),

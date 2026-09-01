@@ -26,8 +26,6 @@ import Gallery from '../components/Gallery'
 import Faq from '../components/Faq'
 import Footer from '../components/Footer'
 
-// Built once at module scope, because the object identity has to stay stable
-// or the Seo effect would re-serialise the whole graph on every render.
 const homeJsonLd = graph([
   websiteSchema(),
   webPageSchema({ ...pages.home, type: 'WebPage' }),

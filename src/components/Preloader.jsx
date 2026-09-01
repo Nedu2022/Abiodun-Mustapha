@@ -2,11 +2,6 @@ import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { site } from '../data/content'
 
-// Elegant intro: a rotating gold ring around the monogram, then a curtain lift.
-// Held to 900ms on purpose. The curtain sits over the hero, so however long it
-// stays up is added directly to Largest Contentful Paint, the Core Web Vital
-// Google grades the page on. Anyone who has asked their system for reduced
-// motion skips it entirely.
 const HOLD_MS = 900
 
 export default function Preloader() {
@@ -21,7 +16,6 @@ export default function Preloader() {
     return () => clearTimeout(t)
   }, [done])
 
-  // lock scroll while it's up
   useEffect(() => {
     document.body.style.overflow = done ? '' : 'hidden'
     return () => {

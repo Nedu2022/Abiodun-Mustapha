@@ -6,9 +6,6 @@ import Logo from './ui/Logo'
 import { site, nav, socials } from '../data/content'
 import SocialIcons from './SocialIcons'
 
-// Full routes (/about) use React Router's <Link> for client-side navigation.
-// Section anchors (#story) stay plain <a> tags for in-page scrolling on the
-// homepage, but route back to the homepage first when clicked from elsewhere.
 function NavLink({ href, onHome, className, children, onClick }) {
   const isRoute = href.startsWith('/') && !href.includes('#')
   if (isRoute) {
@@ -30,10 +27,7 @@ export default function Navbar({ dark = false }) {
   const onHome = pathname === '/'
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
-  // Only relevant before scrolling, when the header is transparent and the
-  // page's own background shows through, so `dark` says that background is a
-  // dark section (like the About page's header), so the logo/links need to
-  // render light instead of assuming a light hero sits behind them.
+
   const floatingOnDark = dark && !scrolled
 
   useEffect(() => {
@@ -106,7 +100,6 @@ export default function Navbar({ dark = false }) {
         </nav>
       </motion.header>
 
-      {/* Side drawer (mobile) */}
       <AnimatePresence>
         {open && (
           <>
@@ -124,7 +117,6 @@ export default function Navbar({ dark = false }) {
               exit={{ x: '100%' }}
               transition={{ type: 'spring', stiffness: 260, damping: 30 }}
             >
-              {/* Full name as a large backdrop watermark */}
               <div
                 aria-hidden="true"
                 className="pointer-events-none absolute inset-0 flex flex-col justify-center px-6"

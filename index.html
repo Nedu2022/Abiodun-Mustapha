@@ -4,10 +4,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!-- Baseline head. The <Seo> component rewrites title/description/canonical
-         and the JSON-LD block per route once React mounts; everything here is
-         what a crawler or social scraper sees before any JavaScript runs, so it
-         has to be correct on its own. -->
     <title>Dr. Abiodun Mustapha | Personal Development Expert & Speaker</title>
     <meta
       name="description"
@@ -23,7 +19,6 @@
     <meta name="author" content="Dr. Abiodun Mustapha" />
     <meta name="theme-color" content="#0d3a2c" />
 
-    <!-- Open Graph / Facebook / LinkedIn / WhatsApp -->
     <meta property="og:type" content="profile" />
     <meta property="og:site_name" content="Dr. Abiodun Mustapha" />
     <meta property="og:locale" content="en_US" />
@@ -46,7 +41,6 @@
     <meta property="profile:first_name" content="Abiodun" />
     <meta property="profile:last_name" content="Mustapha" />
 
-    <!-- X / Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta
       name="twitter:title"
@@ -67,12 +61,8 @@
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
 
-    <!-- The hero portrait is the largest-contentful paint on the home page;
-         preloading it pulls LCP forward instead of waiting on the JS bundle. -->
     <link rel="preload" as="image" href="/images/portrait-suit.jpg" fetchpriority="high" />
 
-    <!-- Fonts load without blocking first paint: the stylesheet is fetched as a
-         non-render-blocking "print" sheet, then switched to all once it lands. -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="dns-prefetch" href="https://www.youtube.com" />
@@ -145,9 +135,6 @@
   <body>
     <div id="root"></div>
 
-    <!-- Real, indexable copy for anything that reads HTML without executing it.
-         It mirrors what the rendered page says; nothing here is hidden from
-         visitors, it is simply what they get when scripts cannot run. -->
     <noscript>
       <h1>Dr. Abiodun Mustapha</h1>
       <p><strong>Personal Development Expert. Educator. Author. Speaker.</strong></p>

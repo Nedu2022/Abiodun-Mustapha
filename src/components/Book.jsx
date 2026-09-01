@@ -8,7 +8,6 @@ export default function Book() {
   return (
     <section id="book" className="scroll-mt-24 bg-cream py-20 sm:py-28">
       <div className="mx-auto grid max-w-6xl items-center gap-12 px-5 sm:px-8 lg:grid-cols-[0.85fr_1.15fr] lg:gap-16">
-        {/* Cover */}
         <Reveal className="relative mx-auto w-full max-w-[280px]">
           <div className="absolute -inset-3 -z-10 bg-green/10" />
           <div className="absolute -bottom-3 -right-3 -z-10 h-full w-full border border-gold/50" />
@@ -22,7 +21,6 @@ export default function Book() {
           />
         </Reveal>
 
-        {/* Details */}
         <div>
           <SectionHeading eyebrow={book.eyebrow} title={book.title} accent={book.accent} />
           <Reveal delay={0.05}>

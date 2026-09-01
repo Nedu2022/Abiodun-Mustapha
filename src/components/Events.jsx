@@ -4,7 +4,6 @@ import Media from './ui/Media'
 import SectionHeading from './ui/SectionHeading'
 import { events } from '../data/content'
 
-// The TED-style wordmark: "TED" in cream, the "x" in the signature TED red.
 function TedxMark() {
   return (
     <span className="inline-flex items-baseline font-sans font-bold uppercase leading-none tracking-tight">
@@ -20,7 +19,6 @@ export default function Events() {
       id="events"
       className="scroll-mt-24 relative overflow-hidden bg-charcoal py-20 text-cream sm:py-28"
     >
-      {/* Soft green glow to give the dark section depth */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute -top-24 right-0 h-72 w-72 rounded-full bg-green/25 blur-[120px]"
@@ -40,7 +38,6 @@ export default function Events() {
         />
 
         <div className="mt-12 grid gap-5 lg:grid-cols-3">
-          {/* Featured: TEDx */}
           <Reveal className="lg:col-span-2">
             <div className="group relative h-full min-h-[22rem] overflow-hidden rounded-2xl">
               <Media
@@ -67,7 +64,6 @@ export default function Events() {
             </div>
           </Reveal>
 
-          {/* Credibility panel */}
           <Reveal delay={0.1}>
             <div className="flex h-full flex-col justify-between gap-8 rounded-2xl border border-cream/10 bg-charcoal-800 p-6 sm:p-8">
               <div className="flex flex-col gap-6">
@@ -93,7 +89,6 @@ export default function Events() {
           </Reveal>
         </div>
 
-        {/* Other engagements */}
         <div className="mt-5 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {events.list.map((e, i) => (
             <Reveal key={e.title} delay={0.05 * i}>

@@ -1,4 +1,3 @@
-
 export const SITE_URL = 'https://abiodunmustapha.com'
 
 export const DEFAULT_OG_IMAGE = {
@@ -21,7 +20,7 @@ export const person = {
   city: 'Lagos',
   country: 'NG',
   countryName: 'Nigeria',
-  // Only claims that appear verbatim in the site copy. Nothing invented.
+
   knowsAbout: [
     'Personal development',
     'Purpose and clarity',
@@ -82,8 +81,6 @@ export const podcast = {
   youtube: 'https://www.youtube.com/channel/UC4KuhzkY8SNEbEUD78LBo6w',
 }
 
-// Per-route <head> copy. Titles stay under ~60 chars and descriptions under
-// ~155 so Google renders them whole instead of truncating with an ellipsis.
 export const pages = {
   home: {
     path: '/',

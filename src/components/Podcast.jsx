@@ -5,7 +5,6 @@ import Particles from './ui/Particles'
 import SectionHeading from './ui/SectionHeading'
 import { podcast } from '../data/content'
 
-// Rotating "vinyl" made of concentric rings + a photo label in the middle.
 function Vinyl() {
   return (
     <div className="relative mx-auto aspect-square w-full max-w-sm">
@@ -20,7 +19,6 @@ function Vinyl() {
       >
         <div className="absolute inset-0 rounded-full border border-cream/10" />
         <div className="absolute inset-[18%] rounded-full border border-gold/30" />
-        {/* label */}
         <div className="absolute inset-[34%] flex items-center justify-center overflow-hidden rounded-full bg-gold">
           <img
             src="/images/portrait-formal.jpg"

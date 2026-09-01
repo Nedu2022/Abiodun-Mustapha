@@ -1,6 +1,5 @@
 import { motion } from 'framer-motion'
 
-// Scroll-triggered fade-up. Reused everywhere for a consistent reveal rhythm.
 export default function Reveal({
   children,
   delay = 0,

@@ -1,6 +1,5 @@
 import Reveal from './Reveal'
 
-// Consistent section header: gold eyebrow + Playfair heading with italic accent.
 export default function SectionHeading({
   eyebrow,
   title,

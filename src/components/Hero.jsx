@@ -4,7 +4,7 @@ import Media from './ui/Media'
 import Particles from './ui/Particles'
 import { hero, credentials } from '../data/content'
 
-const D = 0.95 // start as the preloader curtain lifts (see Preloader HOLD_MS)
+const D = 0.95
 const fade = {
   hidden: { opacity: 0, y: 22 },
   show: (i) => ({

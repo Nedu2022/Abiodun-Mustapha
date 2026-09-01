@@ -1,10 +1,6 @@
 import { useEffect } from 'react'
 import { SITE_URL, absolute, DEFAULT_OG_IMAGE, person } from './config'
 
-// Tiny, dependency-free replacement for react-helmet: it rewrites the document
-// head on every route change so each URL has its own title, description,
-// canonical and social card. Tags it owns are marked data-seo="1" and cleared
-// on unmount, so routes can never inherit each other's metadata.
 const OWNED = 'data-seo'
 
 function upsert(selector, create) {
@@ -65,8 +61,7 @@ export default function Seo({
         : 'index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1'
     )
     link('canonical', url)
-    // The site is English-only, so every URL points at itself and doubles as
-    // the x-default. Stated explicitly, it stops Google guessing.
+
     link('alternate', url, { hreflang: 'en' })
     link('alternate', url, { hreflang: 'x-default' })
 
@@ -85,8 +80,6 @@ export default function Seo({
     meta('name', 'twitter:image', img)
     meta('name', 'twitter:image:alt', imageAlt || DEFAULT_OG_IMAGE.alt)
 
-    // Structured data is replaced wholesale rather than merged: stale nodes
-    // from a previous route are worse than no nodes at all.
     document.head.querySelectorAll('script[data-seo-jsonld]').forEach((s) => s.remove())
     if (jsonLd) {
       const script = document.createElement('script')

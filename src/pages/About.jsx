@@ -26,8 +26,6 @@ const aboutJsonLd = graph([
   ]),
 ])
 
-// A standalone, shareable page: this is the link the team hands out whenever
-// someone asks "send me your bio", with no scrolling through the full site.
 export default function About() {
   return (
     <>
@@ -57,7 +55,6 @@ export default function About() {
         <section className="relative overflow-hidden bg-green-deep py-20 text-cream sm:py-28">
           <Particles count={16} tone="gold" />
 
-          {/* Oversized initials watermark, echoing the mobile-nav treatment */}
           <div
             aria-hidden="true"
             className="pointer-events-none absolute inset-0 flex items-center justify-center"

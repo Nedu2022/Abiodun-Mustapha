@@ -25,9 +25,9 @@ export const nav = [
 ]
 
 export const hero = {
-  eyebrow: 'Talk Leader and Global Speaker',
+  eyebrow: 'Thought Leader and Global Speaker',
   name: 'Dr. Abiodun Mustapha',
-  roles: 'Personal Development Expert. Educator. Author. Speaker.',
+  roles: 'Personal Development Expert. Educator. Author',
   mission:
     'I help everyday people discover their purpose, build real discipline, and grow into the fullness of who they were created to be.',
   blurb:
@@ -138,7 +138,7 @@ export const speaking = {
   eyebrow: 'Speaking & Training',
   title: 'Invite me to your',
   accent: 'next event',
-  body: 'I stand in front of churches, schools, companies, and conferences and leave the room different than I found it. Give me your audience and I will give them a moment they carry home.',
+  body: 'I stand in front of professionals, schools, companies, and conferences and leave the room different than I found it. Give me your audience and I will give them a moment they carry home.',
   topics: [
     'Purpose & Clarity',
     'Personal Development',
@@ -166,26 +166,26 @@ export const events = {
   },
   list: [
     {
-      title: 'SHI Conference',
+      title: ' China IECC Workshop',
       role: 'Speaker',
       note: 'Purpose & personal transformation',
       image: '/images/event-lightcongress.jpg',
     },
     {
-      title: 'China IECC Workshop',
-      role: 'Speaker',
+      title: 'TEDx',
+      role: 'Organizer',
       note: 'Thinking bigger than your environment',
       image: '/images/speaking-futureforward.jpg',
     },
     {
-      title: 'The Advance',
-      role: 'Facilitator',
+      title: 'SHI Conference',
+      role: 'Speaker',
       note: 'Discipline, habits & becoming',
       image: '/images/speaking-advance.jpg',
     },
     {
       title: 'Leadership Confab',
-      role: 'Panelist & Speaker',
+      role: 'Team Lead',
       note: 'Faith, work & leadership',
       image: '/images/speaking-confab.jpg',
     },

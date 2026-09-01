@@ -89,6 +89,19 @@ export const pages = {
       'Dr. Abiodun Mustapha is a personal development expert, educator, author and speaker in Lagos, Nigeria. Book him to speak, train your team, or coach you one on one.',
     image: '/images/portrait-suit.jpg',
   },
+  blog: {
+    path: '/blog',
+    title: 'Writing by Dr. Abiodun Mustapha | Purpose, Discipline & Career',
+    description:
+      'Long-form writing from Dr. Abiodun Mustapha on finding your purpose, building discipline, and growing a career from nothing. New pieces twice a month.',
+    image: '/images/portrait-desk.jpg',
+  },
+  admin: {
+    path: '/admin',
+    title: 'Studio',
+    description: 'Private editor.',
+    image: '/images/portrait-suit.jpg',
+  },
   about: {
     path: '/about',
     title: 'About Dr. Abiodun Mustapha | Bio, Credentials & Speaker Profile',

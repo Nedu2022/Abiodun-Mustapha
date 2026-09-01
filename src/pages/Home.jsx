@@ -23,6 +23,7 @@ import Speaking from '../components/Speaking'
 import Events from '../components/Events'
 import Community from '../components/Community'
 import Gallery from '../components/Gallery'
+import LatestWriting from '../components/blog/LatestWriting'
 import Faq from '../components/Faq'
 import Footer from '../components/Footer'
 
@@ -59,6 +60,7 @@ export default function Home() {
         <Events />
         <Community />
         <Gallery />
+        <LatestWriting />
         <Faq />
       </main>
       <Footer />

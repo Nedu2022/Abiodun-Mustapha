@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url'
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 const dist = resolve(root, 'dist')
 
-const { SITE_URL, pages, absolute } = await import(
+const { SITE_URL, pages, absolute, person } = await import(
   new URL('../src/seo/config.js', import.meta.url).href
 )
 
@@ -39,6 +39,15 @@ function setAlternates(html, url) {
   )
 }
 
+function setNoscript(html, inner) {
+  let replaced = false
+  return html.replace(/<noscript>[\s\S]*?<\/noscript>/gi, (match) => {
+    if (replaced || !match.includes('<h1')) return match
+    replaced = true
+    return `<noscript>\n      ${inner}\n    </noscript>`
+  })
+}
+
 function setJsonLd(html, json) {
   const block = `<script type="application/ld+json" data-seo-jsonld="1">\n${JSON.stringify(
     json,
@@ -51,7 +60,97 @@ function setJsonLd(html, json) {
   )
 }
 
+const posts = JSON.parse(
+  await readFile(new URL('../src/data/posts.json', import.meta.url), 'utf8')
+)
+
+const published = posts
+  .filter((post) => post.status === 'published' && post.publishedAt)
+  .filter((post) => new Date(post.publishedAt).getTime() <= Date.now())
+  .sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt))
+
 const PERSON_ID = `${SITE_URL}/#person`
+const BLOG_ID = `${SITE_URL}/blog#blog`
+
+function blockToHtml(block) {
+  if (block.type === 'heading') return `<h2>${esc(block.text || '')}</h2>`
+  if (block.type === 'quote') return `<blockquote><p>${esc(block.text || '')}</p></blockquote>`
+  if (block.type === 'divider') return '<hr>'
+  if (block.type === 'list') {
+    return `<ul>${(block.items || []).map((i) => `<li>${esc(i)}</li>`).join('')}</ul>`
+  }
+  if (block.type === 'image') {
+    const caption = block.caption ? `<figcaption>${esc(block.caption)}</figcaption>` : ''
+    return `<figure><img src="${esc(block.src || '')}" alt="${esc(block.alt || '')}">${caption}</figure>`
+  }
+  return `<p>${esc(block.text || '')}</p>`
+}
+
+function articleHtml(post) {
+  return [
+    `<h1>${esc(post.title)}</h1>`,
+    `<p><em>${esc(post.excerpt)}</em></p>`,
+    `<p>By ${esc(person.name)}, <time datetime="${esc(post.publishedAt)}">${esc(post.publishedAt)}</time></p>`,
+    ...(post.body || []).map(blockToHtml),
+    '<p><a href="/blog">More writing by Dr. Abiodun Mustapha</a></p>',
+  ].join('\n      ')
+}
+
+function indexHtml() {
+  const items = published
+    .map(
+      (post) =>
+        `<li><a href="/blog/${esc(post.slug)}">${esc(post.title)}</a> &mdash; ${esc(post.excerpt)}</li>`
+    )
+    .join('\n        ')
+  return [
+    '<h1>Writing by Dr. Abiodun Mustapha</h1>',
+    `<p>${esc(pages.blog.description)}</p>`,
+    `<ul>\n        ${items}\n      </ul>`,
+  ].join('\n      ')
+}
+
+function wordCount(post) {
+  return (post.body || [])
+    .map((b) => (b.type === 'list' ? (b.items || []).join(' ') : b.text || b.caption || ''))
+    .join(' ')
+    .split(/\s+/)
+    .filter(Boolean).length
+}
+
+function postGraph(post) {
+  const url = absolute(`/blog/${post.slug}`)
+  return {
+    '@type': 'BlogPosting',
+    '@id': `${url}#post`,
+    headline: post.title,
+    description: post.seoDescription || post.excerpt,
+    url,
+    image: post.cover ? absolute(post.cover) : undefined,
+    datePublished: post.publishedAt,
+    dateModified: post.updatedAt || post.publishedAt,
+    keywords: (post.tags || []).join(', '),
+    wordCount: wordCount(post),
+    articleSection: (post.tags || [])[0],
+    inLanguage: 'en',
+    author: { '@id': PERSON_ID },
+    publisher: { '@id': PERSON_ID },
+    isPartOf: { '@id': BLOG_ID },
+    mainEntityOfPage: { '@id': `${url}#webpage` },
+  }
+}
+
+function crumbs(trail) {
+  return {
+    '@type': 'BreadcrumbList',
+    itemListElement: trail.map((item, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      name: item.name,
+      item: absolute(item.path),
+    })),
+  }
+}
 
 function baseNodes(shell) {
   const match = shell.match(
@@ -142,16 +241,167 @@ const aboutImages = [
   ['/images/portrait-gesture.jpg', 'Dr. Abiodun Mustapha, founder of Growth Hub Africa and GIZ-certified business trainer'],
 ]
 
+async function writeBoth(relPath, html) {
+  await mkdir(resolve(dist, relPath), { recursive: true })
+  await writeFile(resolve(dist, `${relPath}/index.html`), html, 'utf8')
+  await writeFile(resolve(dist, `${relPath}.html`), html, 'utf8')
+}
+
+async function buildStamped(shell, { path, title, description, image, jsonLd, noscript, out }) {
+  const url = absolute(path)
+  let html = shell
+
+  html = html.replace(/<title>[\s\S]*?<\/title>/i, `<title>${esc(title)}</title>`)
+  html = setMeta(html, 'name', 'description', description)
+  html = setCanonical(html, url)
+  html = setAlternates(html, url)
+  html = setMeta(html, 'property', 'og:title', title)
+  html = setMeta(html, 'property', 'og:description', description)
+  html = setMeta(html, 'property', 'og:url', url)
+  html = setMeta(html, 'name', 'twitter:title', title)
+  html = setMeta(html, 'name', 'twitter:description', description)
+  html = html.replace(/<meta property="og:image:width"[\s\S]*?\/>\s*/i, '')
+  html = html.replace(/<meta property="og:image:height"[\s\S]*?\/>\s*/i, '')
+  if (image) {
+    html = setMeta(html, 'property', 'og:image', absolute(image))
+    html = setMeta(html, 'name', 'twitter:image', absolute(image))
+    html = html.replace(
+      /<link rel="preload" as="image"[^>]*>/i,
+      `<link rel="preload" as="image" href="${image}" fetchpriority="high" />`
+    )
+  }
+  html = setNoscript(html, noscript)
+  html = setJsonLd(html, { ...jsonLd, '@graph': [...jsonLd['@graph'], ...baseNodes(shell)] })
+
+  await writeBoth(out, html)
+  return `${out}.html`
+}
+
+async function buildBlog(shell) {
+  const written = []
+
+  written.push(
+    await buildStamped(shell, {
+      path: '/blog',
+      title: pages.blog.title,
+      description: pages.blog.description,
+      image: pages.blog.image,
+      noscript: indexHtml(),
+      out: 'blog',
+      jsonLd: {
+        '@context': 'https://schema.org',
+        '@graph': [
+          {
+            '@type': 'Blog',
+            '@id': BLOG_ID,
+            url: absolute('/blog'),
+            name: `${person.name} on purpose, discipline and work`,
+            description: pages.blog.description,
+            inLanguage: 'en',
+            author: { '@id': PERSON_ID },
+            publisher: { '@id': PERSON_ID },
+            blogPost: published.map((post) => ({ '@id': `${absolute(`/blog/${post.slug}`)}#post` })),
+          },
+          {
+            '@type': 'CollectionPage',
+            '@id': `${absolute('/blog')}#webpage`,
+            url: absolute('/blog'),
+            name: pages.blog.title,
+            description: pages.blog.description,
+            isPartOf: { '@id': `${SITE_URL}/#website` },
+            inLanguage: 'en',
+          },
+          crumbs([
+            { name: 'Home', path: '/' },
+            { name: 'Writing', path: '/blog' },
+          ]),
+        ],
+      },
+    })
+  )
+
+  for (const post of published) {
+    written.push(
+      await buildStamped(shell, {
+        path: `/blog/${post.slug}`,
+        title: post.seoTitle || `${post.title} | ${person.name}`,
+        description: post.seoDescription || post.excerpt,
+        image: post.cover,
+        noscript: articleHtml(post),
+        out: `blog/${post.slug}`,
+        jsonLd: {
+          '@context': 'https://schema.org',
+          '@graph': [
+            postGraph(post),
+            crumbs([
+              { name: 'Home', path: '/' },
+              { name: 'Writing', path: '/blog' },
+              { name: post.title, path: `/blog/${post.slug}` },
+            ]),
+          ],
+        },
+      })
+    )
+  }
+
+  return `${written.length} blog pages`
+}
+
+async function buildFeed() {
+  const items = published
+    .map((post) => {
+      const url = absolute(`/blog/${post.slug}`)
+      return `    <item>
+      <title>${esc(post.title)}</title>
+      <link>${url}</link>
+      <guid isPermaLink="true">${url}</guid>
+      <pubDate>${new Date(post.publishedAt).toUTCString()}</pubDate>
+      <description>${esc(post.excerpt)}</description>
+    </item>`
+    })
+    .join('\n')
+
+  const xml = `<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>${esc(person.name)}</title>
+    <link>${SITE_URL}/blog</link>
+    <description>${esc(pages.blog.description)}</description>
+    <language>en</language>
+    <atom:link href="${SITE_URL}/rss.xml" rel="self" type="application/rss+xml" />
+${items}
+  </channel>
+</rss>
+`
+  await writeFile(resolve(dist, 'rss.xml'), xml, 'utf8')
+  return 'rss.xml'
+}
+
 async function buildSitemap() {
   const lastmod = new Date().toISOString().slice(0, 10)
   const urls = [
-    { loc: `${SITE_URL}/`, priority: '1.0', changefreq: 'weekly', images: homeImages },
+    { loc: `${SITE_URL}/`, priority: '1.0', changefreq: 'weekly', images: homeImages, mod: lastmod },
     {
       loc: absolute(pages.about.path),
       priority: '0.8',
       changefreq: 'monthly',
       images: aboutImages,
+      mod: lastmod,
     },
+    {
+      loc: absolute('/blog'),
+      priority: '0.9',
+      changefreq: 'weekly',
+      images: [],
+      mod: published[0]?.updatedAt || published[0]?.publishedAt || lastmod,
+    },
+    ...published.map((post) => ({
+      loc: absolute(`/blog/${post.slug}`),
+      priority: '0.7',
+      changefreq: 'monthly',
+      mod: post.updatedAt || post.publishedAt,
+      images: post.cover ? [[post.cover, post.coverAlt || post.title]] : [],
+    })),
   ]
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset
@@ -162,7 +412,7 @@ ${urls
   .map(
     (u) => `  <url>
     <loc>${u.loc}</loc>
-    <lastmod>${lastmod}</lastmod>
+    <lastmod>${u.mod}</lastmod>
     <changefreq>${u.changefreq}</changefreq>
     <priority>${u.priority}</priority>
     <xhtml:link rel="alternate" hreflang="en" href="${u.loc}" />
@@ -185,5 +435,10 @@ ${u.images
 }
 
 const shell = await readFile(resolve(dist, 'index.html'), 'utf8')
-const written = [await buildAboutPage(shell), await buildSitemap()]
+const written = [
+  await buildAboutPage(shell),
+  await buildBlog(shell),
+  await buildFeed(),
+  await buildSitemap(),
+]
 console.log(`SEO: wrote ${written.join(', ')}`)

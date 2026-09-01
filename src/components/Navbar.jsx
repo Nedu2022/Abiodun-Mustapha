@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Menu, X, ArrowRight } from 'lucide-react'
 import Logo from './ui/Logo'
+import TopLink from './ui/TopLink'
 import { site, nav, socials } from '../data/content'
 import SocialIcons from './SocialIcons'
 
@@ -10,9 +11,9 @@ function NavLink({ href, onHome, className, children, onClick }) {
   const isRoute = href.startsWith('/') && !href.includes('#')
   if (isRoute) {
     return (
-      <Link to={href} className={className} onClick={onClick}>
+      <TopLink to={href} className={className} onClick={onClick}>
         {children}
-      </Link>
+      </TopLink>
     )
   }
   return (
@@ -55,13 +56,9 @@ export default function Navbar({ dark = false }) {
         }`}
       >
         <nav className="mx-auto flex max-w-6xl items-center justify-between px-5 py-4 sm:px-8">
-          <Link
-            to="/"
-            aria-label={site.name}
-            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-          >
+          <TopLink to="/" aria-label={site.name}>
             <Logo light={floatingOnDark} />
-          </Link>
+          </TopLink>
 
           <div className="hidden items-center gap-9 md:flex">
             {nav.map((item) => (

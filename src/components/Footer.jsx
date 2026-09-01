@@ -1,7 +1,8 @@
 import { ArrowRight } from 'lucide-react'
-import { Link, useLocation } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 import SocialIcons from './SocialIcons'
 import Logo from './ui/Logo'
+import TopLink from './ui/TopLink'
 import { site, nav, socials } from '../data/content'
 
 export default function Footer({ hideCta = false }) {
@@ -45,13 +46,13 @@ export default function Footer({ hideCta = false }) {
         <nav className="flex flex-wrap gap-x-7 gap-y-2">
           {nav.map((item) =>
             item.href.startsWith('/') && !item.href.includes('#') ? (
-              <Link
+              <TopLink
                 key={item.href}
                 to={item.href}
                 className="text-[13px] font-medium uppercase tracking-[0.1em] text-cream/70 transition-colors hover:text-gold"
               >
                 {item.label}
-              </Link>
+              </TopLink>
             ) : (
               <a
                 key={item.href}

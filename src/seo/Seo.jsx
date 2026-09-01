@@ -45,6 +45,7 @@ export default function Seo({
   type = 'website',
   jsonLd,
   noindex = false,
+  article,
 }) {
   useEffect(() => {
     const url = absolute(path)
@@ -80,6 +81,25 @@ export default function Seo({
     meta('name', 'twitter:image', img)
     meta('name', 'twitter:image:alt', imageAlt || DEFAULT_OG_IMAGE.alt)
 
+    document.head.querySelectorAll('meta[data-seo-article]').forEach((m) => m.remove())
+    if (article) {
+      const entries = [
+        ['article:published_time', article.publishedAt],
+        ['article:modified_time', article.updatedAt || article.publishedAt],
+        ['article:author', person.name],
+        ['article:section', (article.tags || [])[0]],
+        ...(article.tags || []).map((tag) => ['article:tag', tag]),
+      ]
+      entries.forEach(([property, content]) => {
+        if (!content) return
+        const el = document.createElement('meta')
+        el.setAttribute('property', property)
+        el.setAttribute('content', content)
+        el.setAttribute('data-seo-article', '1')
+        document.head.appendChild(el)
+      })
+    }
+
     document.head.querySelectorAll('script[data-seo-jsonld]').forEach((s) => s.remove())
     if (jsonLd) {
       const script = document.createElement('script')
@@ -88,7 +108,7 @@ export default function Seo({
       script.textContent = JSON.stringify(jsonLd)
       document.head.appendChild(script)
     }
-  }, [title, description, path, image, imageAlt, type, noindex, jsonLd])
+  }, [title, description, path, image, imageAlt, type, noindex, jsonLd, article])
 
   return null
 }

@@ -1,5 +1,6 @@
-import { Link, Navigate, useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { ArrowLeft } from 'lucide-react'
+import NotFound from './NotFound'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import Button from '../components/ui/Button'
@@ -16,13 +17,13 @@ export default function Post() {
   const { slug } = useParams()
   const post = postBySlug(slug)
 
-  if (!post) return <Navigate to="/blog" replace />
+  if (!post) return <NotFound />
 
   const related = relatedPosts(post)
 
   return (
     <>
-      <Seo {...postSeo(post)} jsonLd={postJsonLd(post)} type="article" />
+      <Seo {...postSeo(post)} jsonLd={postJsonLd(post)} type="article" article={post} />
       <a
         href="#main"
         className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[200] focus:rounded-full focus:bg-charcoal focus:px-5 focus:py-3 focus:text-[13px] focus:text-cream"

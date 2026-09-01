@@ -1,3 +1,4 @@
+import { execFileSync } from 'node:child_process'
 import { mkdir, readFile, writeFile } from 'node:fs/promises'
 import { dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -8,6 +9,24 @@ const dist = resolve(root, 'dist')
 const { SITE_URL, pages, absolute, person } = await import(
   new URL('../src/seo/config.js', import.meta.url).href
 )
+
+const { about, speaking, credentials, site } = await import(
+  new URL('../src/data/content.js', import.meta.url).href
+)
+
+function gitDate(...paths) {
+  try {
+    const out = execFileSync('git', ['log', '-1', '--format=%cs', '--', ...paths], {
+      cwd: root,
+      encoding: 'utf8',
+      stdio: ['ignore', 'pipe', 'ignore'],
+    }).trim()
+    if (/^\d{4}-\d{2}-\d{2}$/.test(out)) return out
+  } catch {
+    return null
+  }
+  return null
+}
 
 const esc = (s) =>
   String(s)
@@ -46,6 +65,26 @@ function setNoscript(html, inner) {
     replaced = true
     return `<noscript>\n      ${inner}\n    </noscript>`
   })
+}
+
+function setOgType(html, type) {
+  return html.replace(/(<meta[^>]*property="og:type"[^>]*content=")[^"]*(")/i, `$1${type}$2`)
+}
+
+function setArticleMeta(html, post) {
+  const tags = (post.tags || [])
+    .map((tag) => `    <meta property="article:tag" content="${esc(tag)}" />`)
+    .join('\n')
+  const block = [
+    `    <meta property="article:published_time" content="${esc(post.publishedAt)}" />`,
+    `    <meta property="article:modified_time" content="${esc(post.updatedAt || post.publishedAt)}" />`,
+    `    <meta property="article:author" content="${esc(person.name)}" />`,
+    `    <meta property="article:section" content="${esc((post.tags || [])[0] || 'Personal development')}" />`,
+    tags,
+  ]
+    .filter(Boolean)
+    .join('\n')
+  return html.replace('</head>', `${block}\n  </head>`)
 }
 
 function setJsonLd(html, json) {
@@ -191,55 +230,55 @@ const aboutGraph = {
   ],
 }
 
-async function buildAboutPage(shell) {
-  const { title, description, path, image } = pages.about
-  const url = absolute(path)
-  let html = shell
-
-  html = html.replace(/<title>[\s\S]*?<\/title>/i, `<title>${esc(title)}</title>`)
-  html = setMeta(html, 'name', 'description', description)
-  html = setCanonical(html, url)
-  html = setAlternates(html, url)
-  html = setMeta(html, 'property', 'og:title', title)
-  html = setMeta(html, 'property', 'og:description', description)
-  html = setMeta(html, 'property', 'og:url', url)
-  html = setMeta(html, 'property', 'og:image', absolute(image))
-  html = setMeta(html, 'name', 'twitter:title', title)
-  html = setMeta(html, 'name', 'twitter:description', description)
-  html = setMeta(html, 'name', 'twitter:image', absolute(image))
-
-  html = html.replace(/<meta property="og:image:width"[\s\S]*?\/>\s*/i, '')
-  html = html.replace(/<meta property="og:image:height"[\s\S]*?\/>\s*/i, '')
-  html = html.replace(
-    /<link rel="preload" as="image"[^>]*>/i,
-    `<link rel="preload" as="image" href="${image}" fetchpriority="high" />`
-  )
-  html = setJsonLd(html, {
-    ...aboutGraph,
-    '@graph': [...aboutGraph['@graph'], ...baseNodes(shell)],
-  })
-
-  await mkdir(resolve(dist, 'about'), { recursive: true })
-  await writeFile(resolve(dist, 'about/index.html'), html, 'utf8')
-  await writeFile(resolve(dist, 'about.html'), html, 'utf8')
-  return 'about.html + about/index.html'
+function aboutNoscript() {
+  const bio = about.body.map((paragraph) => `<p>${esc(paragraph)}</p>`).join('\n      ')
+  const creds = about.credentials.map((item) => `<li>${esc(item)}</li>`).join('\n        ')
+  const marks = credentials.map((item) => `<li>${esc(item)}</li>`).join('\n        ')
+  const topics = speaking.topics.map((item) => `<li>${esc(item)}</li>`).join('\n        ')
+  return [
+    `<h1>${esc(person.name)}</h1>`,
+    `<p><strong>${esc(person.jobTitle)}</strong></p>`,
+    bio,
+    '<h2>Credentials and memberships</h2>',
+    `<ul>\n        ${creds}\n      </ul>`,
+    '<h2>Also known for</h2>',
+    `<ul>\n        ${marks}\n      </ul>`,
+    '<h2>Speaking topics</h2>',
+    `<ul>\n        ${topics}\n      </ul>`,
+    `<p>For speaking, coaching or media enquiries, write to <a href="mailto:${esc(site.email)}">${esc(site.email)}</a>.</p>`,
+    '<p><a href="/">Home</a> &middot; <a href="/blog">Writing</a></p>',
+  ].join('\n      ')
 }
 
-const homeImages = [
-  ['/images/portrait-suit.jpg', 'Dr. Abiodun Mustapha, personal development expert, educator and speaker'],
-  ['/images/portrait-bw.jpg', 'Dr. Abiodun Mustapha, who grew up in Oshodi, Lagos'],
-  ['/images/speaking-tedx.jpg', 'Dr. Abiodun Mustapha speaking on the TEDx stage about purpose'],
-  ['/images/book-30.jpg', 'Cover of 30 Lessons Life Taught Me Before 30 by Dr. Abiodun Mustapha'],
-  ['/images/event-lightcongress.jpg', 'Dr. Abiodun Mustapha speaking at the China IECC Workshop'],
-  ['/images/speaking-futureforward.jpg', 'Dr. Abiodun Mustapha organising TEDx'],
-  ['/images/speaking-advance.jpg', 'Dr. Abiodun Mustapha speaking at the SHI Conference'],
-  ['/images/speaking-confab.jpg', 'Dr. Abiodun Mustapha as team lead at Leadership Confab'],
-  ['/images/portrait-formal.jpg', 'Dr. Abiodun Mustapha, host of the Growth Secrets podcast'],
-]
+async function buildAboutPage(shell) {
+  return buildStamped(shell, {
+    path: pages.about.path,
+    title: pages.about.title,
+    description: pages.about.description,
+    image: pages.about.image,
+    ogType: 'profile',
+    noscript: aboutNoscript(),
+    out: 'about',
+    jsonLd: aboutGraph,
+  })
+}
 
-const aboutImages = [
-  ['/images/portrait-gesture.jpg', 'Dr. Abiodun Mustapha, founder of Growth Hub Africa and GIZ-certified business trainer'],
-]
+async function buildNotFound(shell) {
+  let html = shell
+  html = html.replace(/<title>[\s\S]*?<\/title>/i, '<title>Page not found</title>')
+  html = setMeta(html, 'name', 'description', 'That page does not exist on this site.')
+  html = setMeta(html, 'name', 'robots', 'noindex, follow')
+  html = setNoscript(
+    html,
+    [
+      '<h1>Page not found</h1>',
+      '<p>That page does not exist. Try one of these instead:</p>',
+      '<ul>\n        <li><a href="/">Home</a></li>\n        <li><a href="/about">About Dr. Abiodun Mustapha</a></li>\n        <li><a href="/blog">Writing</a></li>\n      </ul>',
+    ].join('\n      ')
+  )
+  await writeFile(resolve(dist, '404.html'), html, 'utf8')
+  return '404.html'
+}
 
 async function writeBoth(relPath, html) {
   await mkdir(resolve(dist, relPath), { recursive: true })
@@ -247,7 +286,10 @@ async function writeBoth(relPath, html) {
   await writeFile(resolve(dist, `${relPath}.html`), html, 'utf8')
 }
 
-async function buildStamped(shell, { path, title, description, image, jsonLd, noscript, out }) {
+async function buildStamped(
+  shell,
+  { path, title, description, image, jsonLd, noscript, out, ogType = 'website', article }
+) {
   const url = absolute(path)
   let html = shell
 
@@ -270,6 +312,8 @@ async function buildStamped(shell, { path, title, description, image, jsonLd, no
       `<link rel="preload" as="image" href="${image}" fetchpriority="high" />`
     )
   }
+  html = setOgType(html, ogType)
+  if (article) html = setArticleMeta(html, article)
   html = setNoscript(html, noscript)
   html = setJsonLd(html, { ...jsonLd, '@graph': [...jsonLd['@graph'], ...baseNodes(shell)] })
 
@@ -288,6 +332,7 @@ async function buildBlog(shell) {
       image: pages.blog.image,
       noscript: indexHtml(),
       out: 'blog',
+      ogType: 'website',
       jsonLd: {
         '@context': 'https://schema.org',
         '@graph': [
@@ -329,6 +374,8 @@ async function buildBlog(shell) {
         image: post.cover,
         noscript: articleHtml(post),
         out: `blog/${post.slug}`,
+        ogType: 'article',
+        article: post,
         jsonLd: {
           '@context': 'https://schema.org',
           '@graph': [
@@ -377,16 +424,36 @@ ${items}
   return 'rss.xml'
 }
 
+const homeImages = [
+  ['/images/portrait-suit.jpg', 'Dr. Abiodun Mustapha, personal development expert, educator and speaker'],
+  ['/images/portrait-bw.jpg', 'Dr. Abiodun Mustapha, who grew up in Oshodi, Lagos'],
+  ['/images/speaking-tedx.jpg', 'Dr. Abiodun Mustapha speaking on the TEDx stage about purpose'],
+  ['/images/book-30.jpg', 'Cover of 30 Lessons Life Taught Me Before 30 by Dr. Abiodun Mustapha'],
+  ['/images/event-lightcongress.jpg', 'Dr. Abiodun Mustapha speaking at the China IECC Workshop'],
+  ['/images/speaking-futureforward.jpg', 'Dr. Abiodun Mustapha organising TEDx'],
+  ['/images/speaking-advance.jpg', 'Dr. Abiodun Mustapha speaking at the SHI Conference'],
+  ['/images/speaking-confab.jpg', 'Dr. Abiodun Mustapha as team lead at Leadership Confab'],
+  ['/images/portrait-formal.jpg', 'Dr. Abiodun Mustapha, host of the Growth Secrets podcast'],
+]
+
+const aboutImages = [
+  ['/images/portrait-gesture.jpg', 'Dr. Abiodun Mustapha, founder of Growth Hub Africa and GIZ-certified business trainer'],
+]
+
 async function buildSitemap() {
   const lastmod = new Date().toISOString().slice(0, 10)
+  const homeMod =
+    gitDate('src/pages/Home.jsx', 'src/components', 'src/data/content.js', 'index.html') || lastmod
+  const aboutMod = gitDate('src/pages/About.jsx', 'src/components/About.jsx') || lastmod
+
   const urls = [
-    { loc: `${SITE_URL}/`, priority: '1.0', changefreq: 'weekly', images: homeImages, mod: lastmod },
+    { loc: `${SITE_URL}/`, priority: '1.0', changefreq: 'weekly', images: homeImages, mod: homeMod },
     {
       loc: absolute(pages.about.path),
       priority: '0.8',
       changefreq: 'monthly',
       images: aboutImages,
-      mod: lastmod,
+      mod: aboutMod,
     },
     {
       loc: absolute('/blog'),
@@ -437,6 +504,7 @@ ${u.images
 const shell = await readFile(resolve(dist, 'index.html'), 'utf8')
 const written = [
   await buildAboutPage(shell),
+  await buildNotFound(shell),
   await buildBlog(shell),
   await buildFeed(),
   await buildSitemap(),

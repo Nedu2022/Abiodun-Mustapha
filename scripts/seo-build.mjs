@@ -265,8 +265,16 @@ async function buildAboutPage(shell) {
 
 async function buildNotFound(shell) {
   let html = shell
-  html = html.replace(/<title>[\s\S]*?<\/title>/i, '<title>Page not found</title>')
-  html = setMeta(html, 'name', 'description', 'That page does not exist on this site.')
+  html = html.replace(
+    /<title>[\s\S]*?<\/title>/i,
+    `<title>Page not found | ${esc(person.name)}</title>`
+  )
+  html = setMeta(
+    html,
+    'name',
+    'description',
+    'That page does not exist on this site. Try the home page, the full biography, or the writing archive instead.'
+  )
   html = setMeta(html, 'name', 'robots', 'noindex, follow')
   html = setNoscript(
     html,
@@ -345,7 +353,6 @@ async function buildBlog(shell) {
             inLanguage: 'en',
             author: { '@id': PERSON_ID },
             publisher: { '@id': PERSON_ID },
-            blogPost: published.map((post) => ({ '@id': `${absolute(`/blog/${post.slug}`)}#post` })),
           },
           {
             '@type': 'CollectionPage',
@@ -369,7 +376,11 @@ async function buildBlog(shell) {
     written.push(
       await buildStamped(shell, {
         path: `/blog/${post.slug}`,
-        title: post.seoTitle || `${post.title} | ${person.name}`,
+        title:
+          post.seoTitle ||
+          (`${post.title} | ${person.name}`.length <= 65
+            ? `${post.title} | ${person.name}`
+            : post.title),
         description: post.seoDescription || post.excerpt,
         image: post.cover,
         noscript: articleHtml(post),
@@ -379,6 +390,24 @@ async function buildBlog(shell) {
         jsonLd: {
           '@context': 'https://schema.org',
           '@graph': [
+            {
+              '@type': 'Blog',
+              '@id': BLOG_ID,
+              url: absolute('/blog'),
+              name: `${person.name} on purpose, discipline and work`,
+              inLanguage: 'en',
+              author: { '@id': PERSON_ID },
+              publisher: { '@id': PERSON_ID },
+            },
+            {
+              '@type': 'WebPage',
+              '@id': `${absolute(`/blog/${post.slug}`)}#webpage`,
+              url: absolute(`/blog/${post.slug}`),
+              name: post.title,
+              description: post.excerpt,
+              isPartOf: { '@id': `${SITE_URL}/#website` },
+              inLanguage: 'en',
+            },
             postGraph(post),
             crumbs([
               { name: 'Home', path: '/' },

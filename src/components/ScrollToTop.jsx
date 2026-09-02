@@ -1,18 +1,22 @@
-import { useEffect } from 'react'
+import { useLayoutEffect } from 'react'
 import { useLocation } from 'react-router-dom'
+import { forceTop } from '../lib/scroll'
 
 export default function ScrollToTop() {
   const { pathname, hash } = useLocation()
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (hash) {
       const target = document.querySelector(hash)
       if (target) {
         target.scrollIntoView({ behavior: 'smooth', block: 'start' })
-        return
+        return undefined
       }
     }
-    window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
+
+    forceTop()
+    const frame = requestAnimationFrame(forceTop)
+    return () => cancelAnimationFrame(frame)
   }, [pathname, hash])
 
   return null

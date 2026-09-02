@@ -6,37 +6,102 @@
     "excerpt": "Purpose is not a reward for people who already have resources. It is the thing you build with while you have almost nothing.",
     "cover": "/images/portrait-gesture.jpg",
     "coverAlt": "Dr. Abiodun Mustapha speaking about purpose and clarity",
-    "tags": ["Purpose"],
+    "tags": [
+      "Purpose"
+    ],
     "status": "published",
     "publishedAt": "2026-07-14",
     "updatedAt": "2026-07-14",
-    "seoTitle": "",
+    "seoTitle": "How to Find Your Purpose With No Money or Connections",
     "seoDescription": "",
     "body": [
-      { "type": "paragraph", "text": "People write to me almost every week with the same sentence, arranged in different ways. They say they know they were made for something, but they have no money, no connections, and nobody in their family has ever done what they are dreaming about. Then they ask me how to find their purpose." },
-      { "type": "paragraph", "text": "I understand the question because I lived inside it. I grew up in Oshodi. There was no plan waiting for me and no one to open a door. So I want to answer honestly, without the polish." },
-      { "type": "heading", "text": "Purpose is not a discovery. It is a construction." },
-      { "type": "paragraph", "text": "We talk about purpose like it is a wallet somebody dropped and you have to find it. That framing keeps people waiting. They sit still, praying for a moment of clarity that will arrive fully formed and remove all doubt." },
-      { "type": "paragraph", "text": "That is not how it worked for me and it is not how it has worked for any of the professionals I have coached. Purpose gets built out of what you already have in your hand. You start moving, and the direction sharpens while you move." },
-      { "type": "quote", "text": "Where you are today does not define where you will end.", "cite": "" },
-      { "type": "heading", "text": "Start with the three questions" },
-      { "type": "paragraph", "text": "When someone sits in front of me with no resources and no map, I do not ask them what they are passionate about. Passion is a poor compass when you are hungry. I ask three questions instead." },
-      { "type": "list", "items": [
-        "What do people already come to you for? Not what you wish they came for. What they actually ask you about, for free, again and again.",
-        "What can you do for six hours without needing to be persuaded? That is not passion. That is capacity, and capacity is measurable.",
-        "What problem makes you angry? Not sad. Angry. Anger sustains work long after excitement runs out."
-      ]},
-      { "type": "paragraph", "text": "Write the answers down. Where those three overlap is not your purpose yet. It is your starting direction, which is the only thing you actually need to begin." },
-      { "type": "image", "src": "/images/speaking-white.jpg", "alt": "Dr. Abiodun Mustapha training a room of professionals", "caption": "Every framework I teach was tested on my own life first." },
-      { "type": "heading", "text": "Money is not the entry fee" },
-      { "type": "paragraph", "text": "I hear this often: I will start when I have capital. But look closely at what the first version of almost anything costs. A conversation. A phone. Your time in the evening after work. The first version of what I now do professionally was me teaching people for free in a small room because I wanted to see whether what I had actually helped anybody." },
-      { "type": "paragraph", "text": "Money follows evidence. Build the evidence first, in public, at small scale. Twenty people who will vouch for you are worth more at the start than a loan you cannot service." },
-      { "type": "heading", "text": "Connections are earned in the open" },
-      { "type": "paragraph", "text": "I did not have connections. What I had was consistency in places where people could see me. I showed up, I did the work well, and I did it in the open long enough that people started introducing me to other people." },
-      { "type": "paragraph", "text": "That is the whole method. Do useful work where it can be seen, keep doing it past the point where it feels unrewarded, and the network builds itself around you. It is slower than knowing someone. It is also more durable, because nobody can take it back." },
-      { "type": "heading", "text": "One thing to do this week" },
-      { "type": "paragraph", "text": "Answer the three questions on paper, then find one person this week who has the problem you named, and help them with it for free. Not as charity. As research. You are testing whether the thing you think you carry actually lands when it meets a real person." },
-      { "type": "paragraph", "text": "Do that ten times and you will know more about your purpose than a year of waiting could ever tell you." }
+      {
+        "type": "paragraph",
+        "text": "People write to me almost every week with the same sentence, arranged in different ways. They say they know they were made for something, but they have no money, no connections, and nobody in their family has ever done what they are dreaming about. Then they ask me how to find their purpose."
+      },
+      {
+        "type": "paragraph",
+        "text": "I understand the question because I lived inside it. I grew up in Oshodi. There was no plan waiting for me and no one to open a door. So I want to answer honestly, without the polish."
+      },
+      {
+        "type": "heading",
+        "text": "Purpose is not a discovery. It is a construction."
+      },
+      {
+        "type": "paragraph",
+        "text": "We talk about purpose like it is a wallet somebody dropped and you have to find it. That framing keeps people waiting. They sit still, praying for a moment of clarity that will arrive fully formed and remove all doubt."
+      },
+      {
+        "type": "paragraph",
+        "text": "That is not how it worked for me and it is not how it has worked for any of the professionals I have coached. Purpose gets built out of what you already have in your hand. You start moving, and the direction sharpens while you move."
+      },
+      {
+        "type": "quote",
+        "text": "Where you are today does not define where you will end.",
+        "cite": ""
+      },
+      {
+        "type": "heading",
+        "text": "Start with the three questions"
+      },
+      {
+        "type": "paragraph",
+        "text": "When someone sits in front of me with no resources and no map, I do not ask them what they are passionate about. Passion is a poor compass when you are hungry. I ask three questions instead."
+      },
+      {
+        "type": "list",
+        "items": [
+          "What do people already come to you for? Not what you wish they came for. What they actually ask you about, for free, again and again.",
+          "What can you do for six hours without needing to be persuaded? That is not passion. That is capacity, and capacity is measurable.",
+          "What problem makes you angry? Not sad. Angry. Anger sustains work long after excitement runs out."
+        ]
+      },
+      {
+        "type": "paragraph",
+        "text": "Write the answers down. Where those three overlap is not your purpose yet. It is your starting direction, which is the only thing you actually need to begin."
+      },
+      {
+        "type": "image",
+        "src": "/images/speaking-white.jpg",
+        "alt": "Dr. Abiodun Mustapha training a room of professionals",
+        "caption": "Every framework I teach was tested on my own life first."
+      },
+      {
+        "type": "heading",
+        "text": "Money is not the entry fee"
+      },
+      {
+        "type": "paragraph",
+        "text": "I hear this often: I will start when I have capital. But look closely at what the first version of almost anything costs. A conversation. A phone. Your time in the evening after work. The first version of what I now do professionally was me teaching people for free in a small room because I wanted to see whether what I had actually helped anybody."
+      },
+      {
+        "type": "paragraph",
+        "text": "Money follows evidence. Build the evidence first, in public, at small scale. Twenty people who will vouch for you are worth more at the start than a loan you cannot service."
+      },
+      {
+        "type": "heading",
+        "text": "Connections are earned in the open"
+      },
+      {
+        "type": "paragraph",
+        "text": "I did not have connections. What I had was consistency in places where people could see me. I showed up, I did the work well, and I did it in the open long enough that people started introducing me to other people."
+      },
+      {
+        "type": "paragraph",
+        "text": "That is the whole method. Do useful work where it can be seen, keep doing it past the point where it feels unrewarded, and the network builds itself around you. It is slower than knowing someone. It is also more durable, because nobody can take it back."
+      },
+      {
+        "type": "heading",
+        "text": "One thing to do this week"
+      },
+      {
+        "type": "paragraph",
+        "text": "Answer the three questions on paper, then find one person this week who has the problem you named, and help them with it for free. Not as charity. As research. You are testing whether the thing you think you carry actually lands when it meets a real person."
+      },
+      {
+        "type": "paragraph",
+        "text": "Do that ten times and you will know more about your purpose than a year of waiting could ever tell you."
+      }
     ]
   },
   {
@@ -46,32 +111,82 @@
     "excerpt": "Motivation is a mood. Discipline is a structure. One of them shows up on the days that actually decide your life.",
     "cover": "/images/portrait-desk.jpg",
     "coverAlt": "Dr. Abiodun Mustapha at his desk, working",
-    "tags": ["Discipline"],
+    "tags": [
+      "Discipline"
+    ],
     "status": "published",
     "publishedAt": "2026-08-05",
     "updatedAt": "2026-08-05",
     "seoTitle": "",
     "seoDescription": "",
     "body": [
-      { "type": "paragraph", "text": "Motivation is wonderful. It is also unreliable, and building a life on it is like building on sand that occasionally feels like concrete." },
-      { "type": "paragraph", "text": "I have watched people leave my sessions on fire, ready to change everything. Two weeks later the fire is out, and they conclude that something is wrong with them. Nothing is wrong with them. They were relying on a feeling to do the job of a system." },
-      { "type": "heading", "text": "What discipline actually is" },
-      { "type": "paragraph", "text": "Discipline is not grit and it is not suffering. It is the set of decisions you make once so that you do not have to make them again every morning while you are tired." },
-      { "type": "paragraph", "text": "When I decided I would write every morning before anything else, I stopped negotiating with myself at five in the morning. The negotiation was already over. That is all discipline is: moving the decision to a moment when you are strong, so it can serve you in the moments when you are not." },
-      { "type": "quote", "text": "You do not rise to the level of your dreams. You fall to the level of the systems you built while nobody was watching.", "cite": "" },
-      { "type": "heading", "text": "Three structures that hold" },
-      { "type": "list", "items": [
-        "Make it smaller than you think it should be. Twenty minutes you keep beats two hours you abandon in week three.",
-        "Attach it to something that already happens. After I make tea, I write. The existing habit carries the new one.",
-        "Track it where you can see it. Not an app you will forget. A mark on paper on a wall you walk past."
-      ]},
-      { "type": "image", "src": "/images/speaking-podium.jpg", "alt": "Dr. Abiodun Mustapha speaking at a podium", "caption": "Nothing I do on a stage is possible without what I do at a desk." },
-      { "type": "heading", "text": "The day that decides everything" },
-      { "type": "paragraph", "text": "There is a day in every commitment where you do not want to, nothing is pushing you, and no one would know if you skipped it. That day is not an obstacle in the way of the work. That day is the work." },
-      { "type": "paragraph", "text": "Show up on that day, badly if necessary, and the identity starts to change. You stop being someone who is trying to write and become someone who writes. Once that shift happens, motivation becomes a bonus rather than a requirement." },
-      { "type": "heading", "text": "When you break the chain" },
-      { "type": "paragraph", "text": "You will miss days. Everybody does. The rule that has protected me for years is simple: never miss twice. One missed day is an accident. Two is the beginning of a new pattern, and the second one is far easier to prevent than to reverse." },
-      { "type": "paragraph", "text": "Be gracious with yourself about the first. Be immovable about the second." }
+      {
+        "type": "paragraph",
+        "text": "Motivation is wonderful. It is also unreliable, and building a life on it is like building on sand that occasionally feels like concrete."
+      },
+      {
+        "type": "paragraph",
+        "text": "I have watched people leave my sessions on fire, ready to change everything. Two weeks later the fire is out, and they conclude that something is wrong with them. Nothing is wrong with them. They were relying on a feeling to do the job of a system."
+      },
+      {
+        "type": "heading",
+        "text": "What discipline actually is"
+      },
+      {
+        "type": "paragraph",
+        "text": "Discipline is not grit and it is not suffering. It is the set of decisions you make once so that you do not have to make them again every morning while you are tired."
+      },
+      {
+        "type": "paragraph",
+        "text": "When I decided I would write every morning before anything else, I stopped negotiating with myself at five in the morning. The negotiation was already over. That is all discipline is: moving the decision to a moment when you are strong, so it can serve you in the moments when you are not."
+      },
+      {
+        "type": "quote",
+        "text": "You do not rise to the level of your dreams. You fall to the level of the systems you built while nobody was watching.",
+        "cite": ""
+      },
+      {
+        "type": "heading",
+        "text": "Three structures that hold"
+      },
+      {
+        "type": "list",
+        "items": [
+          "Make it smaller than you think it should be. Twenty minutes you keep beats two hours you abandon in week three.",
+          "Attach it to something that already happens. After I make tea, I write. The existing habit carries the new one.",
+          "Track it where you can see it. Not an app you will forget. A mark on paper on a wall you walk past."
+        ]
+      },
+      {
+        "type": "image",
+        "src": "/images/speaking-podium.jpg",
+        "alt": "Dr. Abiodun Mustapha speaking at a podium",
+        "caption": "Nothing I do on a stage is possible without what I do at a desk."
+      },
+      {
+        "type": "heading",
+        "text": "The day that decides everything"
+      },
+      {
+        "type": "paragraph",
+        "text": "There is a day in every commitment where you do not want to, nothing is pushing you, and no one would know if you skipped it. That day is not an obstacle in the way of the work. That day is the work."
+      },
+      {
+        "type": "paragraph",
+        "text": "Show up on that day, badly if necessary, and the identity starts to change. You stop being someone who is trying to write and become someone who writes. Once that shift happens, motivation becomes a bonus rather than a requirement."
+      },
+      {
+        "type": "heading",
+        "text": "When you break the chain"
+      },
+      {
+        "type": "paragraph",
+        "text": "You will miss days. Everybody does. The rule that has protected me for years is simple: never miss twice. One missed day is an accident. Two is the beginning of a new pattern, and the second one is far easier to prevent than to reverse."
+      },
+      {
+        "type": "paragraph",
+        "text": "Be gracious with yourself about the first. Be immovable about the second."
+      }
     ]
   },
   {
@@ -81,36 +196,95 @@
     "excerpt": "The streets I grew up on were loud, crowded and unforgiving. They also taught me four things about work that no classroom did.",
     "cover": "/images/portrait-bw.jpg",
     "coverAlt": "Black and white portrait of Dr. Abiodun Mustapha",
-    "tags": ["Career"],
+    "tags": [
+      "Career"
+    ],
     "status": "published",
     "publishedAt": "2026-08-22",
     "updatedAt": "2026-08-22",
     "seoTitle": "",
     "seoDescription": "",
     "body": [
-      { "type": "paragraph", "text": "People hear Oshodi and picture the noise. They are not wrong. It was loud, crowded and unforgiving, and for a long time it was the whole of my world." },
-      { "type": "paragraph", "text": "But I did not only survive there. I learned there. Years later, sitting in rooms with executives and graduate students, I keep noticing that the most useful things I know about work I learned on those streets, long before I learned anything in a lecture hall." },
-      { "type": "heading", "text": "Everybody is selling something, so learn to be useful fast" },
-      { "type": "paragraph", "text": "In a crowded market, nobody owes you their attention. You get about ten seconds to show that you are worth stopping for. That is not a street rule. That is every job interview, every proposal, every first meeting with a client you have ever had." },
-      { "type": "paragraph", "text": "Learn to say what you do and who it helps in one sentence a stranger understands. Most professionals I coach cannot do this, and it costs them opportunities they never even hear about." },
-      { "type": "heading", "text": "Your reputation moves faster than you do" },
-      { "type": "paragraph", "text": "In a tight community everyone knows who delivers and who makes excuses. There is no hiding, and no personal brand exercise can rescue a reputation for unreliability." },
-      { "type": "paragraph", "text": "That has not changed at any level I have reached since. The rooms get bigger and the clothes get better, but you are still, always, the person who either does what he said or does not." },
-      { "type": "quote", "text": "Turn every limitation into fuel. It is the only useful thing to do with it.", "cite": "" },
-      { "type": "image", "src": "/images/speaking-agbada.jpg", "alt": "Dr. Abiodun Mustapha speaking at an event", "caption": "The same boy, in different rooms." },
-      { "type": "heading", "text": "Nobody is coming, and that is good news" },
-      { "type": "paragraph", "text": "For years I waited for something to change from the outside. A helper. A break. An opportunity that would arrive and lift me out." },
-      { "type": "paragraph", "text": "When I finally accepted that nobody was coming, it did not crush me. It freed me. If nobody is coming, then the only variable left is what I do, and that is the one variable I actually control." },
-      { "type": "heading", "text": "Keep learning even when it looks pointless" },
-      { "type": "paragraph", "text": "There was nothing around me that suggested education would pay off. I kept going anyway, mostly on stubbornness and faith. Years later that stubbornness turned into a scholarship, then a career, then rooms I once could not have imagined standing in." },
-      { "type": "paragraph", "text": "You will often be investing in a version of yourself that nothing in your environment confirms is coming. Do it anyway. The distance between where you are and where you are going is usually just time plus refusal to quit." },
-      { "type": "list", "items": [
-        "Be useful in ten seconds.",
-        "Guard your reputation harder than your image.",
-        "Stop waiting for a rescue that is not scheduled.",
-        "Keep learning while the evidence is still thin."
-      ]},
-      { "type": "paragraph", "text": "That is Oshodi, compressed into four lines. I have not needed a fifth." }
+      {
+        "type": "paragraph",
+        "text": "People hear Oshodi and picture the noise. They are not wrong. It was loud, crowded and unforgiving, and for a long time it was the whole of my world."
+      },
+      {
+        "type": "paragraph",
+        "text": "But I did not only survive there. I learned there. Years later, sitting in rooms with executives and graduate students, I keep noticing that the most useful things I know about work I learned on those streets, long before I learned anything in a lecture hall."
+      },
+      {
+        "type": "heading",
+        "text": "Everybody is selling something, so learn to be useful fast"
+      },
+      {
+        "type": "paragraph",
+        "text": "In a crowded market, nobody owes you their attention. You get about ten seconds to show that you are worth stopping for. That is not a street rule. That is every job interview, every proposal, every first meeting with a client you have ever had."
+      },
+      {
+        "type": "paragraph",
+        "text": "Learn to say what you do and who it helps in one sentence a stranger understands. Most professionals I coach cannot do this, and it costs them opportunities they never even hear about."
+      },
+      {
+        "type": "heading",
+        "text": "Your reputation moves faster than you do"
+      },
+      {
+        "type": "paragraph",
+        "text": "In a tight community everyone knows who delivers and who makes excuses. There is no hiding, and no personal brand exercise can rescue a reputation for unreliability."
+      },
+      {
+        "type": "paragraph",
+        "text": "That has not changed at any level I have reached since. The rooms get bigger and the clothes get better, but you are still, always, the person who either does what he said or does not."
+      },
+      {
+        "type": "quote",
+        "text": "Turn every limitation into fuel. It is the only useful thing to do with it.",
+        "cite": ""
+      },
+      {
+        "type": "image",
+        "src": "/images/speaking-agbada.jpg",
+        "alt": "Dr. Abiodun Mustapha speaking at an event",
+        "caption": "The same boy, in different rooms."
+      },
+      {
+        "type": "heading",
+        "text": "Nobody is coming, and that is good news"
+      },
+      {
+        "type": "paragraph",
+        "text": "For years I waited for something to change from the outside. A helper. A break. An opportunity that would arrive and lift me out."
+      },
+      {
+        "type": "paragraph",
+        "text": "When I finally accepted that nobody was coming, it did not crush me. It freed me. If nobody is coming, then the only variable left is what I do, and that is the one variable I actually control."
+      },
+      {
+        "type": "heading",
+        "text": "Keep learning even when it looks pointless"
+      },
+      {
+        "type": "paragraph",
+        "text": "There was nothing around me that suggested education would pay off. I kept going anyway, mostly on stubbornness and faith. Years later that stubbornness turned into a scholarship, then a career, then rooms I once could not have imagined standing in."
+      },
+      {
+        "type": "paragraph",
+        "text": "You will often be investing in a version of yourself that nothing in your environment confirms is coming. Do it anyway. The distance between where you are and where you are going is usually just time plus refusal to quit."
+      },
+      {
+        "type": "list",
+        "items": [
+          "Be useful in ten seconds.",
+          "Guard your reputation harder than your image.",
+          "Stop waiting for a rescue that is not scheduled.",
+          "Keep learning while the evidence is still thin."
+        ]
+      },
+      {
+        "type": "paragraph",
+        "text": "That is Oshodi, compressed into four lines. I have not needed a fifth."
+      }
     ]
   }
 ]

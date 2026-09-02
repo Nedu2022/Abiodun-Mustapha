@@ -9,10 +9,15 @@ export function postUrl(post) {
   return absolute(`/blog/${post.slug}`)
 }
 
+export function withBrand(title) {
+  const branded = `${title} | ${person.name}`
+  return branded.length <= 65 ? branded : title
+}
+
 export function postSeo(post) {
   return {
     path: `/blog/${post.slug}`,
-    title: post.seoTitle || `${post.title} | ${person.name}`,
+    title: post.seoTitle || withBrand(post.title),
     description: post.seoDescription || post.excerpt,
     image: post.cover || undefined,
     imageAlt: post.coverAlt || post.title,
@@ -30,6 +35,19 @@ export function blogSchema() {
     inLanguage: 'en',
     author: { '@id': PERSON_ID },
     publisher: { '@id': PERSON_ID },
+  }
+}
+
+export function postWebPage(post) {
+  const url = postUrl(post)
+  return {
+    '@type': 'WebPage',
+    '@id': `${url}#webpage`,
+    url,
+    name: post.title,
+    description: post.excerpt,
+    isPartOf: { '@id': `${SITE_URL}/#website` },
+    inLanguage: 'en',
   }
 }
 
@@ -99,6 +117,8 @@ export const blogListJsonLd = graph([
 export function postJsonLd(post) {
   return graph([
     websiteSchema(),
+    blogSchema(),
+    postWebPage(post),
     blogPostingSchema(post),
     personSchema(),
     breadcrumb([

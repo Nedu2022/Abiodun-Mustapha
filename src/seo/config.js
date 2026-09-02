@@ -91,7 +91,7 @@ export const pages = {
   },
   blog: {
     path: '/blog',
-    title: 'Writing by Dr. Abiodun Mustapha | Purpose, Discipline & Career',
+    title: 'Writing by Dr. Abiodun Mustapha | Purpose & Discipline',
     description:
       'Long-form writing from Dr. Abiodun Mustapha on finding your purpose, building discipline, and growing a career from nothing. New pieces twice a month.',
     image: '/images/portrait-desk.jpg',
@@ -104,7 +104,7 @@ export const pages = {
   },
   about: {
     path: '/about',
-    title: 'About Dr. Abiodun Mustapha | Bio, Credentials & Speaker Profile',
+    title: 'About Dr. Abiodun Mustapha | Bio & Speaker Profile',
     description:
       'The full biography of Dr. Abiodun Mustapha: GIZ-certified trainer, founder of Growth Hub Africa, TEDx speaker, and author who has trained over 2,000 professionals.',
     image: '/images/portrait-gesture.jpg',

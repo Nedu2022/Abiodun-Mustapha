@@ -98,8 +98,8 @@ export const pages = {
   },
   admin: {
     path: '/admin',
-    title: 'Admin Studio Dr Abiodun Mustapha',
-    description: 'Private editor.',
+    title: 'Content Studio — Dr. Abiodun Mustapha Admin Dashboard',
+    description: 'Manage blog articles, publish content, and control the portfolio of Dr. Abiodun Mustapha.',
     image: '/images/portrait-suit.jpg',
   },
   about: {

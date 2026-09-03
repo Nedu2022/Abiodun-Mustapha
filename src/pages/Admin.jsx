@@ -7,7 +7,7 @@ import BlockEditor from '../components/admin/BlockEditor'
 import PostBody from '../components/blog/PostBody'
 import CloudinaryUpload from '../components/admin/CloudinaryUpload'
 import VideoManager from '../components/admin/VideoManager'
-import { TAGS, allPosts, emptyPost, formatDate, readingTime, slugify, loadAllTags, saveAllTags } from '../lib/posts'
+import { TAGS, allPosts, emptyPost, formatDate, readingTime, slugify, loadAllTags, saveAllTags, saveLivePosts } from '../lib/posts'
 import { getCloudinaryConfig, setCloudinaryConfig } from '../lib/cloudinary'
 
 const STORAGE_KEY = 'abiodun.posts.v1'
@@ -160,10 +160,11 @@ export default function Admin() {
     setDirty(true)
   }
 
-  const save = () => {
+  const save = async () => {
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(posts))
+    await saveLivePosts(posts)
     setDirty(false)
-    setToast('Saved in this browser')
+    setToast('Saved & published live!')
   }
 
   const createPost = () => {

@@ -69,8 +69,40 @@ export const allPosts = sortByDate(raw)
 
 export const publishedPosts = sortByDate(raw.filter(isPublished))
 
+export function getLivePosts() {
+  try {
+    const saved = localStorage.getItem('abiodun.posts.v1')
+    if (saved) {
+      const parsed = JSON.parse(saved)
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        return sortByDate(parsed)
+      }
+    }
+  } catch {}
+  return sortByDate(raw)
+}
+
+export function getLivePublishedPosts() {
+  return getLivePosts().filter(isPublished)
+}
+
+export async function saveLivePosts(posts) {
+  try {
+    localStorage.setItem('abiodun.posts.v1', JSON.stringify(posts))
+  } catch {}
+
+  try {
+    await fetch('/api/posts', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(posts),
+    })
+  } catch {}
+}
+
 export function postBySlug(slug) {
-  return publishedPosts.find((post) => post.slug === slug)
+  const dynamic = getLivePublishedPosts()
+  return dynamic.find((post) => post.slug === slug) || publishedPosts.find((post) => post.slug === slug)
 }
 
 export function relatedPosts(post, limit = 2) {

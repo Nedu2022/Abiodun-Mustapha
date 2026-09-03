@@ -6,18 +6,22 @@ import PostCard from '../components/blog/PostCard'
 import Seo from '../seo/Seo'
 import { pages } from '../seo/config'
 import { blogListJsonLd } from '../seo/blogSchema'
-import { blogMeta, publishedPosts } from '../lib/posts'
+import { blogMeta, publishedPosts, getLivePublishedPosts } from '../lib/posts'
 
 export default function Blog() {
   const [tag, setTag] = useState('All')
 
-  const tags = useMemo(() => {
-    const found = new Set()
-    publishedPosts.forEach((post) => (post.tags || []).forEach((t) => found.add(t)))
-    return ['All', ...found]
+  const livePosts = useMemo(() => {
+    return getLivePublishedPosts()
   }, [])
 
-  const visible = tag === 'All' ? publishedPosts : publishedPosts.filter((p) => (p.tags || []).includes(tag))
+  const tags = useMemo(() => {
+    const found = new Set()
+    livePosts.forEach((post) => (post.tags || []).forEach((t) => found.add(t)))
+    return ['All', ...found]
+  }, [livePosts])
+
+  const visible = tag === 'All' ? livePosts : livePosts.filter((p) => (p.tags || []).includes(tag))
   const [lead, ...rest] = visible
 
   return (

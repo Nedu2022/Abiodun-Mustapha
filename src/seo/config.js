@@ -1,4 +1,4 @@
-export const SITE_URL = 'https://abiodunmustapha.com'
+export const SITE_URL = 'https://www.abiodunmustapha.com'
 
 export const DEFAULT_OG_IMAGE = {
   path: '/images/portrait-suit.jpg',

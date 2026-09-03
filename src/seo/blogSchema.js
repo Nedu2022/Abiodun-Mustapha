@@ -9,6 +9,11 @@ export function postUrl(post) {
   return absolute(`/blog/${post.slug}`)
 }
 
+export function safeImage(cover) {
+  if (!cover || cover.startsWith('data:')) return null
+  return cover
+}
+
 export function withBrand(title) {
   const cleanName = person.name.replace(/\./g, '')
   const branded = `${title} ${cleanName}`
@@ -20,7 +25,7 @@ export function postSeo(post) {
     path: `/blog/${post.slug}`,
     title: post.seoTitle || withBrand(post.title),
     description: post.seoDescription || post.excerpt,
-    image: post.cover || undefined,
+    image: safeImage(post.cover) || undefined,
     imageAlt: post.coverAlt || post.title,
     noindex: post.status !== 'published',
   }
@@ -60,7 +65,7 @@ export function blogPostingSchema(post) {
     headline: post.title,
     description: post.seoDescription || post.excerpt,
     url,
-    image: post.cover ? absolute(post.cover) : undefined,
+    image: safeImage(post.cover) ? absolute(safeImage(post.cover)) : undefined,
     datePublished: post.publishedAt,
     dateModified: post.updatedAt || post.publishedAt,
     keywords: (post.tags || []).join(', '),

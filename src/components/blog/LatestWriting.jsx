@@ -1,12 +1,21 @@
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { ArrowRight } from 'lucide-react'
 import Reveal from '../ui/Reveal'
 import SectionHeading from '../ui/SectionHeading'
 import PostCard from './PostCard'
-import { publishedPosts } from '../../lib/posts'
+import { publishedPosts, fetchLivePosts, isPublished, sortByDate } from '../../lib/posts'
 
 export default function LatestWriting() {
-  const posts = publishedPosts.slice(0, 3)
+  const [posts, setPosts] = useState(() => publishedPosts.slice(0, 3))
+
+  useEffect(() => {
+    fetchLivePosts().then((all) => {
+      const pub = sortByDate(all.filter(isPublished))
+      if (pub.length > 0) setPosts(pub.slice(0, 3))
+    }).catch(() => {})
+  }, [])
+
   if (posts.length === 0) return null
 
   return (

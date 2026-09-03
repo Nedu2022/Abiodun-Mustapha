@@ -3,6 +3,7 @@ import { ExternalLink } from 'lucide-react'
 import Reveal from './ui/Reveal'
 import SectionHeading from './ui/SectionHeading'
 import { gallery } from '../data/content'
+import { loadVideos, fetchVideos } from '../lib/videos'
 
 let ytApiPromise
 function loadYouTubeApi() {
@@ -144,15 +145,19 @@ function VideoTile({ id, title }) {
   )
 }
 
-import { loadVideos } from '../lib/videos'
-
 export default function Gallery() {
   const [videos, setVideos] = useState(loadVideos)
 
   useEffect(() => {
-    const syncVideos = () => setVideos(loadVideos())
-    window.addEventListener('storage', syncVideos)
-    return () => window.removeEventListener('storage', syncVideos)
+    let cancelled = false
+    fetchVideos()
+      .then((live) => {
+        if (!cancelled && Array.isArray(live) && live.length > 0) setVideos(live)
+      })
+      .catch(() => {})
+    return () => {
+      cancelled = true
+    }
   }, [])
 
   return (

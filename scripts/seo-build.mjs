@@ -99,9 +99,40 @@ function setJsonLd(html, json) {
   )
 }
 
-const posts = JSON.parse(
-  await readFile(new URL('../src/data/posts.json', import.meta.url), 'utf8')
-)
+function fileCover(post) {
+  const cover = post.cover || ''
+  return cover && !cover.startsWith('data:') ? cover : null
+}
+
+async function loadPosts() {
+  const fallback = JSON.parse(
+    await readFile(new URL('../src/data/posts.json', import.meta.url), 'utf8')
+  )
+  if (!process.env.TURSO_DATABASE_URL) return fallback
+  try {
+    const { createClient } = await import('@libsql/client')
+    const db = createClient({
+      url: process.env.TURSO_DATABASE_URL,
+      authToken: process.env.TURSO_AUTH_TOKEN,
+    })
+    const result = await db.execute({
+      sql: 'SELECT data FROM posts WHERE id = ?',
+      args: ['all'],
+    })
+    if (result.rows.length > 0) {
+      const live = JSON.parse(result.rows[0].data)
+      if (Array.isArray(live) && live.length > 0) {
+        console.log(`SEO: prerendering ${live.length} posts from the database`)
+        return live
+      }
+    }
+  } catch (err) {
+    console.warn(`SEO: database unreachable (${err.message}), using posts.json`)
+  }
+  return fallback
+}
+
+const posts = await loadPosts()
 
 const published = posts
   .filter((post) => post.status === 'published' && post.publishedAt)
@@ -165,7 +196,7 @@ function postGraph(post) {
     headline: post.title,
     description: post.seoDescription || post.excerpt,
     url,
-    image: post.cover ? absolute(post.cover) : undefined,
+    image: fileCover(post) ? absolute(fileCover(post)) : undefined,
     datePublished: post.publishedAt,
     dateModified: post.updatedAt || post.publishedAt,
     keywords: (post.tags || []).join(', '),
@@ -382,7 +413,7 @@ async function buildBlog(shell) {
             ? `${post.title} Dr Abiodun Mustapha`
             : post.title),
         description: post.seoDescription || post.excerpt,
-        image: post.cover,
+        image: fileCover(post) || pages.blog.image,
         noscript: articleHtml(post),
         out: `blog/${post.slug}`,
         ogType: 'article',
@@ -496,7 +527,7 @@ async function buildSitemap() {
       priority: '0.7',
       changefreq: 'monthly',
       mod: post.updatedAt || post.publishedAt,
-      images: post.cover ? [[post.cover, post.coverAlt || post.title]] : [],
+      images: fileCover(post) ? [[fileCover(post), post.coverAlt || post.title]] : [],
     })),
   ]
   const xml = `<?xml version="1.0" encoding="UTF-8"?>

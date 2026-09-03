@@ -113,6 +113,6 @@ It exits non-zero on failure, so it works as a deploy gate.
 
 ### After the next deploy
 
-- Verify the domain in [Google Search Console](https://search.google.com/search-console) and submit `https://abiodunmustapha.com/sitemap.xml`.
+- Verify the domain in [Google Search Console](https://search.google.com/search-console) and submit `https://www.abiodunmustapha.com/sitemap.xml`.
 - Do the same in [Bing Webmaster Tools](https://www.bing.com/webmasters) (it also feeds ChatGPT search).
 - Run the live URLs through the [Rich Results Test](https://search.google.com/test/rich-results) and [PageSpeed Insights](https://pagespeed.web.dev/).

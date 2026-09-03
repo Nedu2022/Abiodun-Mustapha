@@ -4,7 +4,7 @@ import { fileURLToPath } from 'node:url'
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 const dist = resolve(root, 'dist')
-const ORIGIN = 'https://abiodunmustapha.com'
+const ORIGIN = 'https://www.abiodunmustapha.com'
 
 const results = []
 const check = (group, name, ok, detail = '') => results.push({ group, name, ok, detail })

@@ -34,4 +34,4 @@ User-agent: Applebot-Extended
 Allow: /
 Disallow: /admin
 
-Sitemap: https://abiodunmustapha.com/sitemap.xml
+Sitemap: https://www.abiodunmustapha.com/sitemap.xml

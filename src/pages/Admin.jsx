@@ -447,14 +447,7 @@ export default function Admin() {
         {activeTab === 'videos' ? (
           <VideoManager setToast={setToast} />
         ) : (
-          <>
-            <div className="border-b border-line bg-gold/10 px-5 py-3 text-[13px] leading-relaxed text-ink-soft sm:px-8">
-              <span className="font-medium text-ink">Saving keeps your work in this browser.</span> To put
-              it on the live site, click Export and replace <code>src/data/posts.json</code>, then deploy.
-              Cloudinary image uploads are active!
-            </div>
-
-            <div className="mx-auto grid max-w-[100rem] gap-0 px-0 lg:grid-cols-[320px_1fr]">
+          <div className="mx-auto grid max-w-[100rem] gap-0 px-0 lg:grid-cols-[320px_1fr]">
               {/* Post List Sidebar: Always visible on desktop, visible on mobile when mobileView === 'list' */}
               <aside className={`${mobileView === 'edit' ? 'hidden lg:block' : 'block'} border-b border-line bg-white lg:min-h-svh lg:border-b-0 lg:border-r`}>
                 <div className="flex items-center gap-2 border-b border-line px-4 py-3">
@@ -731,7 +724,6 @@ export default function Admin() {
             )}
           </div>
         </div>
-      </>
     )}
 
         {toast && (

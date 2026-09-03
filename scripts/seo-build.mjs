@@ -378,8 +378,8 @@ async function buildBlog(shell) {
         path: `/blog/${post.slug}`,
         title:
           post.seoTitle ||
-          (`${post.title} | ${person.name}`.length <= 65
-            ? `${post.title} | ${person.name}`
+          (`${post.title} Dr Abiodun Mustapha`.length <= 65
+            ? `${post.title} Dr Abiodun Mustapha`
             : post.title),
         description: post.seoDescription || post.excerpt,
         image: post.cover,

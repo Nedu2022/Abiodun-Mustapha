@@ -84,27 +84,27 @@ export const podcast = {
 export const pages = {
   home: {
     path: '/',
-    title: 'Dr. Abiodun Mustapha | Personal Development Expert & Speaker',
+    title: 'Dr Abiodun Mustapha Personal Development Expert and Speaker',
     description:
       'Dr. Abiodun Mustapha is a personal development expert, educator, author and speaker in Lagos, Nigeria. Book him to speak, train your team, or coach you one on one.',
     image: '/images/portrait-suit.jpg',
   },
   blog: {
     path: '/blog',
-    title: 'Writing by Dr. Abiodun Mustapha | Purpose & Discipline',
+    title: 'Writing by Dr Abiodun Mustapha Purpose and Discipline',
     description:
       'Long-form writing from Dr. Abiodun Mustapha on finding your purpose, building discipline, and growing a career from nothing. New pieces twice a month.',
     image: '/images/portrait-desk.jpg',
   },
   admin: {
     path: '/admin',
-    title: 'Studio',
+    title: 'Admin Studio Dr Abiodun Mustapha',
     description: 'Private editor.',
     image: '/images/portrait-suit.jpg',
   },
   about: {
     path: '/about',
-    title: 'About Dr. Abiodun Mustapha | Bio & Speaker Profile',
+    title: 'About Dr Abiodun Mustapha Bio and Speaker Profile',
     description:
       'The full biography of Dr. Abiodun Mustapha: GIZ-certified trainer, founder of Growth Hub Africa, TEDx speaker, and author who has trained over 2,000 professionals.',
     image: '/images/portrait-gesture.jpg',

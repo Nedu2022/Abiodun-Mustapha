@@ -10,7 +10,8 @@ export function postUrl(post) {
 }
 
 export function withBrand(title) {
-  const branded = `${title} | ${person.name}`
+  const cleanName = person.name.replace(/\./g, '')
+  const branded = `${title} ${cleanName}`
   return branded.length <= 65 ? branded : title
 }
 

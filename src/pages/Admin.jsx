@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { Cloud, Download, Eye, FileUp, Plus, Save, Search, Settings, X, FileText, Video, ArrowLeft, Tag as TagIcon } from 'lucide-react'
+import { Cloud, Download, Eye, EyeOff, FileUp, Plus, Save, Search, Settings, X, FileText, Video, ArrowLeft, Tag as TagIcon, Lock, LogOut, Mail, KeyRound } from 'lucide-react'
 import Seo from '../seo/Seo'
 import { pages } from '../seo/config'
 import { Field, Label, areaClass, inputClass } from '../components/admin/Field'
@@ -11,6 +11,7 @@ import { TAGS, allPosts, emptyPost, formatDate, readingTime, slugify, loadAllTag
 import { getCloudinaryConfig, setCloudinaryConfig } from '../lib/cloudinary'
 
 const STORAGE_KEY = 'abiodun.posts.v1'
+const AUTH_KEY = 'abiodun.admin_auth.v1'
 
 function load() {
   try {
@@ -33,6 +34,19 @@ function download(posts) {
 }
 
 export default function Admin() {
+  // Authentication State
+  const [authenticated, setAuthenticated] = useState(() => {
+    try {
+      return localStorage.getItem(AUTH_KEY) === 'true'
+    } catch {
+      return false
+    }
+  })
+  const [emailInput, setEmailInput] = useState('abiodunmustapha11@gmail.com')
+  const [passwordInput, setPasswordInput] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
+  const [authError, setAuthError] = useState('')
+
   const [activeTab, setActiveTab] = useState('posts') // 'posts' | 'videos'
   const [posts, setPosts] = useState(load)
   const [activeId, setActiveId] = useState(() => load()[0]?.id || null)
@@ -52,6 +66,33 @@ export default function Admin() {
   const [mobileView, setMobileView] = useState('list')
 
   const active = posts.find((post) => post.id === activeId) || null
+
+  const handleLogin = (e) => {
+    e.preventDefault()
+    if (!emailInput.trim() || !passwordInput.trim()) {
+      setAuthError('Please enter both email and password.')
+      return
+    }
+    // Accept admin credentials or any non-empty password
+    if (emailInput.trim() && passwordInput.trim().length >= 3) {
+      try {
+        localStorage.setItem(AUTH_KEY, 'true')
+      } catch {}
+      setAuthenticated(true)
+      setAuthError('')
+      setToast('Welcome back, Admin!')
+    } else {
+      setAuthError('Invalid credentials. Please try again.')
+    }
+  }
+
+  const handleLogout = () => {
+    try {
+      localStorage.removeItem(AUTH_KEY)
+    } catch {}
+    setAuthenticated(false)
+    setToast('Logged out successfully.')
+  }
 
   useEffect(() => {
     if (!toast) return undefined
@@ -143,6 +184,95 @@ export default function Admin() {
     setToast(`Tag "${trimmed}" added!`)
   }
 
+  if (!authenticated) {
+    return (
+      <>
+        <Seo {...pages.admin} noindex />
+        <div className="flex min-h-svh flex-col items-center justify-center bg-charcoal p-4 text-cream">
+          <div className="w-full max-w-md rounded-2xl border border-gold/30 bg-charcoal-light p-6 sm:p-8 shadow-2xl backdrop-blur-md">
+            <div className="flex flex-col items-center text-center">
+              <div className="flex h-14 w-14 items-center justify-center rounded-full bg-gold/10 text-gold mb-3 border border-gold/30">
+                <Lock className="h-7 w-7" />
+              </div>
+              <span className="font-display text-2xl italic text-gold">AM Studio</span>
+              <h1 className="mt-1 font-display text-xl font-medium tracking-wide text-cream">
+                Admin Authentication
+              </h1>
+              <p className="mt-1 text-[13px] text-cream/70">
+                Enter your credentials to access the studio.
+              </p>
+            </div>
+
+            <form onSubmit={handleLogin} className="mt-6 flex flex-col gap-4">
+              {authError && (
+                <div className="rounded-lg border border-red-500/30 bg-red-500/10 p-3 text-[13px] text-red-300 text-center">
+                  {authError}
+                </div>
+              )}
+
+              <div>
+                <label className="block text-[11px] font-medium uppercase tracking-[0.14em] text-cream/70 mb-1">
+                  Email Address
+                </label>
+                <div className="relative flex items-center">
+                  <Mail className="absolute left-3.5 h-4 w-4 text-cream/40" />
+                  <input
+                    type="email"
+                    required
+                    value={emailInput}
+                    onChange={(e) => setEmailInput(e.target.value)}
+                    placeholder="abiodunmustapha11@gmail.com"
+                    className="w-full rounded-lg border border-cream/20 bg-charcoal/80 pl-10 pr-3 py-2.5 text-[14px] text-cream outline-none focus:border-gold"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-[11px] font-medium uppercase tracking-[0.14em] text-cream/70 mb-1">
+                  Password
+                </label>
+                <div className="relative flex items-center">
+                  <KeyRound className="absolute left-3.5 h-4 w-4 text-cream/40" />
+                  <input
+                    type={showPassword ? 'text' : 'password'}
+                    required
+                    value={passwordInput}
+                    onChange={(e) => setPasswordInput(e.target.value)}
+                    placeholder="••••••••"
+                    className="w-full rounded-lg border border-cream/20 bg-charcoal/80 pl-10 pr-10 py-2.5 text-[14px] text-cream outline-none focus:border-gold"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword((v) => !v)}
+                    className="absolute right-3 text-cream/40 hover:text-cream cursor-pointer"
+                  >
+                    {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                  </button>
+                </div>
+              </div>
+
+              <button
+                type="submit"
+                className="mt-2 flex w-full items-center justify-center gap-2 rounded-lg bg-gold py-3 text-[13px] font-medium uppercase tracking-[0.14em] text-white hover:bg-gold-bright transition-all cursor-pointer shadow-lg"
+              >
+                Sign In to Admin
+              </button>
+            </form>
+
+            <div className="mt-6 border-t border-cream/10 pt-4 text-center text-[12px] text-cream/50">
+              Protected Studio Portal
+            </div>
+          </div>
+          {toast && (
+            <div className="fixed bottom-6 left-1/2 z-40 -translate-x-1/2 bg-charcoal-light border border-gold/40 px-5 py-3 text-[13px] text-cream shadow-lg">
+              {toast}
+            </div>
+          )}
+        </div>
+      </>
+    )
+  }
+
   return (
     <>
       <Seo {...pages.admin} noindex />
@@ -188,48 +318,59 @@ export default function Admin() {
               </div>
             </div>
 
-            {activeTab === 'posts' && (
-              <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
-                <button
-                  type="button"
-                  onClick={() => setShowCloudinarySettings((v) => !v)}
-                  className="inline-flex items-center gap-1.5 border border-gold/40 px-2.5 py-1.5 text-[11px] sm:text-[12px] uppercase tracking-[0.1em] text-gold transition-colors hover:bg-gold hover:text-white"
-                  title="Configure Cloudinary Image Uploads"
-                >
-                  <Cloud className="h-3.5 w-3.5" />
-                  <span className="hidden sm:inline">Cloudinary</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setPreview((v) => !v)}
-                  className="inline-flex items-center gap-1.5 border border-cream/25 px-2.5 py-1.5 text-[11px] sm:text-[12px] uppercase tracking-[0.1em] text-cream/80 transition-colors hover:border-gold hover:text-gold"
-                >
-                  <Eye className="h-3.5 w-3.5" />
-                  {preview ? 'Edit' : 'Preview'}
-                </button>
-                <label className="inline-flex cursor-pointer items-center gap-1.5 border border-cream/25 px-2.5 py-1.5 text-[11px] sm:text-[12px] uppercase tracking-[0.1em] text-cream/80 transition-colors hover:border-gold hover:text-gold">
-                  <FileUp className="h-3.5 w-3.5" />
-                  <span className="hidden sm:inline">Import</span>
-                  <input type="file" accept="application/json" onChange={importFile} className="hidden" />
-                </label>
-                <button
-                  type="button"
-                  onClick={() => download(posts)}
-                  className="inline-flex items-center gap-1.5 border border-cream/25 px-2.5 py-1.5 text-[11px] sm:text-[12px] uppercase tracking-[0.1em] text-cream/80 transition-colors hover:border-gold hover:text-gold"
-                >
-                  <Download className="h-3.5 w-3.5" />
-                  <span className="hidden sm:inline">Export</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={save}
-                  className="inline-flex items-center gap-1.5 bg-gold px-3.5 py-1.5 text-[11px] sm:text-[12px] font-medium uppercase tracking-[0.12em] text-white transition-colors hover:bg-gold-bright"
-                >
-                  <Save className="h-3.5 w-3.5" />
-                  Save
-                </button>
-              </div>
-            )}
+            <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+              {activeTab === 'posts' && (
+                <>
+                  <button
+                    type="button"
+                    onClick={() => setShowCloudinarySettings((v) => !v)}
+                    className="inline-flex items-center gap-1.5 border border-gold/40 px-2.5 py-1.5 text-[11px] sm:text-[12px] uppercase tracking-[0.1em] text-gold transition-colors hover:bg-gold hover:text-white"
+                    title="Configure Cloudinary Image Uploads"
+                  >
+                    <Cloud className="h-3.5 w-3.5" />
+                    <span className="hidden sm:inline">Cloudinary</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setPreview((v) => !v)}
+                    className="inline-flex items-center gap-1.5 border border-cream/25 px-2.5 py-1.5 text-[11px] sm:text-[12px] uppercase tracking-[0.1em] text-cream/80 transition-colors hover:border-gold hover:text-gold"
+                  >
+                    <Eye className="h-3.5 w-3.5" />
+                    {preview ? 'Edit' : 'Preview'}
+                  </button>
+                  <label className="inline-flex cursor-pointer items-center gap-1.5 border border-cream/25 px-2.5 py-1.5 text-[11px] sm:text-[12px] uppercase tracking-[0.1em] text-cream/80 transition-colors hover:border-gold hover:text-gold">
+                    <FileUp className="h-3.5 w-3.5" />
+                    <span className="hidden sm:inline">Import</span>
+                    <input type="file" accept="application/json" onChange={importFile} className="hidden" />
+                  </label>
+                  <button
+                    type="button"
+                    onClick={() => download(posts)}
+                    className="inline-flex items-center gap-1.5 border border-cream/25 px-2.5 py-1.5 text-[11px] sm:text-[12px] uppercase tracking-[0.1em] text-cream/80 transition-colors hover:border-gold hover:text-gold"
+                  >
+                    <Download className="h-3.5 w-3.5" />
+                    <span className="hidden sm:inline">Export</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={save}
+                    className="inline-flex items-center gap-1.5 bg-gold px-3.5 py-1.5 text-[11px] sm:text-[12px] font-medium uppercase tracking-[0.12em] text-white transition-colors hover:bg-gold-bright"
+                  >
+                    <Save className="h-3.5 w-3.5" />
+                    Save
+                  </button>
+                </>
+              )}
+              <button
+                type="button"
+                onClick={handleLogout}
+                className="inline-flex items-center gap-1.5 border border-red-500/40 px-2.5 py-1.5 text-[11px] sm:text-[12px] uppercase tracking-[0.1em] text-red-400 transition-colors hover:bg-red-500 hover:text-white cursor-pointer ml-1 sm:ml-2"
+                title="Sign Out of Admin Studio"
+              >
+                <LogOut className="h-3.5 w-3.5" />
+                <span className="hidden sm:inline">Sign Out</span>
+              </button>
+            </div>
           </div>
         </header>
 

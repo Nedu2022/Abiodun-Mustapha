@@ -2,6 +2,27 @@ import raw from '../data/posts.json'
 
 export const TAGS = ['Purpose', 'Discipline', 'Career', 'Leadership', 'Faith & Work', 'Business']
 
+export const STORAGE_KEY_TAGS = 'abiodun.tags.v1'
+
+export function loadAllTags() {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY_TAGS)
+    if (saved) {
+      const parsed = JSON.parse(saved)
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        return Array.from(new Set([...TAGS, ...parsed]))
+      }
+    }
+  } catch {}
+  return TAGS
+}
+
+export function saveAllTags(tags) {
+  try {
+    localStorage.setItem(STORAGE_KEY_TAGS, JSON.stringify(tags))
+  } catch {}
+}
+
 export const blogMeta = {
   eyebrow: 'Writing',
   title: 'Notes on purpose,',

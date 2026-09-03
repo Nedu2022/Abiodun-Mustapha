@@ -175,13 +175,23 @@ export default function Admin() {
     setDirty(true)
   }
 
+  // Delete Modal State
+  const [showDeleteModal, setShowDeleteModal] = useState(false)
+
   const removePost = () => {
     if (!active) return
-    if (!window.confirm(`Delete "${active.title || 'Untitled'}"? This cannot be undone.`)) return
+    setShowDeleteModal(true)
+  }
+
+  const confirmDeletePost = () => {
+    if (!active) return
+    const title = active.title || 'Untitled'
     setPosts((current) => current.filter((post) => post.id !== activeId))
     setActiveId(null)
     setMobileView('list')
+    setShowDeleteModal(false)
     setDirty(true)
+    setToast(`Deleted "${title}"`)
   }
 
   const importFile = (event) => {
@@ -585,29 +595,69 @@ export default function Admin() {
           </div>
         )}
 
+        {showDeleteModal && active && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-charcoal/80 p-4 backdrop-blur-xs">
+            <div className="w-full max-w-md rounded-2xl border border-red-500/30 bg-charcoal p-6 text-cream shadow-2xl">
+              <div className="flex items-center justify-between border-b border-cream/10 pb-4">
+                <h3 className="font-display text-lg text-red-400 flex items-center gap-2">
+                  <Trash2 className="h-5 w-5" /> Confirm Article Deletion
+                </h3>
+                <button
+                  type="button"
+                  onClick={() => setShowDeleteModal(false)}
+                  className="text-cream/60 hover:text-cream cursor-pointer"
+                >
+                  <X className="h-5 w-5" />
+                </button>
+              </div>
+
+              <p className="mt-4 text-[14px] text-cream/90 leading-relaxed">
+                Are you sure you want to delete <strong className="text-gold">"{active.title || 'Untitled Post'}"</strong>? This action cannot be undone.
+              </p>
+
+              <div className="flex items-center justify-end gap-3 mt-6 pt-4 border-t border-cream/10">
+                <button
+                  type="button"
+                  onClick={() => setShowDeleteModal(false)}
+                  className="px-4 py-2 text-[12px] font-medium text-cream/70 hover:text-cream cursor-pointer"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  onClick={confirmDeletePost}
+                  className="rounded-lg bg-red-600 px-5 py-2.5 text-[12px] font-medium uppercase tracking-[0.12em] text-white hover:bg-red-700 transition-all cursor-pointer shadow-md"
+                >
+                  Delete Post
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
         {activeTab === 'videos' ? (
           <VideoManager setToast={setToast} />
         ) : (
           <div className="mx-auto grid max-w-[100rem] gap-0 px-0 lg:grid-cols-[320px_1fr]">
               {/* Post List Sidebar: Always visible on desktop, visible on mobile when mobileView === 'list' */}
-              <aside className={`${mobileView === 'edit' ? 'hidden lg:block' : 'block'} border-b border-line bg-white lg:min-h-svh lg:border-b-0 lg:border-r`}>
-                <div className="flex items-center gap-2 border-b border-line px-4 py-3">
-                  <Search className="h-4 w-4 flex-none text-ink-faint" />
+              <aside className={`${mobileView === 'edit' ? 'hidden lg:block' : 'block'} border-b border-slate-300 bg-white lg:min-h-svh lg:border-b-0 lg:border-r`}>
+                <div className="flex items-center gap-2 border-b border-slate-200 px-4 py-3.5 bg-slate-50/50">
+                  <Search className="h-4 w-4 flex-none text-slate-600" />
                   <input
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
-                    placeholder="Search posts"
-                    className="w-full bg-transparent text-[14px] outline-none placeholder:text-ink-faint"
+                    placeholder="Search posts..."
+                    className="w-full bg-transparent text-[14px] font-semibold text-slate-900 outline-none placeholder:text-slate-500"
                   />
                 </div>
 
                 <button
                   type="button"
                   onClick={createPost}
-                  className="flex w-full items-center gap-2 border-b border-line px-4 py-3.5 text-left text-[12px] font-medium uppercase tracking-[0.12em] text-green transition-colors hover:bg-cream"
+                  className="flex w-full items-center gap-2 border-b border-slate-200 px-4 py-3.5 text-left text-[12px] font-bold uppercase tracking-[0.14em] text-green transition-colors hover:bg-cream-100 cursor-pointer"
                 >
-                  <Plus className="h-3.5 w-3.5" />
-                  New post
+                  <Plus className="h-4 w-4 stroke-[2.5]" />
+                  New Article
                 </button>
 
                 <ul className="flex flex-col">
@@ -620,28 +670,28 @@ export default function Admin() {
                           setPreview(false)
                           setMobileView('edit')
                         }}
-                        className={`flex w-full flex-col gap-1.5 border-b border-line px-4 py-4 text-left transition-colors ${
-                          post.id === activeId ? 'bg-cream' : 'hover:bg-cream/60'
+                        className={`flex w-full flex-col gap-1.5 border-b border-slate-200 px-4 py-4 text-left transition-colors ${
+                          post.id === activeId ? 'bg-cream border-l-4 border-l-gold font-semibold' : 'hover:bg-cream/60'
                         }`}
                       >
                         <span className="flex items-center gap-2">
                           <span
-                            className={`h-1.5 w-1.5 flex-none rounded-full ${
+                            className={`h-2 w-2 flex-none rounded-full ${
                               post.status === 'published' ? 'bg-green' : 'bg-gold'
                             }`}
                           />
-                          <span className="text-[10px] uppercase tracking-[0.16em] text-ink-faint">
+                          <span className="text-[11px] font-bold uppercase tracking-[0.14em] text-slate-700">
                             {post.status === 'published' ? formatDate(post.publishedAt) : 'Draft'}
                           </span>
                         </span>
-                        <span className="font-display text-[15px] leading-snug text-ink">
+                        <span className="font-display text-[15px] font-bold leading-snug text-slate-900">
                           {post.title || 'Untitled'}
                         </span>
                       </button>
                     </li>
                   ))}
                   {listed.length === 0 && (
-                    <li className="px-4 py-6 text-[14px] italic text-ink-faint">Nothing matches that.</li>
+                    <li className="px-4 py-6 text-[14px] font-medium italic text-slate-600">Nothing matches that.</li>
                   )}
                 </ul>
               </aside>
@@ -649,42 +699,42 @@ export default function Admin() {
               {/* Main Post Editor: Always visible on desktop, visible on mobile when mobileView === 'edit' */}
               <div className={`${mobileView === 'list' ? 'hidden lg:block' : 'block'} px-4 py-6 sm:px-8 sm:py-8`}>
                 {/* Mobile Back Button */}
-                <div className="mb-6 flex items-center justify-between border-b border-line pb-4 lg:hidden">
+                <div className="mb-6 flex items-center justify-between border-b border-slate-200 pb-4 lg:hidden">
                   <button
                     type="button"
                     onClick={() => setMobileView('list')}
-                    className="inline-flex items-center gap-2 rounded-full border border-line bg-white px-4 py-2 text-[12px] font-medium uppercase tracking-[0.12em] text-ink transition-colors hover:bg-cream cursor-pointer"
+                    className="inline-flex items-center gap-2 rounded-full border border-slate-300 bg-white px-4 py-2 text-[12px] font-bold uppercase tracking-[0.12em] text-slate-900 transition-colors hover:bg-cream cursor-pointer"
                   >
                     <ArrowLeft className="h-4 w-4" />
                     Back to Posts
                   </button>
                   {active && (
-                    <span className="text-[12px] font-medium uppercase tracking-[0.12em] text-ink-soft truncate max-w-[160px]">
+                    <span className="text-[12px] font-bold uppercase tracking-[0.12em] text-slate-800 truncate max-w-[160px]">
                       {active.title || 'Untitled'}
                     </span>
                   )}
                 </div>
 
                 {!active && (
-                  <p className="font-display text-xl italic text-ink-soft">
-                    Pick a post from the list, or start a new one.
+                  <p className="font-display text-xl italic text-slate-700">
+                    Pick a post from the list, or start a new article.
                   </p>
                 )}
 
                 {active && preview && (
                   <article className="mx-auto max-w-3xl">
-                    <span className="text-[11px] font-medium uppercase tracking-[0.16em] text-gold">
+                    <span className="text-[11px] font-bold uppercase tracking-[0.16em] text-gold">
                       {(active.tags || []).join(' · ') || 'Untagged'} · {readingTime(active)} min read
                     </span>
-                    <h1 className="mt-4 font-display text-[2.1rem] leading-[1.08] text-ink sm:text-[2.6rem]">
+                    <h1 className="mt-4 font-display text-[2.1rem] leading-[1.08] text-slate-900 font-bold sm:text-[2.6rem]">
                       {active.title || 'Untitled'}
                     </h1>
-                    <p className="mt-4 font-display text-lg italic text-ink-soft">{active.excerpt}</p>
+                    <p className="mt-4 font-display text-lg italic text-slate-700">{active.excerpt}</p>
                     {active.cover && (
                       <img
                         src={active.cover}
                         alt={active.coverAlt || ''}
-                        className="mt-8 aspect-[16/9] w-full object-cover"
+                        className="mt-8 aspect-[16/9] w-full object-cover rounded-xl"
                       />
                     )}
                     <div className="mt-8">
@@ -695,7 +745,9 @@ export default function Admin() {
 
                 {active && !preview && (
                   <div className="mx-auto flex max-w-3xl flex-col gap-6">
-                    <Field label="Title" hint={`${active.title.length}/70`}>
+                    {/* Medium-style Large Title Input */}
+                    <div className="flex flex-col gap-2">
+                      <Label hint={`${active.title.length}/70`}>Title</Label>
                       <input
                         value={active.title}
                         onChange={(e) => {
@@ -703,10 +755,10 @@ export default function Admin() {
                           const autoSlug = !active.slug || active.slug === slugify(active.title)
                           patch(autoSlug ? { title, slug: slugify(title) } : { title })
                         }}
-                        placeholder="What is this piece called?"
-                        className={inputClass}
+                        placeholder="Title of your story..."
+                        className="w-full border-b border-slate-300 bg-transparent py-2 font-display text-2xl font-bold text-slate-900 outline-none transition-colors placeholder:text-slate-400 focus:border-gold sm:text-3xl"
                       />
-                    </Field>
+                    </div>
 
                     <Field label="URL" hint={active.status === 'published' ? 'Locked once live' : 'Editable'}>
                       <div className="flex items-center gap-0 border border-line bg-white">

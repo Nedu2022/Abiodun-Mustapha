@@ -1,14 +1,14 @@
-import { ArrowDown, ArrowUp, Plus, Trash2 } from 'lucide-react'
+import { ArrowDown, ArrowUp, Plus, Trash2, Heading, AlignLeft, Image as ImageIcon, Quote, List, Minus } from 'lucide-react'
 import { Label, areaClass, inputClass } from './Field'
 import CloudinaryUpload from './CloudinaryUpload'
 
 const TYPES = [
-  { id: 'paragraph', label: 'Text' },
-  { id: 'heading', label: 'Heading' },
-  { id: 'image', label: 'Image' },
-  { id: 'quote', label: 'Quote' },
-  { id: 'list', label: 'List' },
-  { id: 'divider', label: 'Divider' },
+  { id: 'paragraph', label: 'Text', icon: AlignLeft },
+  { id: 'heading', label: 'Heading', icon: Heading },
+  { id: 'image', label: 'Image', icon: ImageIcon },
+  { id: 'quote', label: 'Quote', icon: Quote },
+  { id: 'list', label: 'List', icon: List },
+  { id: 'divider', label: 'Divider', icon: Minus },
 ]
 
 function blankBlock(type) {
@@ -40,60 +40,68 @@ export default function BlockEditor({ body, onChange }) {
   const add = (type) => onChange([...body, blankBlock(type)])
 
   return (
-    <div className="flex flex-col gap-4">
-      <Label hint={`${body.length} blocks`}>Body</Label>
+    <div className="flex flex-col gap-5">
+      <Label hint={`${body.length} blocks`}>Article Content (Medium Style Blocks)</Label>
 
       {body.map((block, index) => (
-        <div key={index} className="border border-line bg-white">
-          <div className="flex items-center justify-between gap-3 border-b border-line px-3 py-2">
-            <select
-              value={block.type}
-              onChange={(e) => update(index, blankBlock(e.target.value))}
-              className="bg-transparent text-[11px] font-medium uppercase tracking-[0.14em] text-green outline-none"
-              aria-label="Block type"
-            >
-              {TYPES.map((t) => (
-                <option key={t.id} value={t.id}>
-                  {t.label}
-                </option>
-              ))}
-            </select>
+        <div key={index} className="rounded-xl border border-slate-300 bg-white shadow-xs transition-all hover:border-gold/50">
+          <div className="flex items-center justify-between gap-3 border-b border-slate-200 bg-slate-50/80 px-4 py-2.5 rounded-t-xl">
+            <div className="flex items-center gap-2">
+              <span className="text-[11px] font-bold uppercase tracking-[0.14em] text-slate-800 bg-gold/15 px-2.5 py-0.5 rounded-md">
+                {TYPES.find((t) => t.id === block.type)?.label || block.type}
+              </span>
+              <select
+                value={block.type}
+                onChange={(e) => update(index, blankBlock(e.target.value))}
+                className="bg-transparent text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-700 outline-none cursor-pointer hover:text-gold"
+                aria-label="Change block type"
+              >
+                {TYPES.map((t) => (
+                  <option key={t.id} value={t.id}>
+                    Change to {t.label}
+                  </option>
+                ))}
+              </select>
+            </div>
 
-            <div className="flex items-center gap-1">
+            <div className="flex items-center gap-1.5">
               <button
                 type="button"
                 onClick={() => move(index, -1)}
                 aria-label="Move block up"
-                className="p-1.5 text-ink-faint transition-colors hover:text-ink"
+                className="rounded p-1.5 text-slate-600 transition-colors hover:bg-slate-200 hover:text-slate-900"
+                title="Move Up"
               >
-                <ArrowUp className="h-3.5 w-3.5" />
+                <ArrowUp className="h-4 w-4" />
               </button>
               <button
                 type="button"
                 onClick={() => move(index, 1)}
                 aria-label="Move block down"
-                className="p-1.5 text-ink-faint transition-colors hover:text-ink"
+                className="rounded p-1.5 text-slate-600 transition-colors hover:bg-slate-200 hover:text-slate-900"
+                title="Move Down"
               >
-                <ArrowDown className="h-3.5 w-3.5" />
+                <ArrowDown className="h-4 w-4" />
               </button>
               <button
                 type="button"
                 onClick={() => remove(index)}
                 aria-label="Delete block"
-                className="p-1.5 text-ink-faint transition-colors hover:text-red-700"
+                className="rounded p-1.5 text-slate-500 transition-colors hover:bg-red-50 hover:text-red-600"
+                title="Delete Block"
               >
-                <Trash2 className="h-3.5 w-3.5" />
+                <Trash2 className="h-4 w-4" />
               </button>
             </div>
           </div>
 
-          <div className="flex flex-col gap-3 p-3">
+          <div className="flex flex-col gap-3 p-4">
             {(block.type === 'paragraph' || block.type === 'heading') && (
               <textarea
                 value={block.text || ''}
                 onChange={(e) => update(index, { ...block, text: e.target.value })}
-                rows={block.type === 'heading' ? 1 : 5}
-                placeholder={block.type === 'heading' ? 'Section heading' : 'Write here'}
+                rows={block.type === 'heading' ? 2 : 5}
+                placeholder={block.type === 'heading' ? 'Section Heading (e.g., The Power of Purpose)' : 'Write your narrative here...'}
                 className={areaClass}
               />
             )}
@@ -104,13 +112,13 @@ export default function BlockEditor({ body, onChange }) {
                   value={block.text || ''}
                   onChange={(e) => update(index, { ...block, text: e.target.value })}
                   rows={3}
-                  placeholder="The line worth pulling out"
-                  className={areaClass}
+                  placeholder="Insert a key quote or pull-out statement..."
+                  className={`${areaClass} font-serif italic border-l-4 border-l-gold bg-cream-50`}
                 />
                 <input
                   value={block.cite || ''}
                   onChange={(e) => update(index, { ...block, cite: e.target.value })}
-                  placeholder="Attribution (optional)"
+                  placeholder="Attribution (e.g. — Dr. Abiodun Mustapha)"
                   className={inputClass}
                 />
               </>
@@ -133,7 +141,7 @@ export default function BlockEditor({ body, onChange }) {
                 <input
                   value={block.alt || ''}
                   onChange={(e) => update(index, { ...block, alt: e.target.value })}
-                  placeholder="Describe the image for search engines and screen readers"
+                  placeholder="Describe image for SEO (Alt text)"
                   className={inputClass}
                 />
                 <input
@@ -146,7 +154,7 @@ export default function BlockEditor({ body, onChange }) {
                   <img
                     src={block.src}
                     alt=""
-                    className="max-h-40 w-full border border-line object-cover"
+                    className="max-h-48 rounded-lg border border-slate-200 object-cover mt-1"
                   />
                 )}
               </>
@@ -163,7 +171,7 @@ export default function BlockEditor({ body, onChange }) {
                         items[itemIndex] = e.target.value
                         update(index, { ...block, items })
                       }}
-                      placeholder="List item"
+                      placeholder={`List item #${itemIndex + 1}`}
                       className={inputClass}
                     />
                     <button
@@ -171,42 +179,51 @@ export default function BlockEditor({ body, onChange }) {
                       onClick={() =>
                         update(index, { ...block, items: block.items.filter((_, i) => i !== itemIndex) })
                       }
-                      aria-label="Remove list item"
-                      className="px-2 text-ink-faint transition-colors hover:text-red-700"
+                      aria-label="Remove item"
+                      className="px-2 text-slate-500 hover:text-red-600 transition-colors"
                     >
-                      <Trash2 className="h-3.5 w-3.5" />
+                      <Trash2 className="h-4 w-4" />
                     </button>
                   </div>
                 ))}
                 <button
                   type="button"
                   onClick={() => update(index, { ...block, items: [...(block.items || []), ''] })}
-                  className="w-fit text-[12px] font-medium uppercase tracking-[0.12em] text-green"
+                  className="w-fit rounded-md bg-slate-100 px-3 py-1.5 text-[11px] font-bold uppercase tracking-[0.12em] text-slate-800 hover:bg-slate-200 transition-colors cursor-pointer mt-1"
                 >
-                  Add item
+                  + Add List Item
                 </button>
               </div>
             )}
 
             {block.type === 'divider' && (
-              <p className="text-[13px] italic text-ink-faint">A horizontal rule.</p>
+              <p className="text-[13px] font-medium text-slate-600 italic">Horizontal divider line.</p>
             )}
           </div>
         </div>
       ))}
 
-      <div className="flex flex-wrap gap-2">
-        {TYPES.map((t) => (
-          <button
-            key={t.id}
-            type="button"
-            onClick={() => add(t.id)}
-            className="inline-flex items-center gap-1.5 border border-line px-3 py-2 text-[12px] font-medium uppercase tracking-[0.1em] text-ink-soft transition-colors hover:border-green hover:text-green"
-          >
-            <Plus className="h-3 w-3" />
-            {t.label}
-          </button>
-        ))}
+      {/* Medium-style Add Content Toolbar */}
+      <div className="mt-2 rounded-xl border border-slate-300 bg-slate-50 p-4">
+        <span className="block text-[11px] font-bold uppercase tracking-[0.14em] text-slate-700 mb-3">
+          Add Content Block
+        </span>
+        <div className="flex flex-wrap gap-2">
+          {TYPES.map((t) => {
+            const Icon = t.icon
+            return (
+              <button
+                key={t.id}
+                type="button"
+                onClick={() => add(t.id)}
+                className="inline-flex items-center gap-2 rounded-lg border border-slate-300 bg-white px-3.5 py-2 text-[12px] font-semibold text-slate-800 hover:border-gold hover:text-gold hover:shadow-xs transition-all cursor-pointer"
+              >
+                <Icon className="h-4 w-4 text-gold" />
+                {t.label}
+              </button>
+            )
+          })}
+        </div>
       </div>
     </div>
   )

@@ -1,4 +1,4 @@
-import { getDb } from './db.js'
+import { getDb, initDb } from './db.js'
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Credentials', 'true')
@@ -8,6 +8,7 @@ export default async function handler(req, res) {
 
   if (req.method === 'OPTIONS') return res.status(200).end()
 
+  await initDb()
   const db = getDb()
   const { action } = req.query || {}
 
@@ -15,11 +16,11 @@ export default async function handler(req, res) {
   if (req.method === 'POST' && action === 'login') {
     try {
       const { email, password } = req.body
-      const savedEmail = db.prepare('SELECT value FROM settings WHERE key = ?').get('admin_email')
-      const savedPass = db.prepare('SELECT value FROM settings WHERE key = ?').get('admin_password')
+      const savedEmail = await db.execute({ sql: 'SELECT value FROM settings WHERE key = ?', args: ['admin_email'] })
+      const savedPass = await db.execute({ sql: 'SELECT value FROM settings WHERE key = ?', args: ['admin_password'] })
 
-      const dbEmail = savedEmail?.value || 'abiodunmustapha11@gmail.com'
-      const dbPass = savedPass?.value || 'admin'
+      const dbEmail = savedEmail.rows[0]?.value || 'abiodunmustapha11@gmail.com'
+      const dbPass = savedPass.rows[0]?.value || 'admin'
 
       if (email === dbEmail && password === dbPass) {
         return res.status(200).json({ success: true })
@@ -34,8 +35,8 @@ export default async function handler(req, res) {
   if (req.method === 'POST' && action === 'change-password') {
     try {
       const { currentPassword, newPassword } = req.body
-      const savedPass = db.prepare('SELECT value FROM settings WHERE key = ?').get('admin_password')
-      const dbPass = savedPass?.value || 'admin'
+      const savedPass = await db.execute({ sql: 'SELECT value FROM settings WHERE key = ?', args: ['admin_password'] })
+      const dbPass = savedPass.rows[0]?.value || 'admin'
 
       if (currentPassword !== dbPass) {
         return res.status(401).json({ error: 'Current password is incorrect.' })
@@ -44,14 +45,17 @@ export default async function handler(req, res) {
         return res.status(400).json({ error: 'New password must be at least 4 characters.' })
       }
 
-      db.prepare('INSERT OR REPLACE INTO settings (key, value) VALUES (?, ?)').run('admin_password', newPassword)
+      await db.execute({
+        sql: 'INSERT OR REPLACE INTO settings (key, value) VALUES (?, ?)',
+        args: ['admin_password', newPassword],
+      })
       return res.status(200).json({ success: true })
     } catch (err) {
       return res.status(500).json({ error: 'Password change failed', detail: err.message })
     }
   }
 
-  // GET /api/auth?action=check — simple ping to confirm auth API works
+  // GET /api/auth — health check
   if (req.method === 'GET') {
     return res.status(200).json({ ok: true })
   }

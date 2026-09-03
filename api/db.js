@@ -1,49 +1,79 @@
-import Database from 'better-sqlite3'
-import { resolve } from 'node:path'
+import { createClient } from '@libsql/client'
 
-let _db = null
+let _client = null
 
 export function getDb() {
-  if (_db) return _db
+  if (_client) return _client
 
-  const dbPath = resolve(process.cwd(), 'data.db')
-  _db = new Database(dbPath)
-  _db.pragma('journal_mode = WAL')
+  _client = createClient({
+    url: process.env.TURSO_DATABASE_URL || 'file:data.db',
+    authToken: process.env.TURSO_AUTH_TOKEN,
+  })
 
-  // Create tables if they don't exist
-  _db.exec(`
-    CREATE TABLE IF NOT EXISTS posts (
-      id TEXT PRIMARY KEY,
-      data TEXT NOT NULL
-    );
+  return _client
+}
 
-    CREATE TABLE IF NOT EXISTS videos (
-      id INTEGER PRIMARY KEY CHECK (id = 1),
-      data TEXT NOT NULL
-    );
+// Initialize tables — call once on first request
+let _initialized = false
 
-    CREATE TABLE IF NOT EXISTS tags (
-      id INTEGER PRIMARY KEY CHECK (id = 1),
-      data TEXT NOT NULL
-    );
+export async function initDb() {
+  if (_initialized) return
+  const db = getDb()
 
-    CREATE TABLE IF NOT EXISTS settings (
-      key TEXT PRIMARY KEY,
-      value TEXT NOT NULL
-    );
-  `)
+  await db.batch([
+    {
+      sql: `CREATE TABLE IF NOT EXISTS posts (
+        id TEXT PRIMARY KEY,
+        data TEXT NOT NULL
+      )`,
+      args: [],
+    },
+    {
+      sql: `CREATE TABLE IF NOT EXISTS videos (
+        id INTEGER PRIMARY KEY CHECK (id = 1),
+        data TEXT NOT NULL
+      )`,
+      args: [],
+    },
+    {
+      sql: `CREATE TABLE IF NOT EXISTS tags (
+        id INTEGER PRIMARY KEY CHECK (id = 1),
+        data TEXT NOT NULL
+      )`,
+      args: [],
+    },
+    {
+      sql: `CREATE TABLE IF NOT EXISTS settings (
+        key TEXT PRIMARY KEY,
+        value TEXT NOT NULL
+      )`,
+      args: [],
+    },
+  ])
 
   // Seed default password if not set
-  const existing = _db.prepare('SELECT value FROM settings WHERE key = ?').get('admin_password')
-  if (!existing) {
-    _db.prepare('INSERT INTO settings (key, value) VALUES (?, ?)').run('admin_password', 'admin')
+  const existing = await db.execute({
+    sql: 'SELECT value FROM settings WHERE key = ?',
+    args: ['admin_password'],
+  })
+  if (existing.rows.length === 0) {
+    await db.execute({
+      sql: 'INSERT INTO settings (key, value) VALUES (?, ?)',
+      args: ['admin_password', 'admin'],
+    })
   }
 
   // Seed default email if not set
-  const existingEmail = _db.prepare('SELECT value FROM settings WHERE key = ?').get('admin_email')
-  if (!existingEmail) {
-    _db.prepare('INSERT INTO settings (key, value) VALUES (?, ?)').run('admin_email', 'abiodunmustapha11@gmail.com')
+  const existingEmail = await db.execute({
+    sql: 'SELECT value FROM settings WHERE key = ?',
+    args: ['admin_email'],
+  })
+  if (existingEmail.rows.length === 0) {
+    await db.execute({
+      sql: 'INSERT INTO settings (key, value) VALUES (?, ?)',
+      args: ['admin_email', 'abiodunmustapha11@gmail.com'],
+    })
   }
 
-  return _db
+  _initialized = true
 }

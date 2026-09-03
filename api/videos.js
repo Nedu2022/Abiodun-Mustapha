@@ -1,4 +1,4 @@
-import { getDb } from './db.js'
+import { getDb, initDb } from './db.js'
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Credentials', 'true')
@@ -8,12 +8,13 @@ export default async function handler(req, res) {
 
   if (req.method === 'OPTIONS') return res.status(200).end()
 
+  await initDb()
   const db = getDb()
 
   if (req.method === 'GET') {
     try {
-      const row = db.prepare('SELECT data FROM videos WHERE id = 1').get()
-      if (row) return res.status(200).json(JSON.parse(row.data))
+      const result = await db.execute({ sql: 'SELECT data FROM videos WHERE id = 1', args: [] })
+      if (result.rows.length > 0) return res.status(200).json(JSON.parse(result.rows[0].data))
       return res.status(200).json([])
     } catch (err) {
       return res.status(500).json({ error: 'Failed to read videos', detail: err.message })
@@ -26,7 +27,10 @@ export default async function handler(req, res) {
       if (!Array.isArray(videos)) {
         return res.status(400).json({ error: 'Payload must be an array of videos' })
       }
-      db.prepare('INSERT OR REPLACE INTO videos (id, data) VALUES (1, ?)').run(JSON.stringify(videos))
+      await db.execute({
+        sql: 'INSERT OR REPLACE INTO videos (id, data) VALUES (1, ?)',
+        args: [JSON.stringify(videos)],
+      })
       return res.status(200).json({ success: true, count: videos.length })
     } catch (err) {
       return res.status(500).json({ error: 'Failed to save videos', detail: err.message })

@@ -331,7 +331,7 @@ export default function Admin() {
     <>
       <Seo {...pages.admin} noindex />
 
-      <div className="min-h-svh bg-cream-200">
+      <div className="min-h-svh bg-white">
         <header className="sticky top-0 z-30 border-b border-charcoal/20 bg-charcoal text-cream">
           <div className="mx-auto flex max-w-[100rem] flex-col gap-3 px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:px-8">
             <div className="flex items-center justify-between gap-3 sm:justify-start">
@@ -640,24 +640,24 @@ export default function Admin() {
         ) : (
           <div className="mx-auto grid max-w-[100rem] gap-0 px-0 lg:grid-cols-[320px_1fr]">
               {/* Post List Sidebar: Always visible on desktop, visible on mobile when mobileView === 'list' */}
-              <aside className={`${mobileView === 'edit' ? 'hidden lg:block' : 'block'} border-b border-slate-300 bg-white lg:min-h-svh lg:border-b-0 lg:border-r`}>
-                <div className="flex items-center gap-2 border-b border-slate-200 px-4 py-3.5 bg-slate-50/50">
-                  <Search className="h-4 w-4 flex-none text-slate-500" />
+              <aside className={`${mobileView === 'edit' ? 'hidden lg:block' : 'block'} border-b border-gold/20 bg-[#FAF7F2] lg:min-h-svh lg:border-b-0 lg:border-r lg:border-gold/25`}>
+                <div className="flex items-center gap-2 border-b border-gold/20 px-4 py-3.5 bg-gold/10">
+                  <Search className="h-4 w-4 flex-none text-gold" />
                   <input
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
                     placeholder="Search posts..."
-                    className="w-full bg-transparent text-[14px] text-slate-900 outline-none placeholder:text-slate-400"
+                    className="w-full bg-transparent text-[14px] text-slate-900 outline-none placeholder:text-slate-500"
                   />
                 </div>
 
                 <button
                   type="button"
                   onClick={createPost}
-                  className="flex w-full items-center gap-2 border-b border-slate-200 px-4 py-3.5 text-left text-[12px] font-medium uppercase tracking-[0.12em] text-green transition-colors hover:bg-cream-100 cursor-pointer"
+                  className="flex w-full items-center gap-2 border-b border-gold/20 bg-gold/15 px-4 py-3.5 text-left text-[12px] font-medium uppercase tracking-[0.12em] text-gold hover:bg-gold hover:text-white transition-all cursor-pointer"
                 >
                   <Plus className="h-4 w-4" />
-                  New Article
+                  + New Article
                 </button>
 
                 <ul className="flex flex-col">
@@ -670,8 +670,8 @@ export default function Admin() {
                           setPreview(false)
                           setMobileView('edit')
                         }}
-                        className={`flex w-full flex-col gap-1 border-b border-slate-200 px-4 py-3.5 text-left transition-colors ${
-                          post.id === activeId ? 'bg-cream border-l-4 border-l-gold' : 'hover:bg-cream/60'
+                        className={`flex w-full flex-col gap-1 border-b border-gold/15 px-4 py-3.5 text-left transition-colors ${
+                          post.id === activeId ? 'bg-gold/15 border-l-4 border-l-gold text-slate-900' : 'hover:bg-gold/10'
                         }`}
                       >
                         <span className="flex items-center gap-2">

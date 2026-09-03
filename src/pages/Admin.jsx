@@ -1,11 +1,10 @@
 import { useEffect, useMemo, useState } from 'react'
-import { Cloud, Download, Eye, EyeOff, FileUp, Plus, Save, Search, Settings, X, FileText, Video, ArrowLeft, Tag as TagIcon, Lock, LogOut, Mail, KeyRound } from 'lucide-react'
+import { Cloud, Download, Eye, EyeOff, FileUp, Plus, Save, Search, Settings, X, FileText, Video, ArrowLeft, Tag as TagIcon, Lock, LogOut, Mail, KeyRound, Globe, Send } from 'lucide-react'
 import Seo from '../seo/Seo'
 import { pages } from '../seo/config'
 import { Field, Label, areaClass, inputClass } from '../components/admin/Field'
 import BlockEditor from '../components/admin/BlockEditor'
 import PostBody from '../components/blog/PostBody'
-import CloudinaryUpload from '../components/admin/CloudinaryUpload'
 import VideoManager from '../components/admin/VideoManager'
 import { TAGS, allPosts, emptyPost, formatDate, readingTime, slugify, loadAllTags, saveAllTags, saveLivePosts } from '../lib/posts'
 import { getCloudinaryConfig, setCloudinaryConfig } from '../lib/cloudinary'
@@ -164,7 +163,18 @@ export default function Admin() {
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(posts))
     await saveLivePosts(posts)
     setDirty(false)
-    setToast('Saved & published live!')
+    setToast('Saved draft & synced live!')
+  }
+
+  const publishPostLive = async () => {
+    if (!active) return
+    const updatedPost = { ...active, status: 'published', updatedAt: new Date().toISOString().slice(0, 10) }
+    const nextPosts = posts.map((p) => (p.id === active.id ? updatedPost : p))
+    setPosts(nextPosts)
+    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(nextPosts))
+    await saveLivePosts(nextPosts)
+    setDirty(false)
+    setToast(`Published "${updatedPost.title || 'Untitled'}" Live!`)
   }
 
   const createPost = () => {
@@ -389,48 +399,35 @@ export default function Admin() {
                 <>
                   <button
                     type="button"
-                    onClick={() => setShowCloudinarySettings((v) => !v)}
-                    className="inline-flex items-center gap-1.5 border border-gold/40 px-2.5 py-1.5 text-[11px] sm:text-[12px] uppercase tracking-[0.1em] text-gold transition-colors hover:bg-gold hover:text-white"
-                    title="Configure Cloudinary Image Uploads"
-                  >
-                    <Cloud className="h-3.5 w-3.5" />
-                    <span className="hidden sm:inline">Cloudinary</span>
-                  </button>
-                  <button
-                    type="button"
                     onClick={() => setPreview((v) => !v)}
-                    className="inline-flex items-center gap-1.5 border border-cream/25 px-2.5 py-1.5 text-[11px] sm:text-[12px] uppercase tracking-[0.1em] text-cream/80 transition-colors hover:border-gold hover:text-gold"
+                    className="inline-flex items-center gap-1.5 border border-cream/25 px-2.5 py-1.5 text-[11px] sm:text-[12px] uppercase tracking-[0.1em] text-cream/80 transition-colors hover:border-gold hover:text-gold rounded-md"
                   >
                     <Eye className="h-3.5 w-3.5" />
                     {preview ? 'Edit' : 'Preview'}
                   </button>
-                  <label className="inline-flex cursor-pointer items-center gap-1.5 border border-cream/25 px-2.5 py-1.5 text-[11px] sm:text-[12px] uppercase tracking-[0.1em] text-cream/80 transition-colors hover:border-gold hover:text-gold">
-                    <FileUp className="h-3.5 w-3.5" />
-                    <span className="hidden sm:inline">Import</span>
-                    <input type="file" accept="application/json" onChange={importFile} className="hidden" />
-                  </label>
-                  <button
-                    type="button"
-                    onClick={() => download(posts)}
-                    className="inline-flex items-center gap-1.5 border border-cream/25 px-2.5 py-1.5 text-[11px] sm:text-[12px] uppercase tracking-[0.1em] text-cream/80 transition-colors hover:border-gold hover:text-gold"
-                  >
-                    <Download className="h-3.5 w-3.5" />
-                    <span className="hidden sm:inline">Export</span>
-                  </button>
                   <button
                     type="button"
                     onClick={save}
-                    className="inline-flex items-center gap-1.5 bg-gold px-3.5 py-1.5 text-[11px] sm:text-[12px] font-medium uppercase tracking-[0.12em] text-white transition-colors hover:bg-gold-bright"
+                    className="inline-flex items-center gap-1.5 bg-slate-700 px-3.5 py-1.5 text-[11px] sm:text-[12px] font-medium uppercase tracking-[0.12em] text-white transition-colors hover:bg-slate-800 rounded-md cursor-pointer"
                   >
                     <Save className="h-3.5 w-3.5" />
                     Save
+                  </button>
+                  <button
+                    type="button"
+                    onClick={publishPostLive}
+                    className="inline-flex items-center gap-1.5 bg-green px-3.5 py-1.5 text-[11px] sm:text-[12px] font-medium uppercase tracking-[0.12em] text-white transition-colors hover:bg-green-deep rounded-md cursor-pointer shadow-xs"
+                    title="Publish this article live to the site"
+                  >
+                    <Globe className="h-3.5 w-3.5" />
+                    Publish Live
                   </button>
                 </>
               )}
               <button
                 type="button"
                 onClick={handleLogout}
-                className="inline-flex items-center gap-1.5 border border-red-500/40 px-2.5 py-1.5 text-[11px] sm:text-[12px] uppercase tracking-[0.1em] text-red-400 transition-colors hover:bg-red-500 hover:text-white cursor-pointer ml-1 sm:ml-2"
+                className="inline-flex items-center gap-1.5 border border-red-500/40 px-2.5 py-1.5 text-[11px] sm:text-[12px] uppercase tracking-[0.1em] text-red-400 transition-colors hover:bg-red-500 hover:text-white cursor-pointer ml-1 sm:ml-2 rounded-md"
                 title="Sign Out of Admin Studio"
               >
                 <LogOut className="h-3.5 w-3.5" />
@@ -439,76 +436,6 @@ export default function Admin() {
             </div>
           </div>
         </header>
-
-        {showCloudinarySettings && (
-          <div className="border-b border-line bg-charcoal text-cream px-5 py-4 sm:px-8">
-            <div className="mx-auto max-w-3xl">
-              <div className="flex items-center justify-between mb-3">
-                <h3 className="font-display text-lg text-gold flex items-center gap-2">
-                  <Cloud className="h-4 w-4" /> Cloudinary Settings
-                </h3>
-                <button
-                  type="button"
-                  onClick={() => setShowCloudinarySettings(false)}
-                  className="text-cream/60 hover:text-cream"
-                >
-                  <X className="h-4 w-4" />
-                </button>
-              </div>
-              <p className="text-[13px] text-cream/80 mb-4">
-                Enter your Cloudinary <strong>Cloud Name</strong> and an <strong>Unsigned Upload Preset</strong>.
-                This allows instant image uploads directly from your browser!
-              </p>
-              <form
-                onSubmit={(e) => {
-                  e.preventDefault()
-                  setCloudinaryConfig(cName.trim(), cPreset.trim())
-                  setShowCloudinarySettings(false)
-                  setToast('Cloudinary credentials saved!')
-                }}
-                className="grid gap-4 sm:grid-cols-2"
-              >
-                <div>
-                  <label className="block text-[11px] font-medium uppercase tracking-[0.14em] text-cream/70 mb-1">
-                    Cloud Name
-                  </label>
-                  <input
-                    value={cName}
-                    onChange={(e) => setCName(e.target.value)}
-                    placeholder="e.g. my-cloud-name"
-                    className="w-full border border-cream/20 bg-charcoal-light px-3 py-2 text-[14px] text-cream outline-none focus:border-gold"
-                  />
-                </div>
-                <div>
-                  <label className="block text-[11px] font-medium uppercase tracking-[0.14em] text-cream/70 mb-1">
-                    Upload Preset (Unsigned)
-                  </label>
-                  <input
-                    value={cPreset}
-                    onChange={(e) => setCPreset(e.target.value)}
-                    placeholder="e.g. ml_default or my_preset"
-                    className="w-full border border-cream/20 bg-charcoal-light px-3 py-2 text-[14px] text-cream outline-none focus:border-gold"
-                  />
-                </div>
-                <div className="sm:col-span-2 flex items-center justify-end gap-3 mt-2">
-                  <button
-                    type="button"
-                    onClick={() => setShowCloudinarySettings(false)}
-                    className="px-4 py-2 text-[12px] text-cream/70 hover:text-cream"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    type="submit"
-                    className="bg-gold px-5 py-2 text-[12px] font-medium uppercase tracking-[0.12em] text-white hover:bg-gold-bright"
-                  >
-                    Save Cloudinary Settings
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>
-        )}
 
         {showPasswordModal && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-charcoal/80 p-4 backdrop-blur-xs">
@@ -787,13 +714,28 @@ export default function Admin() {
                           <input
                             value={active.cover}
                             onChange={(e) => patch({ cover: e.target.value })}
-                            placeholder="/images/portrait-desk.jpg or Cloudinary URL"
+                            placeholder="Image URL or choose file from laptop..."
                             className={`${inputClass} flex-1`}
                           />
-                          <CloudinaryUpload
-                            label="Upload"
-                            onUploadSuccess={(url) => patch({ cover: url })}
-                          />
+                          <label className="inline-flex cursor-pointer items-center justify-center gap-1.5 rounded-lg bg-gold px-4 py-2.5 text-[12px] font-medium uppercase tracking-[0.1em] text-white hover:bg-gold-bright transition-colors whitespace-nowrap shadow-xs">
+                            <FileUp className="h-4 w-4" />
+                            <span>Choose Image</span>
+                            <input
+                              type="file"
+                              accept="image/*"
+                              onChange={(e) => {
+                                const file = e.target.files?.[0]
+                                if (!file) return
+                                const reader = new FileReader()
+                                reader.onload = (event) => {
+                                  patch({ cover: event.target?.result })
+                                  setToast('Cover image selected!')
+                                }
+                                reader.readAsDataURL(file)
+                              }}
+                              className="hidden"
+                            />
+                          </label>
                         </div>
                       </Field>
                       <Field label="Cover description" hint="Required for search">
@@ -901,17 +843,39 @@ export default function Admin() {
                   </div>
                 </details>
 
-                <div className="flex items-center justify-between border-t border-line pt-6">
-                  <span className="text-[12px] uppercase tracking-[0.12em] text-ink-faint">
-                    {readingTime(active)} min read
-                  </span>
-                  <button
-                    type="button"
-                    onClick={removePost}
-                    className="text-[12px] uppercase tracking-[0.12em] text-red-700 transition-opacity hover:opacity-70"
-                  >
-                    Delete post
-                  </button>
+                <div className="flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-slate-200 pt-6">
+                  <div className="flex items-center gap-3">
+                    <button
+                      type="button"
+                      onClick={removePost}
+                      className="text-[12px] uppercase tracking-[0.12em] text-red-600 transition-opacity hover:opacity-80 font-medium cursor-pointer"
+                    >
+                      Delete post
+                    </button>
+                    <span className="text-slate-300">|</span>
+                    <span className="text-[12px] uppercase tracking-[0.12em] text-slate-500">
+                      {readingTime(active)} min read
+                    </span>
+                  </div>
+
+                  <div className="flex items-center gap-3 w-full sm:w-auto">
+                    <button
+                      type="button"
+                      onClick={save}
+                      className="flex-1 sm:flex-none inline-flex items-center justify-center gap-1.5 bg-slate-700 px-4 py-2.5 text-[12px] font-medium uppercase tracking-[0.12em] text-white transition-colors hover:bg-slate-800 rounded-lg cursor-pointer shadow-xs"
+                    >
+                      <Save className="h-4 w-4" />
+                      Save Draft
+                    </button>
+                    <button
+                      type="button"
+                      onClick={publishPostLive}
+                      className="flex-1 sm:flex-none inline-flex items-center justify-center gap-1.5 bg-green px-5 py-2.5 text-[12px] font-medium uppercase tracking-[0.12em] text-white transition-colors hover:bg-green-deep rounded-lg cursor-pointer shadow-sm"
+                    >
+                      <Globe className="h-4 w-4" />
+                      Publish Live
+                    </button>
+                  </div>
                 </div>
               </div>
             )}

@@ -1,6 +1,5 @@
-import { ArrowDown, ArrowUp, Plus, Trash2, Heading, AlignLeft, Image as ImageIcon, Quote, List, Minus } from 'lucide-react'
+import { ArrowDown, ArrowUp, Plus, Trash2, Heading, AlignLeft, Image as ImageIcon, Quote, List, Minus, FileUp } from 'lucide-react'
 import { Label, areaClass, inputClass } from './Field'
-import CloudinaryUpload from './CloudinaryUpload'
 
 const TYPES = [
   { id: 'paragraph', label: 'Text', icon: AlignLeft },
@@ -130,13 +129,27 @@ export default function BlockEditor({ body, onChange }) {
                   <input
                     value={block.src || ''}
                     onChange={(e) => update(index, { ...block, src: e.target.value })}
-                    placeholder="/images/speaking-white.jpg or Cloudinary URL"
+                    placeholder="Image URL or choose file from laptop..."
                     className={`${inputClass} flex-1`}
                   />
-                  <CloudinaryUpload
-                    label="Upload Image"
-                    onUploadSuccess={(url) => update(index, { ...block, src: url })}
-                  />
+                  <label className="inline-flex cursor-pointer items-center justify-center gap-1.5 rounded-lg bg-gold px-4 py-2.5 text-[12px] font-medium uppercase tracking-[0.1em] text-white hover:bg-gold-bright transition-colors whitespace-nowrap shadow-xs">
+                    <FileUp className="h-4 w-4" />
+                    <span>Choose File</span>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0]
+                        if (!file) return
+                        const reader = new FileReader()
+                        reader.onload = (event) => {
+                          update(index, { ...block, src: event.target?.result })
+                        }
+                        reader.readAsDataURL(file)
+                      }}
+                      className="hidden"
+                    />
+                  </label>
                 </div>
                 <input
                   value={block.alt || ''}

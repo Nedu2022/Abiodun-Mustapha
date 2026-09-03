@@ -2,7 +2,6 @@ import Seo from '../seo/Seo'
 import { pages } from '../seo/config'
 import {
   bookSchema,
-  faqSchema,
   graph,
   organizationSchema,
   personSchema,
@@ -11,7 +10,7 @@ import {
   webPageSchema,
   websiteSchema,
 } from '../seo/schema'
-import { faq, services } from '../data/content'
+import { services } from '../data/content'
 import Preloader from '../components/Preloader'
 import Navbar from '../components/Navbar'
 import Hero from '../components/Hero'
@@ -24,7 +23,6 @@ import Events from '../components/Events'
 import Community from '../components/Community'
 import Gallery from '../components/Gallery'
 import LatestWriting from '../components/blog/LatestWriting'
-import Faq from '../components/Faq'
 import Footer from '../components/Footer'
 
 const homeJsonLd = graph([
@@ -35,7 +33,6 @@ const homeJsonLd = graph([
   bookSchema(),
   podcastSchema(),
   servicesSchema(services.items),
-  faqSchema(faq.items),
 ])
 
 export default function Home() {
@@ -61,7 +58,6 @@ export default function Home() {
         <Community />
         <Gallery />
         <LatestWriting />
-        <Faq />
       </main>
       <Footer />
     </>

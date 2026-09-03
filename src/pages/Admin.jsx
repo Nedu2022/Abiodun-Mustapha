@@ -1,11 +1,12 @@
 import { useEffect, useMemo, useState } from 'react'
-import { Cloud, Download, Eye, FileUp, Plus, Save, Search, Settings, X } from 'lucide-react'
+import { Cloud, Download, Eye, FileUp, Plus, Save, Search, Settings, X, FileText, Video } from 'lucide-react'
 import Seo from '../seo/Seo'
 import { pages } from '../seo/config'
 import { Field, Label, areaClass, inputClass } from '../components/admin/Field'
 import BlockEditor from '../components/admin/BlockEditor'
 import PostBody from '../components/blog/PostBody'
 import CloudinaryUpload from '../components/admin/CloudinaryUpload'
+import VideoManager from '../components/admin/VideoManager'
 import { TAGS, allPosts, emptyPost, formatDate, readingTime, slugify } from '../lib/posts'
 import { getCloudinaryConfig, setCloudinaryConfig } from '../lib/cloudinary'
 
@@ -32,6 +33,7 @@ function download(posts) {
 }
 
 export default function Admin() {
+  const [activeTab, setActiveTab] = useState('posts') // 'posts' | 'videos'
   const [posts, setPosts] = useState(load)
   const [activeId, setActiveId] = useState(() => load()[0]?.id || null)
   const [query, setQuery] = useState('')
@@ -121,58 +123,86 @@ export default function Admin() {
       <div className="min-h-svh bg-cream-200">
         <header className="sticky top-0 z-30 border-b border-charcoal/20 bg-charcoal text-cream">
           <div className="mx-auto flex max-w-[100rem] flex-wrap items-center justify-between gap-4 px-5 py-3.5 sm:px-8">
-            <div className="flex items-baseline gap-3">
-              <span className="font-display text-lg italic text-gold">AM</span>
-              <span className="text-[12px] font-medium uppercase tracking-[0.18em] text-cream/70">
-                Writing studio
-              </span>
-              {dirty && (
-                <span className="rounded-full bg-gold/20 px-2.5 py-1 text-[10px] uppercase tracking-[0.14em] text-gold">
-                  Unsaved
+            <div className="flex items-center gap-4">
+              <div className="flex items-baseline gap-3">
+                <span className="font-display text-lg italic text-gold">AM</span>
+                <span className="text-[12px] font-medium uppercase tracking-[0.18em] text-cream/70">
+                  Admin Panel
                 </span>
-              )}
+                {dirty && activeTab === 'posts' && (
+                  <span className="rounded-full bg-gold/20 px-2.5 py-1 text-[10px] uppercase tracking-[0.14em] text-gold">
+                    Unsaved
+                  </span>
+                )}
+              </div>
+
+              {/* Navigation Tabs */}
+              <div className="flex items-center gap-1 border-l border-cream/20 pl-4">
+                <button
+                  type="button"
+                  onClick={() => setActiveTab('posts')}
+                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-[12px] uppercase tracking-[0.12em] rounded-md transition-colors ${
+                    activeTab === 'posts' ? 'bg-gold text-white font-medium' : 'text-cream/70 hover:text-cream'
+                  }`}
+                >
+                  <FileText className="h-3.5 w-3.5" />
+                  Blog Posts
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setActiveTab('videos')}
+                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-[12px] uppercase tracking-[0.12em] rounded-md transition-colors ${
+                    activeTab === 'videos' ? 'bg-gold text-white font-medium' : 'text-cream/70 hover:text-cream'
+                  }`}
+                >
+                  <Video className="h-3.5 w-3.5" />
+                  YouTube Videos
+                </button>
+              </div>
             </div>
 
-            <div className="flex flex-wrap items-center gap-2">
-              <button
-                type="button"
-                onClick={() => setShowCloudinarySettings((v) => !v)}
-                className="inline-flex items-center gap-2 border border-gold/40 px-3.5 py-2 text-[12px] uppercase tracking-[0.12em] text-gold transition-colors hover:bg-gold hover:text-white"
-                title="Configure Cloudinary Image Uploads"
-              >
-                <Cloud className="h-3.5 w-3.5" />
-                Cloudinary
-              </button>
-              <button
-                type="button"
-                onClick={() => setPreview((v) => !v)}
-                className="inline-flex items-center gap-2 border border-cream/25 px-3.5 py-2 text-[12px] uppercase tracking-[0.12em] text-cream/80 transition-colors hover:border-gold hover:text-gold"
-              >
-                <Eye className="h-3.5 w-3.5" />
-                {preview ? 'Edit' : 'Preview'}
-              </button>
-              <label className="inline-flex cursor-pointer items-center gap-2 border border-cream/25 px-3.5 py-2 text-[12px] uppercase tracking-[0.12em] text-cream/80 transition-colors hover:border-gold hover:text-gold">
-                <FileUp className="h-3.5 w-3.5" />
-                Import
-                <input type="file" accept="application/json" onChange={importFile} className="hidden" />
-              </label>
-              <button
-                type="button"
-                onClick={() => download(posts)}
-                className="inline-flex items-center gap-2 border border-cream/25 px-3.5 py-2 text-[12px] uppercase tracking-[0.12em] text-cream/80 transition-colors hover:border-gold hover:text-gold"
-              >
-                <Download className="h-3.5 w-3.5" />
-                Export
-              </button>
-              <button
-                type="button"
-                onClick={save}
-                className="inline-flex items-center gap-2 bg-gold px-4 py-2 text-[12px] font-medium uppercase tracking-[0.12em] text-white transition-colors hover:bg-gold-bright"
-              >
-                <Save className="h-3.5 w-3.5" />
-                Save
-              </button>
-            </div>
+            {activeTab === 'posts' && (
+              <div className="flex flex-wrap items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => setShowCloudinarySettings((v) => !v)}
+                  className="inline-flex items-center gap-2 border border-gold/40 px-3.5 py-2 text-[12px] uppercase tracking-[0.12em] text-gold transition-colors hover:bg-gold hover:text-white"
+                  title="Configure Cloudinary Image Uploads"
+                >
+                  <Cloud className="h-3.5 w-3.5" />
+                  Cloudinary
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setPreview((v) => !v)}
+                  className="inline-flex items-center gap-2 border border-cream/25 px-3.5 py-2 text-[12px] uppercase tracking-[0.12em] text-cream/80 transition-colors hover:border-gold hover:text-gold"
+                >
+                  <Eye className="h-3.5 w-3.5" />
+                  {preview ? 'Edit' : 'Preview'}
+                </button>
+                <label className="inline-flex cursor-pointer items-center gap-2 border border-cream/25 px-3.5 py-2 text-[12px] uppercase tracking-[0.12em] text-cream/80 transition-colors hover:border-gold hover:text-gold">
+                  <FileUp className="h-3.5 w-3.5" />
+                  Import
+                  <input type="file" accept="application/json" onChange={importFile} className="hidden" />
+                </label>
+                <button
+                  type="button"
+                  onClick={() => download(posts)}
+                  className="inline-flex items-center gap-2 border border-cream/25 px-3.5 py-2 text-[12px] uppercase tracking-[0.12em] text-cream/80 transition-colors hover:border-gold hover:text-gold"
+                >
+                  <Download className="h-3.5 w-3.5" />
+                  Export
+                </button>
+                <button
+                  type="button"
+                  onClick={save}
+                  className="inline-flex items-center gap-2 bg-gold px-4 py-2 text-[12px] font-medium uppercase tracking-[0.12em] text-white transition-colors hover:bg-gold-bright"
+                >
+                  <Save className="h-3.5 w-3.5" />
+                  Save
+                </button>
+              </div>
+            )}
           </div>
         </header>
 
@@ -246,13 +276,17 @@ export default function Admin() {
           </div>
         )}
 
-        <div className="border-b border-line bg-gold/10 px-5 py-3 text-[13px] leading-relaxed text-ink-soft sm:px-8">
-          <span className="font-medium text-ink">Saving keeps your work in this browser.</span> To put
-          it on the live site, click Export and replace <code>src/data/posts.json</code>, then deploy.
-          Cloudinary image uploads are active!
-        </div>
+        {activeTab === 'videos' ? (
+          <VideoManager setToast={setToast} />
+        ) : (
+          <>
+            <div className="border-b border-line bg-gold/10 px-5 py-3 text-[13px] leading-relaxed text-ink-soft sm:px-8">
+              <span className="font-medium text-ink">Saving keeps your work in this browser.</span> To put
+              it on the live site, click Export and replace <code>src/data/posts.json</code>, then deploy.
+              Cloudinary image uploads are active!
+            </div>
 
-        <div className="mx-auto grid max-w-[100rem] gap-0 px-0 lg:grid-cols-[320px_1fr]">
+            <div className="mx-auto grid max-w-[100rem] gap-0 px-0 lg:grid-cols-[320px_1fr]">
           <aside className="border-b border-line bg-white lg:min-h-svh lg:border-b-0 lg:border-r">
             <div className="flex items-center gap-2 border-b border-line px-4 py-3">
               <Search className="h-4 w-4 flex-none text-ink-faint" />
@@ -491,6 +525,8 @@ export default function Admin() {
             )}
           </div>
         </div>
+      </>
+    )}
 
         {toast && (
           <div className="fixed bottom-6 left-1/2 z-40 -translate-x-1/2 bg-charcoal px-5 py-3 text-[13px] text-cream shadow-lg">

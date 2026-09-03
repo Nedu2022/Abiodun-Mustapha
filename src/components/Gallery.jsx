@@ -144,7 +144,17 @@ function VideoTile({ id, title }) {
   )
 }
 
+import { loadVideos } from '../lib/videos'
+
 export default function Gallery() {
+  const [videos, setVideos] = useState(loadVideos)
+
+  useEffect(() => {
+    const syncVideos = () => setVideos(loadVideos())
+    window.addEventListener('storage', syncVideos)
+    return () => window.removeEventListener('storage', syncVideos)
+  }, [])
+
   return (
     <section className="bg-white py-20 sm:py-28">
       <div className="mx-auto max-w-[92rem] px-5 sm:px-10">
@@ -156,8 +166,8 @@ export default function Gallery() {
         />
 
         <div className="mt-12 grid gap-6 sm:grid-cols-3">
-          {gallery.videos.map((v, i) => (
-            <Reveal key={i} delay={0.08 * i}>
+          {videos.map((v, i) => (
+            <Reveal key={v.id || i} delay={0.08 * i}>
               <VideoTile id={v.id} title={v.title} />
             </Reveal>
           ))}

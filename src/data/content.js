@@ -22,7 +22,6 @@ export const nav = [
   { label: 'Podcast', href: '#podcast' },
   { label: 'Speaking', href: '#speaking' },
   { label: 'Events', href: '#events' },
-  { label: 'FAQ', href: '#faq' },
 ]
 
 export const hero = {

@@ -17,16 +17,20 @@ export default function Button({
   arrow = true,
   className = '',
   children,
+  onClick,
   ...props
 }) {
-  const Tag = as
+  const Tag = onClick ? 'button' : as
   const isExternal = props.href?.startsWith('http')
   const linkProps =
     Tag === 'a' && isExternal ? { target: '_blank', rel: 'noreferrer' } : {}
+  const buttonProps = Tag === 'button' ? { type: 'button' } : {}
 
   return (
     <Tag
-      className={`${base} ${styles[variant]} ${className}`}
+      className={`${base} ${styles[variant]} ${className} ${onClick ? 'cursor-pointer' : ''}`}
+      onClick={onClick}
+      {...buttonProps}
       {...linkProps}
       {...props}
     >

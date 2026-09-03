@@ -3,6 +3,7 @@ import Button from './ui/Button'
 import Media from './ui/Media'
 import Particles from './ui/Particles'
 import { hero, credentials } from '../data/content'
+import { useBooking } from '../context/BookingContext'
 
 const D = 0.95
 const fade = {
@@ -35,6 +36,8 @@ function Marquee() {
 }
 
 export default function Hero() {
+  const { openBookingModal } = useBooking()
+
   return (
     <section id="top" className="relative flex min-h-svh flex-col overflow-hidden">
       <Particles count={16} tone="gold" />
@@ -92,7 +95,7 @@ export default function Hero() {
             animate="show"
             className="mt-9 flex flex-wrap gap-3"
           >
-            <Button href={hero.primary.href} variant="primary">
+            <Button onClick={() => openBookingModal()} variant="primary">
               {hero.primary.label}
             </Button>
             <Button href={hero.secondary.href} variant="outline" arrow={false}>

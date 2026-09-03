@@ -4,10 +4,12 @@ import SocialIcons from './SocialIcons'
 import Logo from './ui/Logo'
 import TopLink from './ui/TopLink'
 import { site, nav, socials } from '../data/content'
+import { useBooking } from '../context/BookingContext'
 
 export default function Footer({ hideCta = false }) {
   const year = new Date().getFullYear()
   const onHome = useLocation().pathname === '/'
+  const { openBookingModal } = useBooking()
 
   return (
     <footer id="contact" className="scroll-mt-24 bg-charcoal text-cream">
@@ -22,15 +24,14 @@ export default function Footer({ hideCta = false }) {
                 Whether it is a booking, a question, or just a hello, I would love to hear from you.
               </p>
             </div>
-            <a
-              href={site.ctaHref}
-              target="_blank"
-              rel="noreferrer"
-              className="group inline-flex flex-none items-center gap-2.5 rounded-full bg-gold px-7 py-3.5 text-[12px] font-medium uppercase tracking-[0.12em] text-white transition-colors hover:bg-gold-bright"
+            <button
+              type="button"
+              onClick={() => openBookingModal()}
+              className="group inline-flex flex-none items-center gap-2.5 rounded-full bg-gold px-7 py-3.5 text-[12px] font-medium uppercase tracking-[0.12em] text-white transition-colors hover:bg-gold-bright cursor-pointer"
             >
               {site.ctaLabel}
               <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
-            </a>
+            </button>
           </div>
         </div>
       )}

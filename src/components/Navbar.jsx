@@ -6,6 +6,7 @@ import Logo from './ui/Logo'
 import TopLink from './ui/TopLink'
 import { site, nav, socials } from '../data/content'
 import SocialIcons from './SocialIcons'
+import { useBooking } from '../context/BookingContext'
 
 function NavLink({ href, onHome, className, children, onClick }) {
   const isRoute = href.startsWith('/') && !href.includes('#')
@@ -28,6 +29,7 @@ export default function Navbar({ dark = false }) {
   const onHome = pathname === '/'
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
+  const { openBookingModal } = useBooking()
 
   const floatingOnDark = dark && !scrolled
 
@@ -55,40 +57,39 @@ export default function Navbar({ dark = false }) {
           scrolled ? 'border-b border-line bg-cream/95 backdrop-blur-sm' : 'bg-transparent'
         }`}
       >
-        <nav className="mx-auto flex max-w-6xl items-center justify-between px-5 py-4 sm:px-8">
-          <TopLink to="/" aria-label={site.name}>
+        <nav className="mx-auto flex max-w-[90rem] items-center justify-between px-5 py-4 sm:px-8 lg:px-10">
+          <TopLink to="/" aria-label={site.name} className="flex-none">
             <Logo light={floatingOnDark} />
           </TopLink>
 
-          <div className="hidden items-center gap-9 md:flex">
+          <div className="hidden items-center gap-3.5 lg:flex xl:gap-6 2xl:gap-8">
             {nav.map((item) => (
               <NavLink
                 key={item.href}
                 href={item.href}
                 onHome={onHome}
-                className={`text-[13px] font-medium uppercase tracking-[0.12em] transition-colors ${
-                  floatingOnDark ? 'text-cream/80 hover:text-gold' : 'text-ink-soft hover:text-green'
+                className={`text-[12px] xl:text-[13px] font-medium uppercase tracking-[0.08em] xl:tracking-[0.12em] whitespace-nowrap transition-colors ${
+                  floatingOnDark ? 'text-cream/85 hover:text-gold' : 'text-ink-soft hover:text-green'
                 }`}
               >
                 {item.label}
               </NavLink>
             ))}
-            <a
-              href={site.ctaHref}
-              target="_blank"
-              rel="noreferrer"
-              className="group inline-flex items-center gap-2 rounded-full bg-green px-5 py-2.5 text-[12px] font-medium uppercase tracking-[0.12em] text-cream transition-colors hover:bg-green-deep"
+            <button
+              type="button"
+              onClick={() => openBookingModal()}
+              className="group inline-flex items-center gap-2 whitespace-nowrap rounded-full bg-green px-4 py-2.5 xl:px-5 text-[11.5px] xl:text-[12px] font-medium uppercase tracking-[0.1em] xl:tracking-[0.12em] text-cream transition-colors hover:bg-green-deep flex-none cursor-pointer"
             >
               {site.ctaLabel}
               <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
-            </a>
+            </button>
           </div>
 
           <button
             type="button"
             onClick={() => setOpen(true)}
             aria-label="Open menu"
-            className={`flex h-10 w-10 items-center justify-center md:hidden ${
+            className={`flex h-10 w-10 items-center justify-center lg:hidden ${
               floatingOnDark ? 'text-cream' : 'text-ink'
             }`}
           >
@@ -101,14 +102,14 @@ export default function Navbar({ dark = false }) {
         {open && (
           <>
             <motion.div
-              className="fixed inset-0 z-[60] bg-charcoal/50 backdrop-blur-sm md:hidden"
+              className="fixed inset-0 z-[60] bg-charcoal/50 backdrop-blur-sm lg:hidden"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setOpen(false)}
             />
             <motion.aside
-              className="fixed inset-y-0 right-0 z-[70] flex w-[86%] max-w-sm flex-col overflow-hidden bg-charcoal text-cream md:hidden"
+              className="fixed inset-y-0 right-0 z-[70] flex w-[86%] max-w-sm flex-col overflow-hidden bg-charcoal text-cream lg:hidden"
               initial={{ x: '100%' }}
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
@@ -162,16 +163,17 @@ export default function Navbar({ dark = false }) {
               </nav>
 
               <div className="relative flex flex-col gap-5 px-6 py-8">
-                <a
-                  href={site.ctaHref}
-                  target="_blank"
-                  rel="noreferrer"
-                  onClick={() => setOpen(false)}
-                  className="inline-flex items-center justify-center gap-2 rounded-full bg-gold px-6 py-3.5 text-[12px] font-medium uppercase tracking-[0.14em] text-white"
+                <button
+                  type="button"
+                  onClick={() => {
+                    setOpen(false)
+                    openBookingModal()
+                  }}
+                  className="inline-flex items-center justify-center gap-2 rounded-full bg-gold px-6 py-3.5 text-[12px] font-medium uppercase tracking-[0.14em] text-white cursor-pointer"
                 >
                   {site.ctaLabel}
                   <ArrowRight className="h-4 w-4" />
-                </a>
+                </button>
                 <SocialIcons items={socials} />
               </div>
             </motion.aside>

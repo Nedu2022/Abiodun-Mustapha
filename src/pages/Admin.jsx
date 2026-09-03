@@ -1,11 +1,13 @@
 import { useEffect, useMemo, useState } from 'react'
-import { Download, Eye, FileUp, Plus, Save, Search } from 'lucide-react'
+import { Cloud, Download, Eye, FileUp, Plus, Save, Search, Settings, X } from 'lucide-react'
 import Seo from '../seo/Seo'
 import { pages } from '../seo/config'
 import { Field, Label, areaClass, inputClass } from '../components/admin/Field'
 import BlockEditor from '../components/admin/BlockEditor'
 import PostBody from '../components/blog/PostBody'
+import CloudinaryUpload from '../components/admin/CloudinaryUpload'
 import { TAGS, allPosts, emptyPost, formatDate, readingTime, slugify } from '../lib/posts'
+import { getCloudinaryConfig, setCloudinaryConfig } from '../lib/cloudinary'
 
 const STORAGE_KEY = 'abiodun.posts.v1'
 
@@ -36,6 +38,9 @@ export default function Admin() {
   const [dirty, setDirty] = useState(false)
   const [preview, setPreview] = useState(false)
   const [toast, setToast] = useState('')
+  const [showCloudinarySettings, setShowCloudinarySettings] = useState(false)
+  const [cName, setCName] = useState(() => getCloudinaryConfig().cloudName)
+  const [cPreset, setCPreset] = useState(() => getCloudinaryConfig().uploadPreset)
 
   const active = posts.find((post) => post.id === activeId) || null
 
@@ -131,6 +136,15 @@ export default function Admin() {
             <div className="flex flex-wrap items-center gap-2">
               <button
                 type="button"
+                onClick={() => setShowCloudinarySettings((v) => !v)}
+                className="inline-flex items-center gap-2 border border-gold/40 px-3.5 py-2 text-[12px] uppercase tracking-[0.12em] text-gold transition-colors hover:bg-gold hover:text-white"
+                title="Configure Cloudinary Image Uploads"
+              >
+                <Cloud className="h-3.5 w-3.5" />
+                Cloudinary
+              </button>
+              <button
+                type="button"
                 onClick={() => setPreview((v) => !v)}
                 className="inline-flex items-center gap-2 border border-cream/25 px-3.5 py-2 text-[12px] uppercase tracking-[0.12em] text-cream/80 transition-colors hover:border-gold hover:text-gold"
               >
@@ -162,10 +176,80 @@ export default function Admin() {
           </div>
         </header>
 
+        {showCloudinarySettings && (
+          <div className="border-b border-line bg-charcoal text-cream px-5 py-4 sm:px-8">
+            <div className="mx-auto max-w-3xl">
+              <div className="flex items-center justify-between mb-3">
+                <h3 className="font-display text-lg text-gold flex items-center gap-2">
+                  <Cloud className="h-4 w-4" /> Cloudinary Settings
+                </h3>
+                <button
+                  type="button"
+                  onClick={() => setShowCloudinarySettings(false)}
+                  className="text-cream/60 hover:text-cream"
+                >
+                  <X className="h-4 w-4" />
+                </button>
+              </div>
+              <p className="text-[13px] text-cream/80 mb-4">
+                Enter your Cloudinary <strong>Cloud Name</strong> and an <strong>Unsigned Upload Preset</strong>.
+                This allows instant image uploads directly from your browser!
+              </p>
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault()
+                  setCloudinaryConfig(cName.trim(), cPreset.trim())
+                  setShowCloudinarySettings(false)
+                  setToast('Cloudinary credentials saved!')
+                }}
+                className="grid gap-4 sm:grid-cols-2"
+              >
+                <div>
+                  <label className="block text-[11px] font-medium uppercase tracking-[0.14em] text-cream/70 mb-1">
+                    Cloud Name
+                  </label>
+                  <input
+                    value={cName}
+                    onChange={(e) => setCName(e.target.value)}
+                    placeholder="e.g. my-cloud-name"
+                    className="w-full border border-cream/20 bg-charcoal-light px-3 py-2 text-[14px] text-cream outline-none focus:border-gold"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[11px] font-medium uppercase tracking-[0.14em] text-cream/70 mb-1">
+                    Upload Preset (Unsigned)
+                  </label>
+                  <input
+                    value={cPreset}
+                    onChange={(e) => setCPreset(e.target.value)}
+                    placeholder="e.g. ml_default or my_preset"
+                    className="w-full border border-cream/20 bg-charcoal-light px-3 py-2 text-[14px] text-cream outline-none focus:border-gold"
+                  />
+                </div>
+                <div className="sm:col-span-2 flex items-center justify-end gap-3 mt-2">
+                  <button
+                    type="button"
+                    onClick={() => setShowCloudinarySettings(false)}
+                    className="px-4 py-2 text-[12px] text-cream/70 hover:text-cream"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="bg-gold px-5 py-2 text-[12px] font-medium uppercase tracking-[0.12em] text-white hover:bg-gold-bright"
+                  >
+                    Save Cloudinary Settings
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
+
         <div className="border-b border-line bg-gold/10 px-5 py-3 text-[13px] leading-relaxed text-ink-soft sm:px-8">
           <span className="font-medium text-ink">Saving keeps your work in this browser.</span> To put
           it on the live site, click Export and replace <code>src/data/posts.json</code>, then deploy.
-          Wiring this to a hosted CMS removes that step.
+          Cloudinary image uploads are active!
         </div>
 
         <div className="mx-auto grid max-w-[100rem] gap-0 px-0 lg:grid-cols-[320px_1fr]">
@@ -291,12 +375,18 @@ export default function Admin() {
 
                 <div className="grid gap-6 sm:grid-cols-2">
                   <Field label="Cover image">
-                    <input
-                      value={active.cover}
-                      onChange={(e) => patch({ cover: e.target.value })}
-                      placeholder="/images/portrait-desk.jpg"
-                      className={inputClass}
-                    />
+                    <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+                      <input
+                        value={active.cover}
+                        onChange={(e) => patch({ cover: e.target.value })}
+                        placeholder="/images/portrait-desk.jpg or Cloudinary URL"
+                        className={`${inputClass} flex-1`}
+                      />
+                      <CloudinaryUpload
+                        label="Upload"
+                        onUploadSuccess={(url) => patch({ cover: url })}
+                      />
+                    </div>
                   </Field>
                   <Field label="Cover description" hint="Required for search">
                     <input

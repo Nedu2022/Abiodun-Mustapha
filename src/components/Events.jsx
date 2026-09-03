@@ -3,6 +3,7 @@ import Reveal from './ui/Reveal'
 import Media from './ui/Media'
 import SectionHeading from './ui/SectionHeading'
 import { events } from '../data/content'
+import { useBooking } from '../context/BookingContext'
 
 function TedxMark() {
   return (
@@ -14,6 +15,8 @@ function TedxMark() {
 }
 
 export default function Events() {
+  const { openBookingModal } = useBooking()
+
   return (
     <section
       id="events"
@@ -76,15 +79,14 @@ export default function Events() {
                   </div>
                 ))}
               </div>
-              <a
-                href={events.cta.href}
-                target="_blank"
-                rel="noreferrer"
-                className="group inline-flex w-fit items-center gap-2 rounded-full bg-gold px-5 py-3 text-[12px] font-medium uppercase tracking-[0.12em] text-white transition-colors hover:bg-gold-bright"
+              <button
+                type="button"
+                onClick={() => openBookingModal('Speaking Engagement / Keynote Talk')}
+                className="group inline-flex w-fit items-center gap-2 rounded-full bg-gold px-5 py-3 text-[12px] font-medium uppercase tracking-[0.12em] text-white transition-colors hover:bg-gold-bright cursor-pointer"
               >
                 {events.cta.label}
                 <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
-              </a>
+              </button>
             </div>
           </Reveal>
         </div>

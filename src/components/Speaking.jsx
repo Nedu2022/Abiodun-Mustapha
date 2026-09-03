@@ -2,15 +2,18 @@ import Reveal from './ui/Reveal'
 import Button from './ui/Button'
 import SectionHeading from './ui/SectionHeading'
 import { speaking } from '../data/content'
+import { useBooking } from '../context/BookingContext'
 
 export default function Speaking() {
+  const { openBookingModal } = useBooking()
+
   return (
     <section id="speaking" className="scroll-mt-24 bg-cream py-20 sm:py-28">
       <div className="mx-auto grid max-w-6xl gap-10 px-5 sm:px-8 lg:grid-cols-[1fr_1fr] lg:items-center lg:gap-16">
         <div>
           <SectionHeading eyebrow={speaking.eyebrow} title={speaking.title} accent={speaking.accent} intro={speaking.body} />
           <Reveal delay={0.1} className="mt-8">
-            <Button href={speaking.cta.href} variant="primary">
+            <Button onClick={() => openBookingModal('Speaking Engagement / Keynote Talk')} variant="primary">
               {speaking.cta.label}
             </Button>
           </Reveal>

@@ -1,5 +1,6 @@
 import { ArrowDown, ArrowUp, Plus, Trash2 } from 'lucide-react'
 import { Label, areaClass, inputClass } from './Field'
+import CloudinaryUpload from './CloudinaryUpload'
 
 const TYPES = [
   { id: 'paragraph', label: 'Text' },
@@ -117,12 +118,18 @@ export default function BlockEditor({ body, onChange }) {
 
             {block.type === 'image' && (
               <>
-                <input
-                  value={block.src || ''}
-                  onChange={(e) => update(index, { ...block, src: e.target.value })}
-                  placeholder="/images/speaking-white.jpg"
-                  className={inputClass}
-                />
+                <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+                  <input
+                    value={block.src || ''}
+                    onChange={(e) => update(index, { ...block, src: e.target.value })}
+                    placeholder="/images/speaking-white.jpg or Cloudinary URL"
+                    className={`${inputClass} flex-1`}
+                  />
+                  <CloudinaryUpload
+                    label="Upload Image"
+                    onUploadSuccess={(url) => update(index, { ...block, src: url })}
+                  />
+                </div>
                 <input
                   value={block.alt || ''}
                   onChange={(e) => update(index, { ...block, alt: e.target.value })}

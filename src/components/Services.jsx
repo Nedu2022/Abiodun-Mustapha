@@ -3,8 +3,11 @@ import Reveal from './ui/Reveal'
 import Button from './ui/Button'
 import SectionHeading from './ui/SectionHeading'
 import { services } from '../data/content'
+import { useBooking } from '../context/BookingContext'
 
 export default function Services() {
+  const { openBookingModal } = useBooking()
+
   return (
     <section id="services" className="scroll-mt-24 bg-white py-20 sm:py-28">
       <div className="mx-auto max-w-6xl px-5 sm:px-8">
@@ -20,11 +23,10 @@ export default function Services() {
         <div className="grid gap-px overflow-hidden border border-line bg-line sm:grid-cols-2 lg:grid-cols-3">
           {services.items.map((s, i) => (
             <Reveal key={i} delay={0.05 * (i % 3)} className="h-full">
-              <a
-                href={services.cta.href}
-                target="_blank"
-                rel="noreferrer"
-                className="group flex h-full flex-col bg-white p-8 transition-colors duration-300 hover:bg-cream"
+              <button
+                type="button"
+                onClick={() => openBookingModal(s.title)}
+                className="group flex h-full w-full flex-col bg-white p-8 text-left transition-colors duration-300 hover:bg-cream cursor-pointer"
               >
                 <div className="flex items-center justify-between">
                   <span className="eyebrow text-gold">{s.tag}</span>
@@ -37,13 +39,13 @@ export default function Services() {
                     {s.meta}
                   </span>
                 </div>
-              </a>
+              </button>
             </Reveal>
           ))}
         </div>
 
         <Reveal delay={0.1} className="mt-12 flex justify-center">
-          <Button href={services.cta.href} variant="primary">
+          <Button onClick={() => openBookingModal()} variant="primary">
             {services.cta.label}
           </Button>
         </Reveal>

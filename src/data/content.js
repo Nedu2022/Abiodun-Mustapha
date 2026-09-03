@@ -27,7 +27,7 @@ export const nav = [
 export const hero = {
   eyebrow: 'Thought Leader and Global Speaker',
   name: 'Dr. Abiodun Mustapha',
-  roles: 'Personal Development Expert. Educator. Author',
+  roles: 'Personal Development Professional. Educator. Author',
   mission:
     'I help everyday people discover their purpose, build real discipline, and grow into the fullness of who they were created to be.',
   blurb:
@@ -238,7 +238,7 @@ export const faq = {
   items: [
     {
       q: 'Who is Dr. Abiodun Mustapha?',
-      a: 'I am a personal development expert, educator, author and speaker based in Lagos, Nigeria. I am the founder of Growth Hub Africa and GrowthSpec Technologies Ltd, a GIZ-certified business trainer and coach, and the author of 30 Lessons Life Taught Me Before 30. I grew up on the streets of Oshodi and now teach professionals how to move through purpose, productivity and profitability.',
+      a: 'I am a personal development professional, educator, author and speaker based in Lagos, Nigeria. I am the founder of Growth Hub Africa and GrowthSpec Technologies Ltd, a GIZ-certified business trainer and coach, and the author of 30 Lessons Life Taught Me Before 30. I grew up on the streets of Oshodi and now teach professionals how to move through purpose, productivity and profitability.',
     },
     {
       q: 'How do I book Abiodun Mustapha to speak at my event?',

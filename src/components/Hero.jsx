@@ -114,7 +114,7 @@ export default function Hero() {
           <div className="absolute -bottom-3 -left-3 hidden h-2/3 w-2/3 bg-green/10 sm:block" />
           <Media
             src={hero.image}
-            alt="Dr. Abiodun Mustapha, personal development expert, educator and speaker, in a portrait suit"
+            alt="Dr. Abiodun Mustapha, personal development professional, educator and speaker, in a portrait suit"
             label="Add photo"
             width={1728}
             height={2160}

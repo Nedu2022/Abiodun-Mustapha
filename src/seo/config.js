@@ -4,7 +4,7 @@ export const DEFAULT_OG_IMAGE = {
   path: '/images/portrait-suit.jpg',
   width: 1728,
   height: 2160,
-  alt: 'Dr. Abiodun Mustapha, personal development expert, author and speaker',
+  alt: 'Dr. Abiodun Mustapha, personal development professional, author and speaker',
 }
 
 export const person = {
@@ -13,7 +13,7 @@ export const person = {
   honorificPrefix: 'Dr.',
   givenName: 'Abiodun',
   familyName: 'Mustapha',
-  jobTitle: 'Personal Development Expert, Educator, Author and Speaker',
+  jobTitle: 'Personal Development Professional, Educator, Author and Speaker',
   email: 'abiodunmustapha11@gmail.com',
   telephone: '+2348148560609',
   image: '/images/portrait-suit.jpg',
@@ -84,9 +84,9 @@ export const podcast = {
 export const pages = {
   home: {
     path: '/',
-    title: 'Dr Abiodun Mustapha Personal Development Expert and Speaker',
+    title: 'Dr Abiodun Mustapha Personal Development Professional and Speaker',
     description:
-      'Dr. Abiodun Mustapha is a personal development expert, educator, author and speaker in Lagos, Nigeria. Book him to speak, train your team, or coach you one on one.',
+      'Dr. Abiodun Mustapha is a personal development professional, educator, author and speaker in Lagos, Nigeria. Book him to speak, train your team, or coach you one on one.',
     image: '/images/portrait-suit.jpg',
   },
   blog: {

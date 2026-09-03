@@ -10,6 +10,7 @@ import { blogMeta, publishedPosts, getLivePublishedPosts } from '../lib/posts'
 
 export default function Blog() {
   const [tag, setTag] = useState('All')
+  const [visibleCount, setVisibleCount] = useState(7)
 
   const livePosts = useMemo(() => {
     return getLivePublishedPosts()
@@ -23,6 +24,8 @@ export default function Blog() {
 
   const visible = tag === 'All' ? livePosts : livePosts.filter((p) => (p.tags || []).includes(tag))
   const [lead, ...rest] = visible
+  const pagedRest = rest.slice(0, visibleCount - 1)
+  const hasMore = rest.length > pagedRest.length
 
   return (
     <>
@@ -53,8 +56,11 @@ export default function Blog() {
                   <button
                     key={t}
                     type="button"
-                    onClick={() => setTag(t)}
-                    className={`rounded-full border px-4 py-2 text-[12px] font-medium uppercase tracking-[0.12em] transition-colors ${
+                    onClick={() => {
+                      setTag(t)
+                      setVisibleCount(7)
+                    }}
+                    className={`rounded-full border px-4 py-2 text-[12px] font-medium uppercase tracking-[0.12em] transition-colors cursor-pointer ${
                       t === tag
                         ? 'border-green bg-green text-cream'
                         : 'border-line text-ink-soft hover:border-green hover:text-green'
@@ -78,13 +84,25 @@ export default function Blog() {
               </Reveal>
             )}
 
-            {rest.length > 0 && (
+            {pagedRest.length > 0 && (
               <div className="mt-14 grid gap-x-8 gap-y-14 sm:grid-cols-2 lg:grid-cols-3">
-                {rest.map((post, i) => (
+                {pagedRest.map((post, i) => (
                   <Reveal key={post.slug} delay={0.05 * i}>
                     <PostCard post={post} />
                   </Reveal>
                 ))}
+              </div>
+            )}
+
+            {hasMore && (
+              <div className="mt-16 flex justify-center border-t border-line pt-10">
+                <button
+                  type="button"
+                  onClick={() => setVisibleCount((c) => c + 6)}
+                  className="rounded-full border border-charcoal/30 bg-charcoal px-8 py-3.5 text-[12px] font-medium uppercase tracking-[0.14em] text-cream hover:bg-gold hover:border-gold transition-all shadow-md cursor-pointer"
+                >
+                  Load More Articles ({rest.length - pagedRest.length} remaining)
+                </button>
               </div>
             )}
           </div>

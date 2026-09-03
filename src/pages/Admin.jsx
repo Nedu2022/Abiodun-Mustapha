@@ -193,15 +193,18 @@ export default function Admin() {
     setShowDeleteModal(true)
   }
 
-  const confirmDeletePost = () => {
+  const confirmDeletePost = async () => {
     if (!active) return
     const title = active.title || 'Untitled'
-    setPosts((current) => current.filter((post) => post.id !== activeId))
-    setActiveId(null)
+    const nextPosts = posts.filter((post) => post.id !== activeId)
+    setPosts(nextPosts)
+    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(nextPosts))
+    await saveLivePosts(nextPosts)
+    setActiveId(nextPosts[0]?.id || null)
     setMobileView('list')
     setShowDeleteModal(false)
-    setDirty(true)
-    setToast(`Deleted "${title}"`)
+    setDirty(false)
+    setToast(`Deleted "${title}" from website & database!`)
   }
 
   const importFile = (event) => {

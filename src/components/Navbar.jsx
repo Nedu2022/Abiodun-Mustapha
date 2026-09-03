@@ -89,8 +89,11 @@ export default function Navbar({ dark = false }) {
             type="button"
             onClick={() => setOpen(true)}
             aria-label="Open menu"
-            className={`flex h-10 w-10 items-center justify-center lg:hidden ${
-              floatingOnDark ? 'text-cream' : 'text-ink'
+            aria-expanded={open}
+            className={`flex h-11 w-11 items-center justify-center rounded-full border shadow-sm backdrop-blur-sm transition-colors lg:hidden ${
+              floatingOnDark
+                ? 'border-cream/25 bg-charcoal/25 text-cream'
+                : 'border-line bg-cream/85 text-ink hover:border-gold hover:text-green'
             }`}
           >
             <Menu className="h-6 w-6" />
@@ -109,7 +112,7 @@ export default function Navbar({ dark = false }) {
               onClick={() => setOpen(false)}
             />
             <motion.aside
-              className="fixed inset-y-0 right-0 z-[70] flex w-[86%] max-w-sm flex-col overflow-hidden bg-charcoal text-cream lg:hidden"
+              className="fixed inset-y-0 right-0 z-[70] flex h-dvh max-h-dvh w-[88%] max-w-sm flex-col overflow-y-auto overscroll-contain bg-charcoal text-cream lg:hidden"
               initial={{ x: '100%' }}
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
@@ -127,7 +130,7 @@ export default function Navbar({ dark = false }) {
                 </span>
               </div>
 
-              <div className="relative flex items-center justify-between px-6 py-5">
+              <div className="relative flex flex-none items-center justify-between px-6 py-5">
                 <Logo light />
                 <button
                   type="button"
@@ -139,7 +142,7 @@ export default function Navbar({ dark = false }) {
                 </button>
               </div>
 
-              <nav className="relative mt-6 flex flex-1 flex-col justify-center gap-1 px-6">
+              <nav className="relative flex flex-none flex-col gap-1 px-6 py-4">
                 {nav.map((item, i) => (
                   <motion.div
                     key={item.href}
@@ -151,10 +154,10 @@ export default function Navbar({ dark = false }) {
                       href={item.href}
                       onHome={onHome}
                       onClick={() => setOpen(false)}
-                      className="group flex items-baseline gap-3 border-b border-cream/10 py-4"
+                      className="group flex items-baseline gap-3 border-b border-cream/10 py-3.5"
                     >
                       <span className="font-display text-xs italic text-gold">0{i + 1}</span>
-                      <span className="font-display text-3xl text-cream transition-colors group-hover:text-gold">
+                      <span className="font-display text-[2rem] leading-none text-cream transition-colors group-hover:text-gold">
                         {item.label}
                       </span>
                     </NavLink>
@@ -162,7 +165,7 @@ export default function Navbar({ dark = false }) {
                 ))}
               </nav>
 
-              <div className="relative flex flex-col gap-5 px-6 py-8">
+              <div className="relative mt-auto flex flex-none flex-col gap-5 px-6 py-6">
                 <button
                   type="button"
                   onClick={() => {

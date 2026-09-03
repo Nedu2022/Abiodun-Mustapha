@@ -47,13 +47,13 @@ export default function BlockEditor({ body, onChange }) {
         <div key={index} className="rounded-xl border border-slate-300 bg-white shadow-xs transition-all hover:border-gold/50">
           <div className="flex items-center justify-between gap-3 border-b border-slate-200 bg-slate-50/80 px-4 py-2.5 rounded-t-xl">
             <div className="flex items-center gap-2">
-              <span className="text-[11px] font-bold uppercase tracking-[0.14em] text-slate-800 bg-gold/15 px-2.5 py-0.5 rounded-md">
+              <span className="text-[11px] font-medium uppercase tracking-[0.14em] text-slate-700 bg-gold/15 px-2.5 py-0.5 rounded-md">
                 {TYPES.find((t) => t.id === block.type)?.label || block.type}
               </span>
               <select
                 value={block.type}
                 onChange={(e) => update(index, blankBlock(e.target.value))}
-                className="bg-transparent text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-700 outline-none cursor-pointer hover:text-gold"
+                className="bg-transparent text-[11px] font-medium uppercase tracking-[0.12em] text-slate-700 outline-none cursor-pointer hover:text-gold"
                 aria-label="Change block type"
               >
                 {TYPES.map((t) => (
@@ -189,7 +189,7 @@ export default function BlockEditor({ body, onChange }) {
                 <button
                   type="button"
                   onClick={() => update(index, { ...block, items: [...(block.items || []), ''] })}
-                  className="w-fit rounded-md bg-slate-100 px-3 py-1.5 text-[11px] font-bold uppercase tracking-[0.12em] text-slate-800 hover:bg-slate-200 transition-colors cursor-pointer mt-1"
+                  className="w-fit rounded-md bg-slate-100 px-3 py-1.5 text-[11px] font-medium uppercase tracking-[0.12em] text-slate-700 hover:bg-slate-200 transition-colors cursor-pointer mt-1"
                 >
                   + Add List Item
                 </button>
@@ -197,7 +197,7 @@ export default function BlockEditor({ body, onChange }) {
             )}
 
             {block.type === 'divider' && (
-              <p className="text-[13px] font-medium text-slate-600 italic">Horizontal divider line.</p>
+              <p className="text-[13px] text-slate-500 italic">Horizontal divider line.</p>
             )}
           </div>
         </div>
@@ -205,7 +205,7 @@ export default function BlockEditor({ body, onChange }) {
 
       {/* Medium-style Add Content Toolbar */}
       <div className="mt-2 rounded-xl border border-slate-300 bg-slate-50 p-4">
-        <span className="block text-[11px] font-bold uppercase tracking-[0.14em] text-slate-700 mb-3">
+        <span className="block text-[11px] font-medium uppercase tracking-[0.14em] text-slate-700 mb-3">
           Add Content Block
         </span>
         <div className="flex flex-wrap gap-2">
@@ -216,7 +216,7 @@ export default function BlockEditor({ body, onChange }) {
                 key={t.id}
                 type="button"
                 onClick={() => add(t.id)}
-                className="inline-flex items-center gap-2 rounded-lg border border-slate-300 bg-white px-3.5 py-2 text-[12px] font-semibold text-slate-800 hover:border-gold hover:text-gold hover:shadow-xs transition-all cursor-pointer"
+                className="inline-flex items-center gap-2 rounded-lg border border-slate-300 bg-white px-3.5 py-2 text-[12px] font-medium text-slate-700 hover:border-gold hover:text-gold hover:shadow-xs transition-all cursor-pointer"
               >
                 <Icon className="h-4 w-4 text-gold" />
                 {t.label}

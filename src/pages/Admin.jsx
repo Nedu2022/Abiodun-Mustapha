@@ -642,21 +642,21 @@ export default function Admin() {
               {/* Post List Sidebar: Always visible on desktop, visible on mobile when mobileView === 'list' */}
               <aside className={`${mobileView === 'edit' ? 'hidden lg:block' : 'block'} border-b border-slate-300 bg-white lg:min-h-svh lg:border-b-0 lg:border-r`}>
                 <div className="flex items-center gap-2 border-b border-slate-200 px-4 py-3.5 bg-slate-50/50">
-                  <Search className="h-4 w-4 flex-none text-slate-600" />
+                  <Search className="h-4 w-4 flex-none text-slate-500" />
                   <input
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
                     placeholder="Search posts..."
-                    className="w-full bg-transparent text-[14px] font-semibold text-slate-900 outline-none placeholder:text-slate-500"
+                    className="w-full bg-transparent text-[14px] text-slate-900 outline-none placeholder:text-slate-400"
                   />
                 </div>
 
                 <button
                   type="button"
                   onClick={createPost}
-                  className="flex w-full items-center gap-2 border-b border-slate-200 px-4 py-3.5 text-left text-[12px] font-bold uppercase tracking-[0.14em] text-green transition-colors hover:bg-cream-100 cursor-pointer"
+                  className="flex w-full items-center gap-2 border-b border-slate-200 px-4 py-3.5 text-left text-[12px] font-medium uppercase tracking-[0.12em] text-green transition-colors hover:bg-cream-100 cursor-pointer"
                 >
-                  <Plus className="h-4 w-4 stroke-[2.5]" />
+                  <Plus className="h-4 w-4" />
                   New Article
                 </button>
 
@@ -670,28 +670,28 @@ export default function Admin() {
                           setPreview(false)
                           setMobileView('edit')
                         }}
-                        className={`flex w-full flex-col gap-1.5 border-b border-slate-200 px-4 py-4 text-left transition-colors ${
-                          post.id === activeId ? 'bg-cream border-l-4 border-l-gold font-semibold' : 'hover:bg-cream/60'
+                        className={`flex w-full flex-col gap-1 border-b border-slate-200 px-4 py-3.5 text-left transition-colors ${
+                          post.id === activeId ? 'bg-cream border-l-4 border-l-gold' : 'hover:bg-cream/60'
                         }`}
                       >
                         <span className="flex items-center gap-2">
                           <span
-                            className={`h-2 w-2 flex-none rounded-full ${
+                            className={`h-1.5 w-1.5 flex-none rounded-full ${
                               post.status === 'published' ? 'bg-green' : 'bg-gold'
                             }`}
                           />
-                          <span className="text-[11px] font-bold uppercase tracking-[0.14em] text-slate-700">
+                          <span className="text-[10px] font-medium uppercase tracking-[0.14em] text-slate-600">
                             {post.status === 'published' ? formatDate(post.publishedAt) : 'Draft'}
                           </span>
                         </span>
-                        <span className="font-display text-[15px] font-bold leading-snug text-slate-900">
+                        <span className="font-display text-[15px] text-slate-900">
                           {post.title || 'Untitled'}
                         </span>
                       </button>
                     </li>
                   ))}
                   {listed.length === 0 && (
-                    <li className="px-4 py-6 text-[14px] font-medium italic text-slate-600">Nothing matches that.</li>
+                    <li className="px-4 py-6 text-[14px] italic text-slate-500">Nothing matches that.</li>
                   )}
                 </ul>
               </aside>
@@ -703,33 +703,33 @@ export default function Admin() {
                   <button
                     type="button"
                     onClick={() => setMobileView('list')}
-                    className="inline-flex items-center gap-2 rounded-full border border-slate-300 bg-white px-4 py-2 text-[12px] font-bold uppercase tracking-[0.12em] text-slate-900 transition-colors hover:bg-cream cursor-pointer"
+                    className="inline-flex items-center gap-2 rounded-full border border-slate-300 bg-white px-4 py-2 text-[12px] font-medium uppercase tracking-[0.12em] text-slate-900 transition-colors hover:bg-cream cursor-pointer"
                   >
                     <ArrowLeft className="h-4 w-4" />
                     Back to Posts
                   </button>
                   {active && (
-                    <span className="text-[12px] font-bold uppercase tracking-[0.12em] text-slate-800 truncate max-w-[160px]">
+                    <span className="text-[12px] font-medium uppercase tracking-[0.12em] text-slate-700 truncate max-w-[160px]">
                       {active.title || 'Untitled'}
                     </span>
                   )}
                 </div>
 
                 {!active && (
-                  <p className="font-display text-xl italic text-slate-700">
+                  <p className="font-display text-xl italic text-slate-600">
                     Pick a post from the list, or start a new article.
                   </p>
                 )}
 
                 {active && preview && (
                   <article className="mx-auto max-w-3xl">
-                    <span className="text-[11px] font-bold uppercase tracking-[0.16em] text-gold">
+                    <span className="text-[11px] font-medium uppercase tracking-[0.16em] text-gold">
                       {(active.tags || []).join(' · ') || 'Untagged'} · {readingTime(active)} min read
                     </span>
-                    <h1 className="mt-4 font-display text-[2.1rem] leading-[1.08] text-slate-900 font-bold sm:text-[2.6rem]">
+                    <h1 className="mt-4 font-display text-[2.1rem] leading-[1.08] text-slate-900 sm:text-[2.6rem]">
                       {active.title || 'Untitled'}
                     </h1>
-                    <p className="mt-4 font-display text-lg italic text-slate-700">{active.excerpt}</p>
+                    <p className="mt-4 font-display text-lg italic text-slate-600">{active.excerpt}</p>
                     {active.cover && (
                       <img
                         src={active.cover}
@@ -756,7 +756,7 @@ export default function Admin() {
                           patch(autoSlug ? { title, slug: slugify(title) } : { title })
                         }}
                         placeholder="Title of your story..."
-                        className="w-full border-b border-slate-300 bg-transparent py-2 font-display text-2xl font-bold text-slate-900 outline-none transition-colors placeholder:text-slate-400 focus:border-gold sm:text-3xl"
+                        className="w-full border-b border-slate-300 bg-transparent py-2 font-display text-2xl text-slate-900 outline-none transition-colors placeholder:text-slate-400 focus:border-gold sm:text-3xl"
                       />
                     </div>
 

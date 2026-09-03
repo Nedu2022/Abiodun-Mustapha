@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { Cloud, Download, Eye, EyeOff, FileUp, Plus, Save, Search, Settings, X, FileText, Video, ArrowLeft, Tag as TagIcon, Lock, LogOut, Mail, KeyRound, Globe, Send } from 'lucide-react'
+import { Cloud, Download, Eye, EyeOff, FileUp, Plus, Save, Search, Settings, X, FileText, Video, ArrowLeft, Tag as TagIcon, Lock, LogOut, Mail, KeyRound, Globe, Send, Trash2 } from 'lucide-react'
 import Seo from '../seo/Seo'
 import { pages } from '../seo/config'
 import { Field, Label, areaClass, inputClass } from '../components/admin/Field'
@@ -187,22 +187,27 @@ export default function Admin() {
 
   // Delete Modal State
   const [showDeleteModal, setShowDeleteModal] = useState(false)
+  const [deleteTargetId, setDeleteTargetId] = useState(null)
+  const deleteTarget = posts.find((p) => p.id === deleteTargetId) || null
 
   const removePost = () => {
     if (!active) return
+    setDeleteTargetId(active.id)
     setShowDeleteModal(true)
   }
 
   const confirmDeletePost = async () => {
-    if (!active) return
-    const title = active.title || 'Untitled'
-    const nextPosts = posts.filter((post) => post.id !== activeId)
+    if (!deleteTargetId) return
+    const target = posts.find((p) => p.id === deleteTargetId)
+    const title = target?.title || 'Untitled'
+    const nextPosts = posts.filter((post) => post.id !== deleteTargetId)
     setPosts(nextPosts)
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(nextPosts))
     await saveLivePosts(nextPosts)
     setActiveId(nextPosts[0]?.id || null)
     setMobileView('list')
     setShowDeleteModal(false)
+    setDeleteTargetId(null)
     setDirty(false)
     setToast(`Deleted "${title}" from website & database!`)
   }
@@ -525,7 +530,7 @@ export default function Admin() {
           </div>
         )}
 
-        {showDeleteModal && active && (
+        {showDeleteModal && deleteTarget && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-charcoal/80 p-4 backdrop-blur-xs">
             <div className="w-full max-w-md rounded-2xl border border-red-500/30 bg-charcoal p-6 text-cream shadow-2xl">
               <div className="flex items-center justify-between border-b border-cream/10 pb-4">
@@ -534,7 +539,7 @@ export default function Admin() {
                 </h3>
                 <button
                   type="button"
-                  onClick={() => setShowDeleteModal(false)}
+                  onClick={() => { setShowDeleteModal(false); setDeleteTargetId(null) }}
                   className="text-cream/60 hover:text-cream cursor-pointer"
                 >
                   <X className="h-5 w-5" />
@@ -542,13 +547,13 @@ export default function Admin() {
               </div>
 
               <p className="mt-4 text-[14px] text-cream/90 leading-relaxed">
-                Are you sure you want to delete <strong className="text-gold">"{active.title || 'Untitled Post'}"</strong>? This action cannot be undone.
+                Are you sure you want to delete <strong className="text-gold">"{deleteTarget.title || 'Untitled Post'}"</strong>? This action cannot be undone.
               </p>
 
               <div className="flex items-center justify-end gap-3 mt-6 pt-4 border-t border-cream/10">
                 <button
                   type="button"
-                  onClick={() => setShowDeleteModal(false)}
+                  onClick={() => { setShowDeleteModal(false); setDeleteTargetId(null) }}
                   className="px-4 py-2 text-[12px] font-medium text-cream/70 hover:text-cream cursor-pointer"
                 >
                   Cancel

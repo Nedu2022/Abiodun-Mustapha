@@ -12,24 +12,24 @@ export default async function handler(req, res) {
 
   if (req.method === 'GET') {
     try {
-      const row = db.prepare('SELECT data FROM posts WHERE id = ?').get('all')
+      const row = db.prepare('SELECT data FROM tags WHERE id = 1').get()
       if (row) return res.status(200).json(JSON.parse(row.data))
       return res.status(200).json([])
     } catch (err) {
-      return res.status(500).json({ error: 'Failed to read posts', detail: err.message })
+      return res.status(500).json({ error: 'Failed to read tags', detail: err.message })
     }
   }
 
   if (req.method === 'POST') {
     try {
-      const posts = req.body
-      if (!Array.isArray(posts)) {
-        return res.status(400).json({ error: 'Payload must be an array of posts' })
+      const tags = req.body
+      if (!Array.isArray(tags)) {
+        return res.status(400).json({ error: 'Payload must be an array of tags' })
       }
-      db.prepare('INSERT OR REPLACE INTO posts (id, data) VALUES (?, ?)').run('all', JSON.stringify(posts))
-      return res.status(200).json({ success: true, count: posts.length })
+      db.prepare('INSERT OR REPLACE INTO tags (id, data) VALUES (1, ?)').run(JSON.stringify(tags))
+      return res.status(200).json({ success: true, count: tags.length })
     } catch (err) {
-      return res.status(500).json({ error: 'Failed to save posts', detail: err.message })
+      return res.status(500).json({ error: 'Failed to save tags', detail: err.message })
     }
   }
 

@@ -2,26 +2,41 @@ import raw from '../data/posts.json'
 
 export const TAGS = ['Purpose', 'Discipline', 'Career', 'Leadership', 'Faith & Work', 'Business']
 
-export const STORAGE_KEY_TAGS = 'abiodun.tags.v1'
+/* ── Tags (API-backed) ── */
 
-export function loadAllTags() {
+export async function loadAllTagsFromApi() {
   try {
-    const saved = localStorage.getItem(STORAGE_KEY_TAGS)
-    if (saved) {
-      const parsed = JSON.parse(saved)
-      if (Array.isArray(parsed) && parsed.length > 0) {
-        return Array.from(new Set([...TAGS, ...parsed]))
+    const res = await fetch('/api/tags')
+    if (res.ok) {
+      const saved = await res.json()
+      if (Array.isArray(saved) && saved.length > 0) {
+        return Array.from(new Set([...TAGS, ...saved]))
       }
     }
   } catch {}
   return TAGS
 }
 
-export function saveAllTags(tags) {
+export async function saveAllTagsToApi(tags) {
   try {
-    localStorage.setItem(STORAGE_KEY_TAGS, JSON.stringify(tags))
+    await fetch('/api/tags', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(tags),
+    })
   } catch {}
 }
+
+// Synchronous fallback for initial render (uses built-in JSON only)
+export function loadAllTags() {
+  return TAGS
+}
+
+export function saveAllTags() {
+  // no-op: replaced by saveAllTagsToApi
+}
+
+/* ── Blog display metadata ── */
 
 export const blogMeta = {
   eyebrow: 'Writing',
@@ -30,6 +45,8 @@ export const blogMeta = {
   intro:
     'Everything I teach, I lived through first. These are the long-form versions, written for the person who is ready to stop existing and start living.',
 }
+
+/* ── Text helpers ── */
 
 export function blockText(block) {
   if (block.type === 'list') return (block.items || []).join(' ')
@@ -69,16 +86,28 @@ export const allPosts = sortByDate(raw)
 
 export const publishedPosts = sortByDate(raw.filter(isPublished))
 
-export function getLivePosts() {
+/* ── Live posts (fetched from API/DB) ── */
+
+// Cache for fetched posts so we don't re-fetch on every render
+let _cachedLivePosts = null
+
+export async function fetchLivePosts() {
   try {
-    const saved = localStorage.getItem('abiodun.posts.v1')
-    if (saved) {
-      const parsed = JSON.parse(saved)
-      if (Array.isArray(parsed) && parsed.length > 0) {
-        return sortByDate(parsed)
+    const res = await fetch('/api/posts')
+    if (res.ok) {
+      const data = await res.json()
+      if (Array.isArray(data) && data.length > 0) {
+        _cachedLivePosts = sortByDate(data)
+        return _cachedLivePosts
       }
     }
   } catch {}
+  return sortByDate(raw)
+}
+
+// Synchronous getter for already-fetched data (fallback to build-time JSON)
+export function getLivePosts() {
+  if (_cachedLivePosts) return _cachedLivePosts
   return sortByDate(raw)
 }
 
@@ -87,10 +116,7 @@ export function getLivePublishedPosts() {
 }
 
 export async function saveLivePosts(posts) {
-  try {
-    localStorage.setItem('abiodun.posts.v1', JSON.stringify(posts))
-  } catch {}
-
+  _cachedLivePosts = sortByDate(posts)
   try {
     await fetch('/api/posts', {
       method: 'POST',
@@ -99,6 +125,8 @@ export async function saveLivePosts(posts) {
     })
   } catch {}
 }
+
+/* ── Post lookup helpers ── */
 
 export function postBySlug(slug) {
   const dynamic = getLivePublishedPosts()

@@ -1,4 +1,5 @@
 import { Link, useParams } from 'react-router-dom'
+import { useEffect, useState } from 'react'
 import { ArrowLeft } from 'lucide-react'
 import NotFound from './NotFound'
 import Navbar from '../components/Navbar'
@@ -10,12 +11,20 @@ import PostBody from '../components/blog/PostBody'
 import PostCard from '../components/blog/PostCard'
 import Seo from '../seo/Seo'
 import { postJsonLd, postSeo } from '../seo/blogSchema'
-import { formatDate, postBySlug, readingTime, relatedPosts } from '../lib/posts'
+import { formatDate, postBySlug, readingTime, relatedPosts, fetchLivePosts } from '../lib/posts'
 import { site } from '../data/content'
 
 export default function Post() {
   const { slug } = useParams()
-  const post = postBySlug(slug)
+  const [post, setPost] = useState(() => postBySlug(slug))
+
+  // Fetch latest from DB to ensure we have the most up-to-date post
+  useEffect(() => {
+    fetchLivePosts().then(() => {
+      const fresh = postBySlug(slug)
+      if (fresh) setPost(fresh)
+    }).catch(() => {})
+  }, [slug])
 
   if (!post) return <NotFound />
 

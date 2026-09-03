@@ -1,7 +1,5 @@
 import { gallery } from '../data/content'
 
-export const STORAGE_KEY_VIDEOS = 'abiodun.videos.v1'
-
 export function extractYouTubeId(input = '') {
   if (!input) return ''
   const trimmed = input.trim()
@@ -24,25 +22,31 @@ export function extractYouTubeId(input = '') {
   return trimmed
 }
 
-export function loadVideos() {
+// Fetch videos from SQLite API
+export async function fetchVideos() {
   try {
-    const saved = localStorage.getItem(STORAGE_KEY_VIDEOS)
-    if (saved) {
-      const parsed = JSON.parse(saved)
-      if (Array.isArray(parsed) && parsed.length > 0) {
-        return parsed
-      }
+    const res = await fetch('/api/videos')
+    if (res.ok) {
+      const data = await res.json()
+      if (Array.isArray(data) && data.length > 0) return data
     }
-  } catch (err) {
-    console.error('Error loading videos:', err)
-  }
+  } catch {}
   return gallery.videos
 }
 
-export function saveVideos(videos) {
+// Synchronous fallback for initial render
+export function loadVideos() {
+  return gallery.videos
+}
+
+// Save videos to SQLite API
+export async function saveVideos(videos) {
   try {
-    localStorage.setItem(STORAGE_KEY_VIDEOS, JSON.stringify(videos))
-    window.dispatchEvent(new Event('storage'))
+    await fetch('/api/videos', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(videos),
+    })
   } catch (err) {
     console.error('Error saving videos:', err)
   }

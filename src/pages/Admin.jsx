@@ -6,46 +6,16 @@ import { Field, Label, areaClass, inputClass } from '../components/admin/Field'
 import BlockEditor from '../components/admin/BlockEditor'
 import PostBody from '../components/blog/PostBody'
 import VideoManager from '../components/admin/VideoManager'
-import { TAGS, allPosts, emptyPost, formatDate, readingTime, slugify, loadAllTags, saveAllTags, saveLivePosts } from '../lib/posts'
-import { getCloudinaryConfig, setCloudinaryConfig } from '../lib/cloudinary'
-
-const STORAGE_KEY = 'abiodun.posts.v1'
-const AUTH_KEY = 'abiodun.admin_auth.v1'
-const PASSWORD_STORAGE_KEY = 'abiodun.admin_password.v1'
-
-function load() {
-  try {
-    const saved = window.localStorage.getItem(STORAGE_KEY)
-    if (saved) return JSON.parse(saved)
-  } catch {
-    return allPosts
-  }
-  return allPosts
-}
-
-function download(posts) {
-  const blob = new Blob([`${JSON.stringify(posts, null, 2)}\n`], { type: 'application/json' })
-  const url = URL.createObjectURL(blob)
-  const a = document.createElement('a')
-  a.href = url
-  a.download = 'posts.json'
-  a.click()
-  URL.revokeObjectURL(url)
-}
+import { TAGS, allPosts, emptyPost, formatDate, readingTime, slugify, saveLivePosts, fetchLivePosts, loadAllTagsFromApi, saveAllTagsToApi } from '../lib/posts'
 
 export default function Admin() {
   // Authentication State
-  const [authenticated, setAuthenticated] = useState(() => {
-    try {
-      return localStorage.getItem(AUTH_KEY) === 'true'
-    } catch {
-      return false
-    }
-  })
+  const [authenticated, setAuthenticated] = useState(false)
   const [emailInput, setEmailInput] = useState('abiodunmustapha11@gmail.com')
   const [passwordInput, setPasswordInput] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const [authError, setAuthError] = useState('')
+  const [loginLoading, setLoginLoading] = useState(false)
 
   // Password Change State
   const [showPasswordModal, setShowPasswordModal] = useState(false)
@@ -55,18 +25,16 @@ export default function Admin() {
   const [passwordError, setPasswordError] = useState('')
 
   const [activeTab, setActiveTab] = useState('posts') // 'posts' | 'videos'
-  const [posts, setPosts] = useState(load)
-  const [activeId, setActiveId] = useState(() => load()[0]?.id || null)
+  const [posts, setPosts] = useState(allPosts)
+  const [activeId, setActiveId] = useState(() => allPosts[0]?.id || null)
   const [query, setQuery] = useState('')
   const [dirty, setDirty] = useState(false)
   const [preview, setPreview] = useState(false)
   const [toast, setToast] = useState('')
-  const [showCloudinarySettings, setShowCloudinarySettings] = useState(false)
-  const [cName, setCName] = useState(() => getCloudinaryConfig().cloudName)
-  const [cPreset, setCPreset] = useState(() => getCloudinaryConfig().uploadPreset)
+  const [loading, setLoading] = useState(true)
   
   // Custom Tag Creation state
-  const [allTags, setAllTags] = useState(loadAllTags)
+  const [allTags, setAllTags] = useState(TAGS)
   const [newTagInput, setNewTagInput] = useState('')
 
   // Mobile View state ('list' | 'edit')
@@ -74,39 +42,54 @@ export default function Admin() {
 
   const active = posts.find((post) => post.id === activeId) || null
 
-  const handleLogin = (e) => {
+  // Load posts and tags from DB on mount
+  useEffect(() => {
+    async function init() {
+      try {
+        const [dbPosts, dbTags] = await Promise.all([
+          fetchLivePosts(),
+          loadAllTagsFromApi(),
+        ])
+        if (dbPosts.length > 0) {
+          setPosts(dbPosts)
+          setActiveId(dbPosts[0]?.id || null)
+        }
+        if (dbTags.length > 0) setAllTags(dbTags)
+      } catch {}
+      setLoading(false)
+    }
+    init()
+  }, [])
+
+  const handleLogin = async (e) => {
     e.preventDefault()
     if (!emailInput.trim() || !passwordInput.trim()) {
       setAuthError('Please enter both email and password.')
       return
     }
-    const savedPass = localStorage.getItem(PASSWORD_STORAGE_KEY) || 'admin'
-    if (
-      emailInput.trim() &&
-      (passwordInput === savedPass || passwordInput === 'admin' || passwordInput === 'admin123')
-    ) {
-      try {
-        localStorage.setItem(AUTH_KEY, 'true')
-      } catch {}
-      setAuthenticated(true)
-      setAuthError('')
-      setToast('Welcome back, Admin!')
-    } else {
-      setAuthError('Invalid credentials. Please try again.')
+    setLoginLoading(true)
+    try {
+      const res = await fetch('/api/auth?action=login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: emailInput.trim(), password: passwordInput }),
+      })
+      if (res.ok) {
+        setAuthenticated(true)
+        setAuthError('')
+        setToast('Welcome back, Admin!')
+      } else {
+        const data = await res.json()
+        setAuthError(data.error || 'Invalid credentials. Please try again.')
+      }
+    } catch {
+      setAuthError('Network error. Please try again.')
     }
+    setLoginLoading(false)
   }
 
-  const handlePasswordChange = (e) => {
+  const handlePasswordChange = async (e) => {
     e.preventDefault()
-    const savedPass = localStorage.getItem(PASSWORD_STORAGE_KEY) || 'admin'
-    if (
-      currentPasswordInput !== savedPass &&
-      currentPasswordInput !== 'admin' &&
-      currentPasswordInput !== 'admin123'
-    ) {
-      setPasswordError('Current password is incorrect.')
-      return
-    }
     if (newPasswordInput.length < 4) {
       setPasswordError('New password must be at least 4 characters.')
       return
@@ -117,21 +100,28 @@ export default function Admin() {
     }
 
     try {
-      localStorage.setItem(PASSWORD_STORAGE_KEY, newPasswordInput)
-    } catch {}
-
-    setShowPasswordModal(false)
-    setCurrentPasswordInput('')
-    setNewPasswordInput('')
-    setConfirmPasswordInput('')
-    setPasswordError('')
-    setToast('Password changed successfully!')
+      const res = await fetch('/api/auth?action=change-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ currentPassword: currentPasswordInput, newPassword: newPasswordInput }),
+      })
+      if (res.ok) {
+        setShowPasswordModal(false)
+        setCurrentPasswordInput('')
+        setNewPasswordInput('')
+        setConfirmPasswordInput('')
+        setPasswordError('')
+        setToast('Password updated in database!')
+      } else {
+        const data = await res.json()
+        setPasswordError(data.error || 'Failed to change password.')
+      }
+    } catch {
+      setPasswordError('Network error. Please try again.')
+    }
   }
 
   const handleLogout = () => {
-    try {
-      localStorage.removeItem(AUTH_KEY)
-    } catch {}
     setAuthenticated(false)
     setToast('Logged out successfully.')
   }
@@ -160,10 +150,9 @@ export default function Admin() {
   }
 
   const save = async () => {
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(posts))
     await saveLivePosts(posts)
     setDirty(false)
-    setToast('Saved draft & synced live!')
+    setToast('Saved to database!')
   }
 
   const publishPostLive = async () => {
@@ -171,7 +160,6 @@ export default function Admin() {
     const updatedPost = { ...active, status: 'published', updatedAt: new Date().toISOString().slice(0, 10) }
     const nextPosts = posts.map((p) => (p.id === active.id ? updatedPost : p))
     setPosts(nextPosts)
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(nextPosts))
     await saveLivePosts(nextPosts)
     setDirty(false)
     setToast(`Published "${updatedPost.title || 'Untitled'}" Live!`)
@@ -202,14 +190,13 @@ export default function Admin() {
     const title = target?.title || 'Untitled'
     const nextPosts = posts.filter((post) => post.id !== deleteTargetId)
     setPosts(nextPosts)
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(nextPosts))
     await saveLivePosts(nextPosts)
     setActiveId(nextPosts[0]?.id || null)
     setMobileView('list')
     setShowDeleteModal(false)
     setDeleteTargetId(null)
     setDirty(false)
-    setToast(`Deleted "${title}" from website & database!`)
+    setToast(`Deleted "${title}" from database!`)
   }
 
   const importFile = (event) => {
@@ -238,7 +225,7 @@ export default function Admin() {
     patch({ tags: tags.includes(tag) ? tags.filter((t) => t !== tag) : [...tags, tag] })
   }
 
-  const handleCreateTag = (e) => {
+  const handleCreateTag = async (e) => {
     e.preventDefault()
     const trimmed = newTagInput.trim()
     if (!trimmed) return
@@ -246,14 +233,14 @@ export default function Admin() {
     if (!allTags.includes(trimmed)) {
       updatedTags = [...allTags, trimmed]
       setAllTags(updatedTags)
-      saveAllTags(updatedTags)
+      await saveAllTagsToApi(updatedTags)
     }
     if (active && !(active.tags || []).includes(trimmed)) {
       const currentTags = active.tags || []
       patch({ tags: [...currentTags, trimmed] })
     }
     setNewTagInput('')
-    setToast(`Tag "${trimmed}" added!`)
+    setToast(`Tag "${trimmed}" saved to database!`)
   }
 
   if (!authenticated) {

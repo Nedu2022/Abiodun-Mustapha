@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import Reveal from '../components/ui/Reveal'
@@ -6,14 +6,18 @@ import PostCard from '../components/blog/PostCard'
 import Seo from '../seo/Seo'
 import { pages } from '../seo/config'
 import { blogListJsonLd } from '../seo/blogSchema'
-import { blogMeta, publishedPosts, getLivePublishedPosts } from '../lib/posts'
+import { blogMeta, publishedPosts, getLivePublishedPosts, fetchLivePosts, isPublished, sortByDate } from '../lib/posts'
 
 export default function Blog() {
   const [tag, setTag] = useState('All')
   const [visibleCount, setVisibleCount] = useState(7)
+  const [livePosts, setLivePosts] = useState(() => getLivePublishedPosts())
 
-  const livePosts = useMemo(() => {
-    return getLivePublishedPosts()
+  // Fetch latest posts from DB API on mount
+  useEffect(() => {
+    fetchLivePosts().then((all) => {
+      setLivePosts(sortByDate(all.filter(isPublished)))
+    }).catch(() => {})
   }, [])
 
   const tags = useMemo(() => {

@@ -1,39 +1,22 @@
-import { readFileSync, writeFileSync, existsSync } from 'node:fs'
-import { resolve } from 'node:path'
-
-let memoryVideos = null
-
-function getFilePath() {
-  return resolve(process.cwd(), 'src/data/videos.json')
-}
+import { getDb } from './db.js'
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Credentials', 'true')
   res.setHeader('Access-Control-Allow-Origin', '*')
   res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,POST')
-  res.setHeader(
-    'Access-Control-Allow-Headers',
-    'X-CSRF-Token, X-Requested-With, Accept, Content-Type'
-  )
+  res.setHeader('Access-Control-Allow-Headers', 'X-CSRF-Token, X-Requested-With, Accept, Content-Type')
 
-  if (req.method === 'OPTIONS') {
-    res.status(200).end()
-    return
-  }
+  if (req.method === 'OPTIONS') return res.status(200).end()
 
-  const filePath = getFilePath()
+  const db = getDb()
 
   if (req.method === 'GET') {
     try {
-      if (memoryVideos) return res.status(200).json(memoryVideos)
-      if (existsSync(filePath)) {
-        const data = JSON.parse(readFileSync(filePath, 'utf8'))
-        memoryVideos = data
-        return res.status(200).json(data)
-      }
+      const row = db.prepare('SELECT data FROM videos WHERE id = 1').get()
+      if (row) return res.status(200).json(JSON.parse(row.data))
       return res.status(200).json([])
-    } catch {
-      return res.status(500).json({ error: 'Failed to read videos' })
+    } catch (err) {
+      return res.status(500).json({ error: 'Failed to read videos', detail: err.message })
     }
   }
 
@@ -43,13 +26,10 @@ export default async function handler(req, res) {
       if (!Array.isArray(videos)) {
         return res.status(400).json({ error: 'Payload must be an array of videos' })
       }
-      memoryVideos = videos
-      try {
-        writeFileSync(filePath, JSON.stringify(videos, null, 2), 'utf8')
-      } catch {}
-      return res.status(200).json({ success: true, videos })
-    } catch {
-      return res.status(500).json({ error: 'Failed to save videos' })
+      db.prepare('INSERT OR REPLACE INTO videos (id, data) VALUES (1, ?)').run(JSON.stringify(videos))
+      return res.status(200).json({ success: true, count: videos.length })
+    } catch (err) {
+      return res.status(500).json({ error: 'Failed to save videos', detail: err.message })
     }
   }
 

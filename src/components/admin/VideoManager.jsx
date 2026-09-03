@@ -1,12 +1,19 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Plus, Trash2, ArrowUp, ArrowDown, Video, ExternalLink, Save, Check } from 'lucide-react'
-import { loadVideos, saveVideos, extractYouTubeId } from '../../lib/videos'
+import { loadVideos, saveVideos, fetchVideos, extractYouTubeId } from '../../lib/videos'
 
 export default function VideoManager({ setToast }) {
   const [videos, setVideos] = useState(loadVideos)
   const [newUrl, setNewUrl] = useState('')
   const [newTitle, setNewTitle] = useState('')
   const [dirty, setDirty] = useState(false)
+
+  // Load videos from DB on mount
+  useEffect(() => {
+    fetchVideos().then((dbVideos) => {
+      if (dbVideos.length > 0) setVideos(dbVideos)
+    }).catch(() => {})
+  }, [])
 
   const handleAdd = (e) => {
     e.preventDefault()
@@ -60,10 +67,10 @@ export default function VideoManager({ setToast }) {
     setDirty(true)
   }
 
-  const handleSave = () => {
-    saveVideos(videos)
+  const handleSave = async () => {
+    await saveVideos(videos)
     setDirty(false)
-    setToast('YouTube videos updated and saved!')
+    setToast('Videos saved to database!')
   }
 
   return (

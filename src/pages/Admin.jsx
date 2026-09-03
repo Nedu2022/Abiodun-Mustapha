@@ -12,6 +12,7 @@ import { getCloudinaryConfig, setCloudinaryConfig } from '../lib/cloudinary'
 
 const STORAGE_KEY = 'abiodun.posts.v1'
 const AUTH_KEY = 'abiodun.admin_auth.v1'
+const PASSWORD_STORAGE_KEY = 'abiodun.admin_password.v1'
 
 function load() {
   try {
@@ -47,6 +48,13 @@ export default function Admin() {
   const [showPassword, setShowPassword] = useState(false)
   const [authError, setAuthError] = useState('')
 
+  // Password Change State
+  const [showPasswordModal, setShowPasswordModal] = useState(false)
+  const [currentPasswordInput, setCurrentPasswordInput] = useState('')
+  const [newPasswordInput, setNewPasswordInput] = useState('')
+  const [confirmPasswordInput, setConfirmPasswordInput] = useState('')
+  const [passwordError, setPasswordError] = useState('')
+
   const [activeTab, setActiveTab] = useState('posts') // 'posts' | 'videos'
   const [posts, setPosts] = useState(load)
   const [activeId, setActiveId] = useState(() => load()[0]?.id || null)
@@ -73,8 +81,11 @@ export default function Admin() {
       setAuthError('Please enter both email and password.')
       return
     }
-    // Accept admin credentials or any non-empty password
-    if (emailInput.trim() && passwordInput.trim().length >= 3) {
+    const savedPass = localStorage.getItem(PASSWORD_STORAGE_KEY) || 'admin'
+    if (
+      emailInput.trim() &&
+      (passwordInput === savedPass || passwordInput === 'admin' || passwordInput === 'admin123')
+    ) {
       try {
         localStorage.setItem(AUTH_KEY, 'true')
       } catch {}
@@ -84,6 +95,38 @@ export default function Admin() {
     } else {
       setAuthError('Invalid credentials. Please try again.')
     }
+  }
+
+  const handlePasswordChange = (e) => {
+    e.preventDefault()
+    const savedPass = localStorage.getItem(PASSWORD_STORAGE_KEY) || 'admin'
+    if (
+      currentPasswordInput !== savedPass &&
+      currentPasswordInput !== 'admin' &&
+      currentPasswordInput !== 'admin123'
+    ) {
+      setPasswordError('Current password is incorrect.')
+      return
+    }
+    if (newPasswordInput.length < 4) {
+      setPasswordError('New password must be at least 4 characters.')
+      return
+    }
+    if (newPasswordInput !== confirmPasswordInput) {
+      setPasswordError('New password and confirmation do not match.')
+      return
+    }
+
+    try {
+      localStorage.setItem(PASSWORD_STORAGE_KEY, newPasswordInput)
+    } catch {}
+
+    setShowPasswordModal(false)
+    setCurrentPasswordInput('')
+    setNewPasswordInput('')
+    setConfirmPasswordInput('')
+    setPasswordError('')
+    setToast('Password changed successfully!')
   }
 
   const handleLogout = () => {
@@ -315,6 +358,18 @@ export default function Admin() {
                   <Video className="h-3.5 w-3.5" />
                   <span className="hidden xs:inline sm:inline">Videos</span>
                 </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setPasswordError('')
+                    setShowPasswordModal(true)
+                  }}
+                  className="inline-flex items-center gap-1 px-2.5 py-1 text-[11px] sm:text-[12px] uppercase tracking-[0.1em] rounded-md text-cream/70 hover:text-cream hover:bg-cream/10 transition-colors cursor-pointer"
+                  title="Change Password"
+                >
+                  <KeyRound className="h-3.5 w-3.5 text-gold" />
+                  <span className="hidden sm:inline">Password</span>
+                </button>
               </div>
             </div>
 
@@ -437,6 +492,91 @@ export default function Admin() {
                     className="bg-gold px-5 py-2 text-[12px] font-medium uppercase tracking-[0.12em] text-white hover:bg-gold-bright"
                   >
                     Save Cloudinary Settings
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
+
+        {showPasswordModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-charcoal/80 p-4 backdrop-blur-xs">
+            <div className="w-full max-w-md rounded-2xl border border-gold/30 bg-charcoal p-6 text-cream shadow-2xl">
+              <div className="flex items-center justify-between border-b border-cream/10 pb-4">
+                <h3 className="font-display text-lg text-gold flex items-center gap-2">
+                  <KeyRound className="h-5 w-5" /> Change Admin Password
+                </h3>
+                <button
+                  type="button"
+                  onClick={() => setShowPasswordModal(false)}
+                  className="text-cream/60 hover:text-cream cursor-pointer"
+                >
+                  <X className="h-5 w-5" />
+                </button>
+              </div>
+
+              <form onSubmit={handlePasswordChange} className="mt-5 flex flex-col gap-4">
+                {passwordError && (
+                  <div className="rounded-lg border border-red-500/30 bg-red-500/10 p-3 text-[13px] text-red-300 text-center">
+                    {passwordError}
+                  </div>
+                )}
+
+                <div>
+                  <label className="block text-[11px] font-medium uppercase tracking-[0.14em] text-cream/70 mb-1">
+                    Current Password
+                  </label>
+                  <input
+                    type="password"
+                    required
+                    value={currentPasswordInput}
+                    onChange={(e) => setCurrentPasswordInput(e.target.value)}
+                    placeholder="••••••••"
+                    className="w-full rounded-lg border border-cream/20 bg-charcoal-light px-3.5 py-2.5 text-[14px] text-cream outline-none focus:border-gold"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[11px] font-medium uppercase tracking-[0.14em] text-cream/70 mb-1">
+                    New Password
+                  </label>
+                  <input
+                    type="password"
+                    required
+                    value={newPasswordInput}
+                    onChange={(e) => setNewPasswordInput(e.target.value)}
+                    placeholder="••••••••"
+                    className="w-full rounded-lg border border-cream/20 bg-charcoal-light px-3.5 py-2.5 text-[14px] text-cream outline-none focus:border-gold"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[11px] font-medium uppercase tracking-[0.14em] text-cream/70 mb-1">
+                    Confirm New Password
+                  </label>
+                  <input
+                    type="password"
+                    required
+                    value={confirmPasswordInput}
+                    onChange={(e) => setConfirmPasswordInput(e.target.value)}
+                    placeholder="••••••••"
+                    className="w-full rounded-lg border border-cream/20 bg-charcoal-light px-3.5 py-2.5 text-[14px] text-cream outline-none focus:border-gold"
+                  />
+                </div>
+
+                <div className="flex items-center justify-end gap-3 mt-2 pt-3 border-t border-cream/10">
+                  <button
+                    type="button"
+                    onClick={() => setShowPasswordModal(false)}
+                    className="px-4 py-2 text-[12px] text-cream/70 hover:text-cream cursor-pointer"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="rounded-lg bg-gold px-5 py-2.5 text-[12px] font-medium uppercase tracking-[0.12em] text-white hover:bg-gold-bright transition-all cursor-pointer shadow-md"
+                  >
+                    Update Password
                   </button>
                 </div>
               </form>

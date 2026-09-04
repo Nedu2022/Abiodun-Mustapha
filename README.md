@@ -13,7 +13,7 @@ All content and links reflect his official Linktree and LinkedIn profiles:
 - **Podcast**: [Growth Secrets Podcast](https://podcasts.google.com/feed/aHR0cHM6Ly9hbmNob3IuZm0vcy8yOGM1MDMwMC9wb2RjYXN0L3Jzcw?ep=14)
 - **YouTube**: [Abiodun Mustapha Channel](https://www.youtube.com/channel/UC4KuhzkY8SNEbEUD78LBo6w)
 - **Community**: [Growth Hub Africa (Telegram)](https://t.me/growthhubafrica)
-- **Free Resources**: [Purpose Challenge](http://t.me/purposechallenge) | [Free Purpose Book](http://bit.ly/freepurposebook) | [Productizing Your Knowledge](http://bit.ly/ProductizingYourKnowledge) | [Localization Ebook](https://sendfox.com/lp/1we5r0)
+- **Free Resources**: [Purpose Challenge](http://t.me/purposechallenge) | [Productizing Your Knowledge](http://bit.ly/ProductizingYourKnowledge) | [Localization Ebook](https://sendfox.com/lp/1we5r0)
 - **Booking**: [WhatsApp (Speaking/Training)](https://api.whatsapp.com/send?phone=2348148560609)
 - **LinkedIn**: [Abiodun Mustapha](https://www.linkedin.com/in/abiodunmustapha/)
 - **Linktree**: [linktr.ee/abiodunmustapha](https://linktr.ee/abiodunmustapha)

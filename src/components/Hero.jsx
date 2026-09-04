@@ -98,9 +98,6 @@ export default function Hero() {
             <Button onClick={() => openBookingModal()} variant="primary">
               {hero.primary.label}
             </Button>
-            <Button href={hero.secondary.href} variant="outline" arrow={false}>
-              {hero.secondary.label}
-            </Button>
           </motion.div>
         </div>
 

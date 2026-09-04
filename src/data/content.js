@@ -34,7 +34,6 @@ export const hero = {
     'Today I teach, write, and speak to people who are ready to stop existing and start living. Everything I hand you, I lived through first.',
   image: '/images/portrait-suit.jpg',
   primary: { label: 'Book a Session', href: BOOKING_FORM },
-  secondary: { label: 'Get a Free Ebook', href: 'http://bit.ly/freepurposebook' },
 }
 
 export const credentials = [
@@ -254,7 +253,7 @@ export const faq = {
     },
     {
       q: 'What books has Abiodun Mustapha written?',
-      a: 'My published works include 30 Lessons Life Taught Me Before 30: The Myths, Mistakes and Miracles, and Mind Shift. 30 Lessons is available on Amazon and through my Selar bookstore, and I also give away a free purpose ebook to anyone starting out.',
+      a: 'My published works include 30 Lessons Life Taught Me Before 30: The Myths, Mistakes and Miracles, and Mind Shift. 30 Lessons is available on Amazon and through my Selar bookstore.',
     },
     {
       q: 'Where can I listen to the Growth Secrets podcast?',
